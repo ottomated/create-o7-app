@@ -29,32 +29,32 @@ jobs:
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
       - run: ls -la osxcross/target/bin
 
-      # - name: Install Rust
-      #   uses: actions-rust-lang/setup-rust-toolchain@v1
-      #   with:
-      #     toolchain: nightly
-      #     components: rustfmt
-      #     target: x86_64-unknown-linux-gnu,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
-      # - name: Build MacOS
-      #   run: |
-      #     export PATH="$(pwd)/osxcross/target/bin:$PATH"
-      #     export LIBZ_SYS_STATIC=1
-      #     export CC=o64-clang
-      #     export CXX=o64-clang++
-      #     cargo build --release --target x86_64-apple-darwin
-      #     cargo build --release --target aarch64-apple-darwin
-      # - name: Build Linux
-      #   run: cargo build --release --target x86_64-unknown-linux-gnu
-      # - name: Build Windows
-      #   run: cargo build --release --target x86_64-pc-windows-gnu
-      # - name: Build Windows 32
-      #   run: cargo build --release --target i686-pc-windows-gnu
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: |
-      #       target/x86_64-unknown-linux-gnu/release/create-o3-app
-      #       target/x86_64-pc-windows-gnu/release/create-o3-app.exe
-      #       target/i686-pc-windows-gnu/release/create-o3-app.exe
-      #       target/x86_64-apple-darwin/release/create-o3-app
-      #       target/aarch64-apple-darwin/release/create-o3-app
+      - name: Install Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+          target: x86_64-unknown-linux-gnu,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
+      - name: Build MacOS
+        run: |
+          export PATH="$(pwd)/osxcross/target/bin:$PATH"
+          export LIBZ_SYS_STATIC=1
+          export CC=o64-clang
+          export CXX=o64-clang++
+          cargo build --release --target x86_64-apple-darwin
+          cargo build --release --target aarch64-apple-darwin
+      - name: Build Linux
+        run: cargo build --release --target x86_64-unknown-linux-gnu
+      - name: Build Windows
+        run: cargo build --release --target x86_64-pc-windows-gnu
+      - name: Build Windows 32
+        run: cargo build --release --target i686-pc-windows-gnu
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/x86_64-unknown-linux-gnu/release/create-o3-app
+            target/x86_64-pc-windows-gnu/release/create-o3-app.exe
+            target/i686-pc-windows-gnu/release/create-o3-app.exe
+            target/x86_64-apple-darwin/release/create-o3-app
+            target/aarch64-apple-darwin/release/create-o3-app
