@@ -16,8 +16,8 @@ jobs:
         id: cache-osxcross
         uses: actions/cache@v3
         with:
-          path: osxcross
-          key: ${{ runner.os }}-osxcross
+          path: osxcross/target/bin
+          key: ${{ runner.os }}-osxcross-bin
 
       - name: Install OSXCross
         if: steps.cache-osxcross.outputs.cache-hit != 'true'
