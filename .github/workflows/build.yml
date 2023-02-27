@@ -7,21 +7,48 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install mingw
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
+      - name: Install MinGW
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
+          version: 1.0
+
+    - name: Cache OSXCross
+      id: cache-osxcross
+      uses: actions/cache@v1
+      with:
+        path: osxcross
+        key: ${{ runner.os }}-osxcross
+
+    - name: Install OSXCross
+      if: steps.cache-osxcross.outputs.cache-hit != 'true'
+      run: |
+        git clone https://github.com/tpoechtrager/osxcross
+        cd osxcross
+        sudo tools/get_dependencies.sh
+        wget -nc https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz
+        mv MacOSX10.10.sdk.tar.xz tarballs/
+        UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+
       - name: Install Rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           toolchain: nightly
           components: rustfmt
-          target: x86_64-unknown-linux-gnu,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin
+          target: x86_64-unknown-linux-gnu,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
+      - name: Build MacOS
+        run: |
+          export PATH="$(pwd)/osxcross/target/bin:$PATH"
+          export LIBZ_SYS_STATIC=1
+          export CC=o64-clang
+          export CXX=o64-clang++
+          cargo build --release --target x86_64-apple-darwin
+        run: cargo build --release --target aarch64-apple-darwin
       - name: Build Linux
         run: cargo build --release --target x86_64-unknown-linux-gnu
       - name: Build Windows
         run: cargo build --release --target x86_64-pc-windows-gnu
       - name: Build Windows 32
         run: cargo build --release --target i686-pc-windows-gnu
-      - name: Build MacOS
-        run: cargo build --release --target x86_64-apple-darwin
+      - run: |
+        ls -l target
