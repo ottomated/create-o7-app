@@ -8,10 +8,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install MinGW
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
-          version: 1.0
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
       - name: Cache OSXCross
         id: cache-osxcross
         uses: actions/cache@v3
