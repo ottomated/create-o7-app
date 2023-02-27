@@ -55,10 +55,10 @@ jobs:
         run: |
           mkdir artifacts
           mv target/x86_64-unknown-linux-gnu/release/create-o3-app artifacts/create-o3-app-linux
-          mv target/x86_64-pc-windows-gnu/release/create-o3-app.exe artifacts/create-o3-app-windows.exe
-          mv target/i686-pc-windows-gnu/release/create-o3-app.exe artifacts/create-o3-app-windows-32.exe
+          mv target/x86_64-pc-windows-gnu/release/create-o3-app.exe artifacts/create-o3-app-win64.exe
+          mv target/i686-pc-windows-gnu/release/create-o3-app.exe artifacts/create-o3-app-win32.exe
           mv target/x86_64-apple-darwin/release/create-o3-app artifacts/create-o3-app-macos
-          mv target/aarch64-apple-darwin/release/create-o3-app artifacts/create-o3-app-macos-m1
+          mv target/aarch64-apple-darwin/release/create-o3-app artifacts/create-o3-app-macos-arm64
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
