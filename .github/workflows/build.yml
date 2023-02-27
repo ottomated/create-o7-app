@@ -54,7 +54,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: /refs/tags/0.0.0
+          tag_name: '0.0.0'
           files: |
             target/x86_64-unknown-linux-gnu/release/create-o3-app
             target/x86_64-pc-windows-gnu/release/create-o3-app.exe
