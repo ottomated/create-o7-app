@@ -50,5 +50,4 @@ jobs:
         run: cargo build --release --target x86_64-pc-windows-gnu
       - name: Build Windows 32
         run: cargo build --release --target i686-pc-windows-gnu
-      - run: |
-        ls -l target
+      - run: ls -l target
