@@ -26,7 +26,6 @@ jobs:
           sudo tools/get_dependencies.sh
           wget -nc https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz
           wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
-          mv MacOSX10.10.sdk.tar.xz tarballs/
           mv MacOSX11.3.sdk.tar.xz tarballs/
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
       - run: ls -la osxcross/target/bin
