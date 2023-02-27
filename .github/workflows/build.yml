@@ -48,4 +48,12 @@ jobs:
         run: cargo build --release --target x86_64-pc-windows-gnu
       - name: Build Windows 32
         run: cargo build --release --target i686-pc-windows-gnu
-      - run: ls -l target
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/x86_64-unknown-linux-gnu/release/create-o3-app
+            target/x86_64-pc-windows-gnu/release/create-o3-app.exe
+            target/i686-pc-windows-gnu/release/create-o3-app.exe
+            target/x86_64-apple-darwin/release/create-o3-app
+            target/aarch64-apple-darwin/release/create-o3-app
