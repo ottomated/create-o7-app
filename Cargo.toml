@@ -16,7 +16,3 @@ walkdir = "2.3.2"
 
 [build-dependencies]
 template_builder = { path = "./template_builder" }
-
-[target.x86_64-apple-darwin]
-linker = "x86_64-apple-darwin14-clang"
-ar = "x86_64-apple-darwin14-ar"
