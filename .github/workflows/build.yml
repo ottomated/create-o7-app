@@ -7,24 +7,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      # - name: Install MinGW
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
-      # - name: Cache OSXCross
-      #   id: cache-osxcross
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: osxcross
-      #     key: ${{ runner.os }}-osxcross
+      - name: Install MinGW
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
+      - name: Cache OSXCross
+        id: cache-osxcross
+        uses: actions/cache@v3
+        with:
+          path: osxcross
+          key: ${{ runner.os }}-osxcross-11.3
 
       - name: Install OSXCross
-        # if: steps.cache-osxcross.outputs.cache-hit != 'true'
+        if: steps.cache-osxcross.outputs.cache-hit != 'true'
         run: |
           git clone https://github.com/tpoechtrager/osxcross
           cd osxcross
           sudo tools/get_dependencies.sh
-          wget -nc https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz
           wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
           mv MacOSX11.3.sdk.tar.xz tarballs/
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
