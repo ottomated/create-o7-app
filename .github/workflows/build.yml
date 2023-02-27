@@ -1,0 +1,27 @@
+name: Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install mingw
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
+      - name: Install Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+          target: x86_64-unknown-linux-gnu,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin
+      - name: Build Linux
+        run: cargo build --release --target x86_64-unknown-linux-gnu
+      - name: Build Windows
+        run: cargo build --release --target x86_64-pc-windows-gnu
+      - name: Build Windows 32
+        run: cargo build --release --target i686-pc-windows-gnu
+      - name: Build MacOS
+        run: cargo build --release --target x86_64-apple-darwin
