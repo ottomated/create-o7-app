@@ -1,0 +1,21 @@
+{
+	"default_name": "my-o3-app",
+	"features": [
+		{
+			"name": "Trpc",
+			"description": "tRPC"
+		},
+		{
+			"name": "Tailwind",
+			"description": "Tailwind"
+		},
+		{
+			"name": "Database",
+			"description": "Database (Prisma + Kysely)"
+		},
+		{
+			"name": "Edge",
+			"description": "Edge (Cloudflare Workers + Planetscale)"
+		}
+	]
+}

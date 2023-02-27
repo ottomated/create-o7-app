@@ -1,12 +1,6 @@
 use std::env;
 
-#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
-pub enum Feature {
-	Trpc,
-	Tailwind,
-	Database,
-	Edge,
-}
+include!(concat!(env!("OUT_DIR"), "/config.rs"));
 
 pub enum PackageManager {
 	Npm,

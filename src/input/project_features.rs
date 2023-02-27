@@ -1,17 +1,11 @@
 use std::collections::HashSet;
 
+use crate::utils::{get_feature_name_map, Feature};
 use anyhow::Result;
 use inquire::{ui::RenderConfig, MultiSelect};
 
-use crate::utils::Feature;
-
 pub fn prompt(render_config: &RenderConfig) -> Result<HashSet<Feature>> {
-	let feature_name_map = vec![
-		("tRPC", Feature::Trpc),
-		("Tailwind", Feature::Tailwind),
-		("Database (Prisma + Kysely)", Feature::Database),
-		("Edge (Cloudflare Workers + Planetscale)", Feature::Edge),
-	];
+	let feature_name_map = get_feature_name_map();
 
 	let features = MultiSelect::new(
 		"Which features would you like to enable?",

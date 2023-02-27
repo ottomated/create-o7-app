@@ -4,14 +4,13 @@ use std::{
 	path::PathBuf,
 };
 
+use crate::utils::DEFAULT_NAME;
 use anyhow::Result;
 use inquire::{ui::RenderConfig, validator::Validation, Confirm, Text};
-use pathdiff::diff_paths;
 
 #[derive(Debug)]
 pub struct ProjectLocation {
 	pub name: String,
-	pub relative_path: PathBuf,
 	pub path: PathBuf,
 }
 
@@ -24,7 +23,6 @@ fn get_file_name(path: &PathBuf) -> String {
 
 fn get_project_name(input: &str) -> Result<ProjectLocation> {
 	let input_path = PathBuf::from(input);
-	let current_dir = std::env::current_dir().expect("Could not get current directory");
 
 	let path = if input_path.exists() {
 		canonicalize(input_path)?
@@ -40,14 +38,13 @@ fn get_project_name(input: &str) -> Result<ProjectLocation> {
 	}
 	Ok(ProjectLocation {
 		name: file_name,
-		relative_path: diff_paths(&path, current_dir).unwrap(),
 		path,
 	})
 }
 
 pub fn prompt(render_config: &RenderConfig) -> Result<ProjectLocation> {
 	let name = Text::new("Where should we create your project?")
-		.with_default("./my-o3-app")
+		.with_default(DEFAULT_NAME)
 		.with_render_config(*render_config)
 		.with_validator(|text: &str| {
 			let location = get_project_name(text);
