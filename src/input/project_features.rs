@@ -3,13 +3,7 @@ use std::collections::HashSet;
 use anyhow::Result;
 use inquire::{ui::RenderConfig, MultiSelect};
 
-#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
-pub enum Feature {
-	Trpc,
-	Tailwind,
-	Database,
-	Edge,
-}
+use crate::utils::Feature;
 
 pub fn prompt(render_config: &RenderConfig) -> Result<HashSet<Feature>> {
 	let feature_name_map = vec![

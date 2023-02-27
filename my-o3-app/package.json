@@ -1,0 +1,13 @@
+{
+  "name": "my-o3-app",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint --fix . && svelte-check",
+    "preview": "vite preview",
+    "dev": "vite dev"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

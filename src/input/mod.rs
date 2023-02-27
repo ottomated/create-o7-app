@@ -1,16 +1,17 @@
 mod install_deps;
-mod project_features;
+pub mod project_features;
 mod project_location;
 
 use std::collections::HashSet;
 
+use crate::utils::Feature;
+
+use self::project_location::ProjectLocation;
 use anyhow::Result;
 use inquire::{
 	ui::{Attributes, RenderConfig, StyleSheet},
 	Confirm,
 };
-
-use self::{project_features::Feature, project_location::ProjectLocation};
 
 #[derive(Debug)]
 pub struct UserInput {
