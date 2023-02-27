@@ -14,7 +14,7 @@ jobs:
           version: 1.0
       - name: Cache OSXCross
         id: cache-osxcross
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: osxcross
           key: ${{ runner.os }}-osxcross
@@ -35,17 +35,17 @@ jobs:
           toolchain: nightly
           components: rustfmt
           target: x86_64-unknown-linux-gnu,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
-      - name: Build MacOS
-        run: |
-          export PATH="$(pwd)/osxcross/target/bin:$PATH"
-          export LIBZ_SYS_STATIC=1
-          export CC=o64-clang
-          export CXX=o64-clang++
-          cargo build --release --target x86_64-apple-darwin
-      - name: Build Linux
-        run: cargo build --release --target x86_64-unknown-linux-gnu
-      - name: Build Windows
-        run: cargo build --release --target x86_64-pc-windows-gnu
-      - name: Build Windows 32
-        run: cargo build --release --target i686-pc-windows-gnu
+      # - name: Build MacOS
+      #   run: |
+      #     export PATH="$(pwd)/osxcross/target/bin:$PATH"
+      #     export LIBZ_SYS_STATIC=1
+      #     export CC=o64-clang
+      #     export CXX=o64-clang++
+      #     cargo build --release --target x86_64-apple-darwin
+      # - name: Build Linux
+      #   run: cargo build --release --target x86_64-unknown-linux-gnu
+      # - name: Build Windows
+      #   run: cargo build --release --target x86_64-pc-windows-gnu
+      # - name: Build Windows 32
+      #   run: cargo build --release --target i686-pc-windows-gnu
       - run: ls -l target
