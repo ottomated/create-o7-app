@@ -7,7 +7,7 @@ use std::collections::HashSet;
 use std::env::{self, current_dir};
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use utils::{parse_feature_file, walk_dir};
+use utils::{parse_feature_file, walk_dir, PackageJsonPartial};
 use which::which;
 
 pub struct Builder {
@@ -30,6 +30,7 @@ struct Config {
 
 #[derive(serde::Deserialize)]
 struct ConfigFeature {
+	id: String,
 	name: String,
 	description: String,
 }
@@ -55,12 +56,8 @@ impl Builder {
 		let templates = self.load_templates()?;
 		let config = self.load_config()?;
 		// println!("cargo:warning={:?}", templates);
-		self.write_file("templates.rs", self.make_templates_file(templates))?;
+		self.write_file("templates.rs", self.make_templates_file(&templates))?;
 		self.write_file("config.rs", self.make_config_file(config))?;
-		println!(
-			"cargo:warning=Out: \"{}/templates.rs\"",
-			self.out_dir.display()
-		);
 
 		Ok(())
 	}
@@ -70,7 +67,7 @@ impl Builder {
 		let features = config
 			.features
 			.iter()
-			.map(|feature| format_ident!("{}", feature.name));
+			.map(|feature| format_ident!("{}", feature.id));
 
 		let unique_descriptions = config
 			.features
@@ -86,8 +83,15 @@ impl Builder {
 			.iter()
 			.map(|feature| {
 				let description = feature.description.clone();
-				let name = format_ident!("{}", feature.name);
-				quote! { (#description, Feature::#name) }
+				let name = feature.name.clone();
+				let id = format_ident!("{}", feature.id);
+				quote! {
+						FeatureDetails {
+					   description: #description,
+					   name:  #name,
+					   feature: Feature::#id
+					}
+				}
 			})
 			.collect::<Vec<_>>();
 
@@ -99,7 +103,13 @@ impl Builder {
 				#(#features),*
 			}
 
-			pub fn get_feature_name_map() -> Vec<(&'static str, Feature)> {
+			pub struct FeatureDetails {
+				pub description: &'static str,
+				pub name: &'static str,
+				pub feature: Feature,
+			}
+
+			pub fn get_feature_name_map() -> Vec<FeatureDetails> {
 				vec![
 					#(#name_map),*
 				]
@@ -119,13 +129,13 @@ impl Builder {
 		Ok(config)
 	}
 
-	fn make_templates_file(&self, templates: Vec<TemplateFile>) -> TokenStream {
-		let mut tokens = vec![];
+	fn make_templates_file(&self, templates: &Vec<TemplateFile>) -> TokenStream {
+		let mut template_files = vec![];
+		let mut package_jsons = (None, vec![]);
 
 		for template in templates {
 			let path = template.path.to_string_lossy();
-			let contents = Literal::byte_string(&template.contents);
-			let features = match template.features {
+			let features = match &template.features {
 				Some(features) => {
 					let mut tokens = vec![];
 					for feature in features {
@@ -136,29 +146,61 @@ impl Builder {
 				}
 				None => quote! { None },
 			};
-
-			tokens.push(quote! {
-				TemplateFile {
-					path: #path,
-					contents: #contents,
-					features: #features,
+			if path == "package.json" {
+				let contents: PackageJsonPartial = serde_json::from_slice(&template.contents)
+					.expect(&format!(
+						"Could not parse package.json with features {:?}",
+						template.features
+					));
+				let package_json = quote! {
+					TemplateFile {
+						path: #path,
+						contents: #contents,
+						features: #features,
+					}
+				};
+				if template.features.is_none() {
+					package_jsons.0 = Some(package_json);
+				} else {
+					package_jsons.1.push(package_json);
 				}
-			});
+			} else {
+				let contents = Literal::byte_string(&template.contents);
+				template_files.push(quote! {
+					TemplateFile {
+						path: #path,
+						contents: #contents,
+						features: #features,
+					}
+				});
+			}
 		}
 
+		let (base, extras) = package_jsons;
 		quote! {
-			use crate::utils::Feature;
-			use std::collections::HashSet;
+			use crate::utils::{Feature, PackageJsonPartial};
+			use std::collections::{HashSet, HashMap};
 			#[derive(Debug)]
-			pub struct TemplateFile {
+			pub struct TemplateFile<T> {
 				pub path: &'static str,
-				pub contents: &'static [u8],
+				pub contents: T,
 				pub features: Option<HashSet<Feature>>,
 			}
-			pub fn get_templates() -> Vec<TemplateFile> {
+			pub fn get_templates() -> Vec<TemplateFile<&'static [u8]>> {
 				vec![
-					#(#tokens),*,
+					#(#template_files),*,
 				]
+			}
+			pub fn get_package_jsons() -> (
+				TemplateFile<PackageJsonPartial<'static>>,
+				Vec<TemplateFile<PackageJsonPartial<'static>>>
+			) {
+				(
+					#base,
+					vec![
+						#(#extras),*
+					]
+				)
 			}
 		}
 	}

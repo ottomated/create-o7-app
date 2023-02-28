@@ -1,12 +1,7 @@
-use std::fs;
-
-use anyhow::{Context, Result};
-
+use super::templates;
 use crate::input::UserInput;
-
-mod templates {
-	include!(concat!(env!("OUT_DIR"), "/templates.rs"));
-}
+use anyhow::{Context, Result};
+use std::fs;
 
 pub fn scaffold(input: &UserInput) -> Result<()> {
 	let templates = templates::get_templates();

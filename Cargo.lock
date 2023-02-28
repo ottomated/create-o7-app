@@ -36,6 +36,7 @@ dependencies = [
  "serde",
  "serde_json",
  "template_builder",
+ "which",
 ]
 
 [[package]]
