@@ -8,7 +8,6 @@ use crate::create::create;
 
 fn main() -> Result<()> {
 	let input = input::prompt()?;
-	println!("{:?}", input);
 
 	create(input)?;
 

@@ -21,6 +21,19 @@ struct TemplateFile {
 	path: PathBuf,
 	contents: Vec<u8>,
 }
+
+#[derive(serde::Deserialize)]
+struct Config {
+	default_name: String,
+	features: Vec<ConfigFeature>,
+}
+
+#[derive(serde::Deserialize)]
+struct ConfigFeature {
+	name: String,
+	description: String,
+}
+
 impl TemplateFile {
 	fn feature_count(&self) -> usize {
 		match self.features.as_ref() {
@@ -40,14 +53,70 @@ impl Builder {
 
 	pub fn build(&self) -> Result<()> {
 		let templates = self.load_templates()?;
+		let config = self.load_config()?;
 		// println!("cargo:warning={:?}", templates);
 		self.write_file("templates.rs", self.make_templates_file(templates))?;
+		self.write_file("config.rs", self.make_config_file(config))?;
 		println!(
 			"cargo:warning=Out: \"{}/templates.rs\"",
 			self.out_dir.display()
 		);
 
 		Ok(())
+	}
+
+	fn make_config_file(&self, config: Config) -> TokenStream {
+		let default_name = format!("./{}", config.default_name);
+		let features = config
+			.features
+			.iter()
+			.map(|feature| format_ident!("{}", feature.name));
+
+		let unique_descriptions = config
+			.features
+			.iter()
+			.map(|feature| feature.description.clone())
+			.collect::<HashSet<_>>();
+		if unique_descriptions.len() != config.features.len() {
+			panic!("Duplicate feature descriptions");
+		}
+
+		let name_map = config
+			.features
+			.iter()
+			.map(|feature| {
+				let description = feature.description.clone();
+				let name = format_ident!("{}", feature.name);
+				quote! { (#description, Feature::#name) }
+			})
+			.collect::<Vec<_>>();
+
+		quote! {
+			pub const DEFAULT_NAME: &str = #default_name;
+
+			#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
+			pub enum Feature {
+				#(#features),*
+			}
+
+			pub fn get_feature_name_map() -> Vec<(&'static str, Feature)> {
+				vec![
+					#(#name_map),*
+				]
+			}
+		}
+	}
+
+	fn load_config(&self) -> Result<Config> {
+		let config_path = current_dir()
+			.context("Could not get current directory")?
+			.join("template_builder/templates/config.json");
+		let config =
+			std::fs::read_to_string(config_path).context("Could not read templates/config.json")?;
+		let config: Config =
+			serde_json::from_str(&config).context("Could not parse templates/config.json")?;
+
+		Ok(config)
 	}
 
 	fn make_templates_file(&self, templates: Vec<TemplateFile>) -> TokenStream {

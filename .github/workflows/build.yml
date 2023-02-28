@@ -1,0 +1,66 @@
+name: Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install MinGW
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
+      - name: Cache OSXCross
+        id: cache-osxcross
+        uses: actions/cache@v3
+        with:
+          path: osxcross
+          key: ${{ runner.os }}-osxcross-11.3
+
+      - name: Install OSXCross
+        if: steps.cache-osxcross.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/tpoechtrager/osxcross
+          cd osxcross
+          sudo tools/get_dependencies.sh
+          wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
+          mv MacOSX11.3.sdk.tar.xz tarballs/
+          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+      - run: ls -la osxcross/target/bin
+
+      - name: Install Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+          target: x86_64-unknown-linux-gnu,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
+      - name: Build MacOS
+        run: |
+          export PATH="$(pwd)/osxcross/target/bin:$PATH"
+          export LIBZ_SYS_STATIC=1
+          export CC=o64-clang
+          export CXX=o64-clang++
+          cargo build --release --target x86_64-apple-darwin
+          cargo build --release --target aarch64-apple-darwin
+      - name: Build Linux
+        run: cargo build --release --target x86_64-unknown-linux-gnu
+      - name: Build Windows
+        run: cargo build --release --target x86_64-pc-windows-gnu
+      - name: Build Windows 32
+        run: cargo build --release --target i686-pc-windows-gnu
+      - name: Copy Artifacts
+        run: |
+          mkdir artifacts
+          mv target/x86_64-unknown-linux-gnu/release/create-o3-app artifacts/create-o3-app-linux
+          mv target/x86_64-pc-windows-gnu/release/create-o3-app.exe artifacts/create-o3-app-win64.exe
+          mv target/i686-pc-windows-gnu/release/create-o3-app.exe artifacts/create-o3-app-win32.exe
+          mv target/x86_64-apple-darwin/release/create-o3-app artifacts/create-o3-app-macos
+          mv target/aarch64-apple-darwin/release/create-o3-app artifacts/create-o3-app-macos-arm64
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: '0.0.0'
+          files: artifacts/*
