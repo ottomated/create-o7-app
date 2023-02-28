@@ -2,20 +2,24 @@
 	"default_name": "my-o3-app",
 	"features": [
 		{
-			"name": "Trpc",
-			"description": "tRPC"
+			"id": "Trpc",
+			"name": "tRPC",
+			"description": "(Type-safe API)"
 		},
 		{
+			"id": "Tailwind",
 			"name": "Tailwind",
-			"description": "Tailwind"
+			"description": "(CSS framework)"
 		},
 		{
+			"id": "Database",
 			"name": "Database",
-			"description": "Database (Prisma + Kysely)"
+			"description": "(Prisma + Kysely)"
 		},
 		{
+			"id": "Edge",
 			"name": "Edge",
-			"description": "Edge (Cloudflare Workers + Planetscale)"
+			"description": "(Cloudflare Workers + Planetscale)"
 		}
 	]
 }

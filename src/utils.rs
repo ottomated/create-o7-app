@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::env;
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
@@ -27,4 +28,48 @@ pub fn get_package_manager() -> PackageManager {
 	} else {
 		PackageManager::Npm
 	}
+}
+
+#[derive(serde::Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct PackageJsonPartial<'a> {
+	pub name: Option<&'a str>,
+	pub version: Option<&'a str>,
+	pub r#type: Option<&'a str>,
+	pub scripts: Option<HashMap<&'a str, Option<&'a str>>>,
+	pub dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
+	pub dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
+}
+
+impl<'a> PackageJsonPartial<'a> {
+	pub fn merge(&mut self, other: PackageJsonPartial<'a>) {
+		if other.name.is_some() {
+			self.name = other.name;
+		}
+		if other.version.is_some() {
+			self.version = other.version;
+		}
+		if other.r#type.is_some() {
+			self.r#type = other.r#type;
+		}
+		merge_hashmaps(&mut self.scripts, other.scripts);
+		merge_hashmaps(&mut self.dependencies, other.dependencies);
+		merge_hashmaps(&mut self.dev_dependencies, other.dev_dependencies);
+	}
+}
+
+fn merge_hashmaps<'a>(
+	old: &mut Option<HashMap<&'a str, Option<&'a str>>>,
+	new: Option<HashMap<&'a str, Option<&'a str>>>,
+) {
+	if old.is_none() {
+		*old = Some(HashMap::new());
+	}
+	let old = old.as_mut().unwrap();
+	if let Some(new) = new {
+		for (key, value) in new {
+			old.insert(key, value);
+		}
+	}
+	old.retain(|_, v| v.is_some());
 }
