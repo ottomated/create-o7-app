@@ -1,0 +1,10 @@
+{
+	"dependencies": {
+		"@tanstack/svelte-query": "^4.24.4",
+		"@trpc/client": "^10.9.1",
+		"@trpc/server": "^10.9.1",
+		"devalue": "^4.2.3",
+		"trpc-svelte-query": "^0.0.2",
+		"zod": "^3.20.2"
+	}
+}

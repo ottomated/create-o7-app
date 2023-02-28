@@ -1,5 +1,13 @@
 {
 	"scripts": {
 		"db:push": "prisma db push"
+	},
+	"devDependencies": {
+		"kysely-codegen": "^0.9.0",
+		"prisma": "^4.9.0"
+	},
+	"dependencies": {
+		"better-sqlite3": "^8.1.0",
+		"kysely": "^0.23.4"
 	}
 }
