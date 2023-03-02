@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::env;
+use std::fmt::Display;
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
 
@@ -8,6 +9,16 @@ pub enum PackageManager {
 	Pnpm,
 	Yarn,
 	Bun,
+}
+impl Display for PackageManager {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			PackageManager::Npm => write!(f, "npm"),
+			PackageManager::Pnpm => write!(f, "pnpm"),
+			PackageManager::Yarn => write!(f, "yarn"),
+			PackageManager::Bun => write!(f, "bun"),
+		}
+	}
 }
 
 pub fn get_package_manager() -> PackageManager {

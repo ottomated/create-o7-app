@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { QueryClientProvider } from '@tanstack/svelte-query';
-	import type { LayoutData } from './$types';
-	import { trpc } from '$lib/trpc/client';
+	import { QueryClientProvider } from "@tanstack/svelte-query";
+	import type { LayoutData } from "./$types";
+	import { trpc } from "$lib/trpc";
 
 	export let data: LayoutData;
 

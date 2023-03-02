@@ -1,13 +1,19 @@
 mod git;
+mod install_deps;
 mod package_json;
 mod scaffold;
 
 use crate::{
-	create::{git::create_repo, package_json::create_package_json},
+	create::{git::create_repo, install_deps::install_deps, package_json::create_package_json},
 	input::UserInput,
 };
 use anyhow::{Context, Result};
-use std::fs;
+use crossterm::style::{style, Stylize};
+use human_repr::HumanDuration;
+use std::{
+	fs,
+	time::{Duration, Instant},
+};
 
 use self::scaffold::scaffold;
 
@@ -22,15 +28,36 @@ pub fn create(input: UserInput) -> Result<()> {
 	}
 	fs::create_dir_all(&input.location.path).context("Could not create project directory")?;
 
+	println!();
 	// Scaffold (copy files)
-	println!("\nScaffolding...");
+	let start = log_step_start("Copying template...");
 	scaffold(&input)?;
+	log_step_end(start);
 
+	let start = log_step_start("Creating package.json...");
 	create_package_json(&input)?;
+	log_step_end(start);
 
 	create_repo(&input)?;
 
 	install_deps(&input)?;
 
 	Ok(())
+}
+
+pub fn log_step_start(step: &str) -> Instant {
+	let logo = style("{O}").dark_magenta().bold();
+	let step = style(step).magenta();
+	println!("{logo} {step}");
+
+	Instant::now()
+}
+
+pub fn log_step_end(start: Instant) {
+	let end = style(format!(
+		"✔  Finished in {}\n",
+		start.elapsed().human_duration()
+	))
+	.green();
+	println!("{end}");
 }
