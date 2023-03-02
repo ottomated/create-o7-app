@@ -19,6 +19,8 @@ pub fn create_package_json(input: &UserInput) -> Result<()> {
 		base.contents.merge(package_json.contents);
 	}
 
+	base.contents.name = Some(&input.location.name);
+
 	let target_path = &input.location.path.join("package.json");
 	let formatter = PrettyFormatter::with_indent(b"\t");
 	let buf = Vec::new();
