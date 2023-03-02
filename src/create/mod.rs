@@ -10,10 +10,7 @@ use crate::{
 use anyhow::{Context, Result};
 use crossterm::style::{style, Stylize};
 use human_repr::HumanDuration;
-use std::{
-	fs,
-	time::{Duration, Instant},
-};
+use std::{fs, time::Instant};
 
 use self::scaffold::scaffold;
 
