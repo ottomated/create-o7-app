@@ -1,19 +1,33 @@
 use std::path::Path;
 
-use crate::input::UserInput;
+use crossterm::style::{style, Stylize};
+
+use crate::{create::log_step_start, input::UserInput};
+
+fn log_with_info(command: &str, info: &str) {
+	let command = style(command).green();
+	let info = style(info).green().dim();
+	println!("  {command} {info}");
+}
 
 pub fn print(input: &UserInput) {
-	println!("\n");
-	println!("{{O}} All done!");
-	println!("  cd {}", get_shortest_path(&input.location.path));
+	log_step_start("All done! Next steps:");
+
+	log_with_info(
+		&format!("cd {}", get_shortest_path(&input.location.path)),
+		"(navigate to your project's folder)",
+	);
 
 	match input.install_deps {
 		Some(ref pm) => {
-			println!("  {}", pm.package_manager.run_script("dev"));
+			log_with_info(
+				&pm.package_manager.run_script("dev"),
+				"(start the dev server)",
+			);
 		}
 		None => {
-			println!("  npm install");
-			println!("	npm run dev");
+			log_with_info("npm install", "(install dependencies)");
+			log_with_info("npm run dev", "(start the dev server)");
 		}
 	};
 }
