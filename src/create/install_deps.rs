@@ -16,7 +16,7 @@ pub fn install_deps(input: &UserInput) -> Result<()> {
 
 	let start = log_step_start("Installing dependencies...");
 
-	let cmd = Command::new(pm)
+	let cmd = Command::new(&pm.exec_path)
 		.current_dir(&input.location.path)
 		.arg("install")
 		.stdout(Stdio::inherit())
@@ -25,7 +25,9 @@ pub fn install_deps(input: &UserInput) -> Result<()> {
 		.with_context(|| {
 			format!(
 				"Failed to execute {:?}",
-				pm.file_name().unwrap_or(&OsStr::new("package manager"))
+				pm.exec_path
+					.file_name()
+					.unwrap_or(&OsStr::new("package manager"))
 			)
 		})?;
 
