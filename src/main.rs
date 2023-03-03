@@ -11,9 +11,5 @@ fn main() -> Result<()> {
 
 	create(input)?;
 
-	// Scaffold (copy files)
-	// git?
-	// install deps?
-
 	Ok(())
 }

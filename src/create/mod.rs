@@ -1,5 +1,6 @@
 mod git;
 mod install_deps;
+mod next_steps;
 mod package_json;
 mod scaffold;
 
@@ -38,6 +39,8 @@ pub fn create(input: UserInput) -> Result<()> {
 	create_repo(&input)?;
 
 	install_deps(&input)?;
+
+	next_steps::print(&input);
 
 	Ok(())
 }

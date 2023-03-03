@@ -4,12 +4,25 @@ use std::fmt::Display;
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
 
+#[derive(Debug)]
 pub enum PackageManager {
 	Npm,
 	Pnpm,
 	Yarn,
 	Bun,
 }
+
+impl PackageManager {
+	pub fn run_script(&self, script: &str) -> String {
+		match self {
+			PackageManager::Npm => format!("npm run {script}"),
+			PackageManager::Pnpm => format!("pnpm {script}"),
+			PackageManager::Yarn => format!("yarn {script}"),
+			PackageManager::Bun => format!("bun run {script}"),
+		}
+	}
+}
+
 impl Display for PackageManager {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {

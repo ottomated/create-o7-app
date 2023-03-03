@@ -8,6 +8,8 @@ use crate::utils::DEFAULT_NAME;
 use anyhow::Result;
 use inquire::{ui::RenderConfig, validator::Validation, Confirm, Text};
 
+use super::warn_render_config;
+
 #[derive(Debug)]
 pub struct ProjectLocation {
 	pub name: String,
@@ -58,8 +60,7 @@ pub fn prompt(render_config: &RenderConfig) -> Result<ProjectLocation> {
 						Ok(Validation::Valid)
 					} else {
 						Ok(Validation::Invalid(
-							"Project name must only contain alphanumeric characters, dashes, and underscores"
-								.into(),
+							format!("Project name ({}) must only contain lowercase alphanumeric characters, dashes, and underscores", location.name).into(),
 						))
 					}
 				}
@@ -75,7 +76,7 @@ pub fn prompt(render_config: &RenderConfig) -> Result<ProjectLocation> {
 			let should_continue = Confirm::new(
 				"That location is not empty. Would you like to empty it and continue?",
 			)
-			.with_render_config(*render_config)
+			.with_render_config(warn_render_config())
 			.with_default(false)
 			.with_help_message(&format!(
 				"{} has {} file{}.",

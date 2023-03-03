@@ -5,28 +5,29 @@ use anyhow::Result;
 use crossterm::style::{style, Stylize};
 use inquire::{ui::RenderConfig, Confirm};
 
-pub fn prompt(render_config: &RenderConfig) -> Result<Option<PathBuf>> {
+#[derive(Debug)]
+pub struct ProjectPackageManager {
+	pub package_manager: PackageManager,
+	pub exec_path: PathBuf,
+}
+
+pub fn prompt(render_config: &RenderConfig) -> Result<Option<ProjectPackageManager>> {
 	let mut package_manager = get_package_manager();
 
-	let package_manager_path = match package_manager {
-		PackageManager::Npm => which::which("npm"),
-		PackageManager::Pnpm => which::which("pnpm"),
-		PackageManager::Yarn => which::which("yarn"),
-		PackageManager::Bun => which::which("bun"),
-	};
+	let package_manager_path = which::which(format!("{}", package_manager));
 
 	let mut old_package_manager = None;
 
 	let (path, is_fallback) =
 		match package_manager_path {
-			Ok(package_manager_path) => (Some(package_manager_path), false),
+			Ok(package_manager_path) => (package_manager_path, false),
 			Err(_) => {
 				let npm_path = which::which("npm");
 				match npm_path {
 					Ok(npm_path) => {
 						old_package_manager = Some(package_manager);
 						package_manager = PackageManager::Npm;
-						(Some(npm_path), true)
+						(npm_path, true)
 					}
 					Err(_) => {
 						let warn = style("!").red();
@@ -60,8 +61,12 @@ pub fn prompt(render_config: &RenderConfig) -> Result<Option<PathBuf>> {
 	}
 	let install_deps = install_deps.prompt()?;
 
-	match install_deps {
-		true => Ok(path),
-		false => Ok(None),
+	if !install_deps {
+		return Ok(None);
 	}
+
+	Ok(Some(ProjectPackageManager {
+		package_manager,
+		exec_path: path,
+	}))
 }
