@@ -57,6 +57,8 @@ jobs:
           mv target/i686-pc-windows-gnu/release/create-o7-app.exe artifacts/create-o7-app-win32.exe
           mv target/x86_64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos
           mv target/aarch64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos-arm64
+          mkdir -p compressed/artifacts
+          for file in artifacts/*; do tar -czvf "compressed/$file.tar.gz" "$file"; done
       - name: Get version
         id: get_version
         run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
@@ -64,7 +66,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
-          files: artifacts/*
+          files: compressed/artifacts/*
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
