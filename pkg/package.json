@@ -1,0 +1,28 @@
+{
+	"name": "create-o7-app",
+	"version": "TEMPLATE",
+	"description": "Create web applications with the o7 stack",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ottomated/create-o7-app.git"
+	},
+	"keywords": [
+		"create-o7-app",
+		"o7",
+		"svelte",
+		"sveltekit",
+		"tailwind",
+		"tRPC",
+		"typescript",
+		"planetscale",
+		"prisma",
+		"kysely"
+	],
+	"bin": {
+		"create-o7-app": "./run.js"
+	},
+	"scripts": {
+		"postinstall": "node ./install.js"
+	}
+}
