@@ -17,3 +17,7 @@ which = "4.4.0"
 
 [build-dependencies]
 template_builder = { path = "./template_builder" }
+
+[dev-dependencies]
+tempfile = "3.4.0"
+itertools = "0.10.5"

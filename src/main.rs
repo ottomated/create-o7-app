@@ -1,5 +1,7 @@
 mod create;
 mod input;
+#[cfg(test)]
+mod test;
 mod utils;
 
 use anyhow::Result;

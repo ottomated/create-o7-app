@@ -1,7 +1,4 @@
-use std::{
-	ffi::OsStr,
-	process::{Command, Stdio},
-};
+use std::{ffi::OsStr, process::Command};
 
 use crate::{create::log_step_start, input::UserInput};
 use anyhow::{Context, Result};
@@ -16,20 +13,21 @@ pub fn install_deps(input: &UserInput) -> Result<()> {
 
 	let start = log_step_start("Installing dependencies...");
 
-	let cmd = Command::new(&pm.exec_path)
-		.current_dir(&input.location.path)
-		.arg("install")
-		.stdout(Stdio::inherit())
-		.stderr(Stdio::inherit())
-		.status()
-		.with_context(|| {
-			format!(
-				"Failed to execute {:?}",
-				pm.exec_path
-					.file_name()
-					.unwrap_or(&OsStr::new("package manager"))
-			)
-		})?;
+	let mut cmd = Command::new(&pm.exec_path);
+	cmd.current_dir(&input.location.path).arg("install");
+	#[cfg(test)]
+	{
+		cmd.stdout(std::process::Stdio::null())
+			.stderr(std::process::Stdio::null());
+	}
+	let cmd = cmd.status().with_context(|| {
+		format!(
+			"Failed to execute {:?}",
+			pm.exec_path
+				.file_name()
+				.unwrap_or(&OsStr::new("package manager"))
+		)
+	})?;
 
 	println!();
 

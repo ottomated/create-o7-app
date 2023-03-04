@@ -25,6 +25,7 @@ struct TemplateFile {
 #[derive(serde::Deserialize)]
 struct Config {
 	default_name: String,
+	initial_commit: String,
 	features: Vec<ConfigFeature>,
 }
 
@@ -64,6 +65,7 @@ impl Builder {
 
 	fn make_config_file(&self, config: Config) -> TokenStream {
 		let default_name = format!("./{}", config.default_name);
+		let initial_commit = config.initial_commit;
 		let features = config
 			.features
 			.iter()
@@ -97,6 +99,7 @@ impl Builder {
 
 		quote! {
 			pub const DEFAULT_NAME: &str = #default_name;
+			pub const INITIAL_COMMIT: &str = #initial_commit;
 
 			#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
 			pub enum Feature {

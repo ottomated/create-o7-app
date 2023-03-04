@@ -6,7 +6,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"lint": "eslint --fix . && svelte-check"
+		"lint": "eslint --max-warnings 0 --fix . && svelte-check"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
@@ -19,6 +19,7 @@
 		"prettier": "^2.8.3",
 		"prettier-plugin-svelte": "^2.9.0",
 		"svelte-check": "^3.0.3",
+		"svelte-preprocess": "^5.0.1",
 		"typescript": "~4.9.5",
 		"vite": "^4.0.4"
 	},
