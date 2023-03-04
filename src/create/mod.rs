@@ -36,6 +36,11 @@ pub fn create(input: UserInput) -> Result<()> {
 	create_package_json(&input)?;
 	log_step_end(start);
 
+	let install_deps_res = install_deps(&input);
+	if let Err(e) = &install_deps_res {
+		log_step_error(e);
+	}
+
 	let create_repo_res = create_repo(&input);
 	let git_error = match &create_repo_res {
 		Ok(_) => None,
@@ -44,11 +49,6 @@ pub fn create(input: UserInput) -> Result<()> {
 			Some(step)
 		}
 	};
-
-	let install_deps_res = install_deps(&input);
-	if let Err(e) = &install_deps_res {
-		log_step_error(e);
-	}
 
 	next_steps::print(&input, git_error, install_deps_res.is_ok());
 
