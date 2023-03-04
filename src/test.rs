@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::path::PathBuf;
 use std::process::{Command, Output};
 use std::sync::atomic::{AtomicU16, Ordering};
 use std::sync::{Arc, RwLock};
@@ -30,10 +31,10 @@ fn make_input(features: HashSet<Feature>) -> UserInput {
 	}
 }
 
-fn test_pnpm(input: &UserInput, args: &[&'static str]) -> Result<Output, String> {
+fn test_pnpm(dir: &PathBuf, args: &[&'static str]) -> Result<Output, String> {
 	let output = Command::new("pnpm")
 		.args(args)
-		.current_dir(&input.location.path)
+		.current_dir(dir)
 		.output()
 		.unwrap();
 	if !output.status.success() {
@@ -71,15 +72,16 @@ fn test() {
 			let thread_count = thread_count.clone();
 
 			s.spawn(move || {
+				let dir = input.location.path.clone();
 				let result: Result<(), String> = (|| {
-					create(&mut input).map_err(|e| format!("{e}"))?;
-					test_pnpm(&input, &["build"])?;
-					test_pnpm(&input, &["eslint", "--max-warnings", "0", "."])?;
-					test_pnpm(&input, &["svelte-check"])?;
+					create(input).map_err(|e| format!("{e}"))?;
+					test_pnpm(&dir, &["build"])?;
+					test_pnpm(&dir, &["eslint", "--max-warnings", "0", "."])?;
+					test_pnpm(&dir, &["svelte-check"])?;
 
 					Ok(())
 				})();
-				let _ = fs::remove_dir_all(input.location.path);
+				let _ = fs::remove_dir_all(&dir);
 				if let Err(e) = result {
 					errors.write().unwrap().push((features, e));
 				}
