@@ -72,6 +72,7 @@ jobs:
       - name: Publish NPM Package
         run: |
           cd pkg
+          cp ../README.md .
           jq '.version = "${{ steps.get_version.outputs.version }}"' package.json > tmp && mv tmp package.json
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
