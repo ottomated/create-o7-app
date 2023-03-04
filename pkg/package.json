@@ -24,5 +24,8 @@
 	},
 	"scripts": {
 		"postinstall": "node ./install.js"
+	},
+	"dependencies": {
+		"binary-install": "^1.0.6"
 	}
 }
