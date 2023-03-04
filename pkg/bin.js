@@ -45,6 +45,6 @@ if (!supported) {
 module.exports = {
 	bin: new Binary(
 		'create-o7-app',
-		`https://github.com/ottomated/create-o7-app/releases/download/v${version}/create-o7-app-${supported.file}`
+		`https://github.com/ottomated/create-o7-app/releases/download/${version}/create-o7-app-${supported.file}`
 	),
 };
