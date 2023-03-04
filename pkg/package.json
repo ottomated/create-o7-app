@@ -26,6 +26,7 @@
 		"postinstall": "node ./install.js"
 	},
 	"dependencies": {
-		"binary-install": "^1.0.6"
+		"axios": "^1.3.4",
+		"tar": "^6.1.13"
 	}
 }
