@@ -1,5 +1,6 @@
 {
 	"default_name": "my-o7-app",
+	"initial_commit": "Create o7 App",
 	"features": [
 		{
 			"id": "Trpc",

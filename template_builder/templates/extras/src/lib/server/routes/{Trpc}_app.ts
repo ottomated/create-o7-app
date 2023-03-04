@@ -3,9 +3,11 @@ import { z } from 'zod';
 
 export const appRouter = router({
 	greeting: publicProcedure
-		.input(z.object({
-			name: z.string().optional(),
-		}))
+		.input(
+			z.object({
+				name: z.string().optional(),
+			})
+		)
 		.query(({ input }) => {
 			return `Hello, ${input.name ?? 'world'}!`;
 		}),

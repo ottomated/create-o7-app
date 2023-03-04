@@ -1,4 +1,4 @@
-mod git;
+pub mod git;
 mod install_deps;
 mod next_steps;
 mod package_json;
@@ -36,13 +36,28 @@ pub fn create(input: UserInput) -> Result<()> {
 	create_package_json(&input)?;
 	log_step_end(start);
 
-	create_repo(&input)?;
+	let create_repo_res = create_repo(&input);
+	let git_error = match &create_repo_res {
+		Ok(_) => None,
+		Err((step, e)) => {
+			log_step_error(e);
+			Some(step)
+		}
+	};
 
-	install_deps(&input)?;
+	let install_deps_res = install_deps(&input);
+	if let Err(e) = &install_deps_res {
+		log_step_error(e);
+	}
 
-	next_steps::print(&input);
+	next_steps::print(&input, git_error, install_deps_res.is_ok());
 
 	Ok(())
+}
+
+pub fn log_step_error(err: &anyhow::Error) {
+	let end = style(format!("❌  Error:",)).red().bold();
+	println!("{end} {}\n", style(err.to_string()).red());
 }
 
 pub fn log_step_start(step: &str) -> Instant {

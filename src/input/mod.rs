@@ -1,7 +1,7 @@
-mod git;
+pub mod git;
 pub mod install_deps;
 pub mod project_features;
-mod project_location;
+pub mod project_location;
 
 use std::{collections::HashSet, path::PathBuf};
 
