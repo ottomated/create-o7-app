@@ -59,7 +59,7 @@ jobs:
           mv target/aarch64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos-arm64
       - name: Get version
         id: get_version
-        run: echo "version=$(cargo pkgid | cut -d@ -f2)" >> $GITHUB_OUTPUT
+        run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
       - name: Release Binaries
         uses: softprops/action-gh-release@v1
         with:
