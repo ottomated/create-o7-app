@@ -4,21 +4,29 @@ const { join } = require('node:path');
 require('dotenv').config();
 
 async function generate() {
-	if (!process.env.DATABASE_URL) {
-		throw new Error('DATABASE_URL is not set');
+	const { DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_HOST, DATABASE_NAME } =
+		process.env;
+	if (
+		!DATABASE_USERNAME ||
+		!DATABASE_PASSWORD ||
+		!DATABASE_HOST ||
+		!DATABASE_NAME
+	) {
+		console.warn(
+			'DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_HOST and DATABASE_NAME must be set'
+		);
+		return;
 	}
+
 	const logger = new Logger(2);
 
-	const url = new URL(process.env.DATABASE_URL);
-	// Prisma needs sslaccept, but mysql2 needs ssl.rejectUnauthorized
-	url.searchParams.delete('sslaccept');
-	url.searchParams.set('ssl', '{"rejectUnauthorized":true}');
+	const databaseUrl = `mysql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}/${DATABASE_NAME}?ssl={"rejectUnauthorized":true}`;
 
 	const dialectManager = new DialectManager();
 	const dialect = dialectManager.getDialect('mysql');
 
 	const db = await dialect.introspector.connect({
-		connectionString: url.href,
+		connectionString: databaseUrl,
 		dialect,
 	});
 

@@ -1,18 +1,18 @@
 {
 	"scripts": {
 		"db:push": "prisma db push && node ./prisma/generate.cjs",
-		"postinstall": "prisma generate && node ./prisma/generate.cjs",
+		"postinstall": "prisma db push && node ./prisma/generate.cjs",
 		"build": "vite build"
-	},
-	"devDependencies": {
-		"kysely-codegen": "^0.9.0",
-		"prisma": "^4.9.0"
 	},
 	"dependencies": {
 		"better-sqlite3": "^8.1.0",
-		"@types/better-sqlite3": "^7.6.3",
 		"kysely": "^0.23.4",
 		"kysely-codegen": "^0.9.0",
 		"dotenv": "^16.0.3"
+	},
+	"devDependencies": {
+		"@types/better-sqlite3": "^7.6.3",
+		"kysely-codegen": "^0.9.0",
+		"prisma": "^4.9.0"
 	}
 }
