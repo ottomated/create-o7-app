@@ -1,6 +1,6 @@
 {
 	"name": "create-o7-app",
-	"version": "TEMPLATE",
+	"version": "0.1.2",
 	"description": "Create web applications with the o7 stack",
 	"license": "MIT",
 	"repository": {

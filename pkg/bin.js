@@ -4,24 +4,24 @@ const os = require('os');
 const { version } = require('./package.json');
 
 const platforms = [
-  {
-    type: 'Windows_NT',
+	{
+		type: 'Windows_NT',
 		arch: 'x64',
 		file: 'win64.exe'
-  },
-  {
+	},
+	{
 		type: 'Windows_NT',
 		arch: 'ia32',
 		file: 'win32.exe'
-  },
-  {
-    type: 'Linux',
-    arch: 'x64',
+	},
+	{
+		type: 'Linux',
+		arch: 'x64',
 		file: 'linux'
 	},
-  {
-    type: 'Darwin',
-    arch: 'x64',
+	{
+		type: 'Darwin',
+		arch: 'x64',
 		file: 'macos'
 	},
 	{
@@ -42,9 +42,7 @@ if (!supported) {
 	);
 }
 
-module.exports = {
-	bin: new Binary(
-		'create-o7-app',
-		`https://github.com/ottomated/create-o7-app/releases/download/${version}/create-o7-app-${supported.file}`
-	),
-};
+module.exports = new Binary(
+	'create-o7-app',
+	`https://github.com/ottomated/create-o7-app/releases/download/${version}/create-o7-app-${supported.file}`
+);
