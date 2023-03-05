@@ -5,7 +5,7 @@ pub mod project_location;
 
 use std::{collections::HashSet, path::PathBuf};
 
-use crate::utils::Feature;
+use crate::utils::{get_package_manager, Feature, PackageManager};
 
 use self::{install_deps::ProjectPackageManager, project_location::ProjectLocation};
 use anyhow::Result;
@@ -20,6 +20,13 @@ pub struct UserInput {
 }
 
 pub fn prompt() -> Result<UserInput> {
+	let package_manager = get_package_manager();
+
+	if package_manager == PackageManager::Pnpm {
+		// pnpm create sometimes eats the first line of output
+		println!();
+	}
+
 	let render_config = RenderConfig {
 		prompt: StyleSheet {
 			att: Attributes::BOLD,
@@ -33,7 +40,7 @@ pub fn prompt() -> Result<UserInput> {
 
 	let git = git::prompt(&render_config, &location)?;
 
-	let install_deps = install_deps::prompt(&render_config)?;
+	let install_deps = install_deps::prompt(&render_config, package_manager)?;
 
 	Ok(UserInput {
 		location,
