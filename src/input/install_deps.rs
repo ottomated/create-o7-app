@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::utils::{get_package_manager, PackageManager};
+use crate::utils::PackageManager;
 use anyhow::Result;
 use crossterm::style::{style, Stylize};
 use inquire::{ui::RenderConfig, Confirm};
@@ -11,9 +11,10 @@ pub struct ProjectPackageManager {
 	pub exec_path: PathBuf,
 }
 
-pub fn prompt(render_config: &RenderConfig) -> Result<Option<ProjectPackageManager>> {
-	let mut package_manager = get_package_manager();
-
+pub fn prompt(
+	render_config: &RenderConfig,
+	mut package_manager: PackageManager,
+) -> Result<Option<ProjectPackageManager>> {
 	let package_manager_path = which::which(format!("{}", package_manager));
 
 	let mut old_package_manager = None;

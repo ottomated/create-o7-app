@@ -4,7 +4,7 @@ use std::fmt::Display;
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum PackageManager {
 	Npm,
 	Pnpm,
