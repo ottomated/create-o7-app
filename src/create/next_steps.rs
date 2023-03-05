@@ -3,10 +3,10 @@ use std::path::Path;
 use crossterm::style::{style, Stylize};
 
 use super::git::GitStep;
-use crate::utils::INITIAL_COMMIT;
+use crate::utils::{get_package_manager, INITIAL_COMMIT};
 use crate::{create::log_step_start, input::UserInput};
 
-fn log_with_info(command: &str, info: &str) {
+fn log_with_info(command: String, info: &str) {
 	let command = style(command).green();
 	let info = style(info).green().dim();
 	println!("  {command} {info}");
@@ -16,7 +16,7 @@ pub fn print(input: &UserInput, git_error: Option<&GitStep>, install_deps: bool)
 	log_step_start("All done! Next steps:");
 
 	log_with_info(
-		&format!("cd {}", get_shortest_path(&input.location.path)),
+		format!("cd {}", get_shortest_path(&input.location.path)),
 		"(navigate to your project's folder)",
 	);
 
@@ -30,26 +30,30 @@ pub fn print(input: &UserInput, git_error: Option<&GitStep>, install_deps: bool)
 	});
 
 	if let Some(git_command) = git_command {
-		log_with_info(&git_command, "(initialize your git repository)");
+		log_with_info(git_command, "(initialize your git repository)");
 	}
 
 	match input.install_deps {
 		Some(ref pm) => {
 			if !install_deps {
 				log_with_info(
-					&format!("{} install", pm.package_manager),
+					format!("{} install", pm.package_manager),
 					"(install dependencies)",
 				);
 			}
 
 			log_with_info(
-				&pm.package_manager.run_script("dev"),
+				pm.package_manager.run_script("dev"),
 				"(start the dev server)",
 			);
 		}
 		None => {
-			log_with_info("npm install", "(install dependencies)");
-			log_with_info("npm run dev", "(start the dev server)");
+			let package_manager = get_package_manager();
+			log_with_info(
+				format!("{} install", package_manager),
+				"(install dependencies)",
+			);
+			log_with_info(package_manager.run_script("dev"), "(start the dev server)");
 		}
 	};
 }
