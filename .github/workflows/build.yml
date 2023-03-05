@@ -48,7 +48,7 @@ jobs:
         with:
           toolchain: nightly
           components: rustfmt
-          target: x86_64-unknown-linux-gnu,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
+          target: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
       - name: Build MacOS
         run: |
           export PATH="$(pwd)/osxcross/target/bin:$PATH"
@@ -58,7 +58,7 @@ jobs:
           cargo build --release --target x86_64-apple-darwin
           cargo build --release --target aarch64-apple-darwin
       - name: Build Linux
-        run: cargo build --release --target x86_64-unknown-linux-gnu
+        run: cargo build --release --target x86_64-unknown-linux-musl
       - name: Build Windows
         run: cargo build --release --target x86_64-pc-windows-gnu
       - name: Build Windows 32
@@ -66,7 +66,7 @@ jobs:
       - name: Copy Artifacts
         run: |
           mkdir artifacts
-          mv target/x86_64-unknown-linux-gnu/release/create-o7-app artifacts/create-o7-app-linux
+          mv target/x86_64-unknown-linux-musl/release/create-o7-app artifacts/create-o7-app-linux
           mv target/x86_64-pc-windows-gnu/release/create-o7-app.exe artifacts/create-o7-app-win64.exe
           mv target/i686-pc-windows-gnu/release/create-o7-app.exe artifacts/create-o7-app-win32.exe
           mv target/x86_64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos
