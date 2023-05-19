@@ -4,7 +4,6 @@ import { transformer } from '$lib/trpc/transformer';
 
 const t = initTRPC.context<Context>().create({
 	transformer,
-	// errorFormatter: (shape) => ({ ...shape }),
 });
 
 export const router = t.router;
