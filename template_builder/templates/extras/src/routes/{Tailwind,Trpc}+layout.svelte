@@ -6,7 +6,7 @@
 
 	export let data: LayoutData;
 
-	const queryClient = trpc.hydrateQueryClient(data.trpc);
+	const queryClient = trpc.hydrateFromServer(data.trpc);
 </script>
 
 <QueryClientProvider client={queryClient}>

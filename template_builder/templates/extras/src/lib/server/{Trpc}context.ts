@@ -1,7 +1,7 @@
+import type { RequestEvent } from '@sveltejs/kit';
 import type { inferAsyncReturnType } from '@trpc/server';
-import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 
-export async function createContext(_opts: FetchCreateContextFnOptions) {
+export async function createContext(_opts: RequestEvent) {
 	return {};
 }
 
