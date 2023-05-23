@@ -21,7 +21,7 @@
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Typescript](https://www.typescriptlang.org/)
 - [Prisma](https://www.prisma.io/)
-- [Kysely](https://github.com/koskimas/kysely)
+- [Kysely](https://github.com/kysely-org/kysely)
 - [Cloudflare Workers](https://workers.cloudflare.com/)
 
 Why both Prisma and Kysely? `create-o7-app`'s template includes Kysely for **Edge support** and **fast cold starts**, with all the convenience of using Prisma to define your database model.
