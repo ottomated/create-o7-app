@@ -9,7 +9,7 @@ export const appRouter = router({
 			})
 		)
 		.query(({ input }) => {
-			return `Hello, ${input.name ?? 'world'}!`;
+			return `Welcome to ${input.name ?? 'the world'}!`;
 		}),
 });
 

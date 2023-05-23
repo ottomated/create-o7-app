@@ -1,7 +1,6 @@
 {
 	"rust-analyzer.linkedProjects": [
 		"Cargo.toml",
-		"template_builder/Cargo.toml",
-		"dependency_upgrader/Cargo.toml"
+		"template_builder/Cargo.toml"
 	]
 }

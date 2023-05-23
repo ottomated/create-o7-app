@@ -5,7 +5,7 @@
 		"build": "vite build"
 	},
 	"dependencies": {
-		"better-sqlite3": "^8.3.0",
+		"better-sqlite3": "^8.4.0",
 		"kysely": "^0.24.2",
 		"dotenv": "^16.0.3"
 	},
