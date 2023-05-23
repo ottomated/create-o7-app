@@ -19,8 +19,8 @@
 			learnMore="https://svelte.dev/tutorial/basics"
 		>
 			<p>
-				Edit <code class="text-lime-300"> src/routes/+page.svelte </code> to see
-				your changes live.
+				Edit <code class="text-lime-300">src/routes/+page.svelte</code> to see your
+				changes live.
 			</p>
 			<p>
 				The source for these cards is in <code class="text-lime-300"

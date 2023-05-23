@@ -19,7 +19,7 @@
 			learnMore="https://svelte.dev/tutorial/basics"
 		>
 			<p>
-				Edit <code class="lime"> src/routes/+page.svelte </code> to see your changes
+				Edit <code class="lime">src/routes/+page.svelte</code> to see your changes
 				live.
 			</p>
 			<p>

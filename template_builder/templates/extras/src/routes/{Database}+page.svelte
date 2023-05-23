@@ -12,7 +12,7 @@
 			learnMore="https://svelte.dev/tutorial/basics"
 		>
 			<p>
-				Edit <code class="lime"> src/routes/+page.svelte </code> to see your changes
+				Edit <code class="lime">src/routes/+page.svelte</code> to see your changes
 				live.
 			</p>
 			<p>
@@ -32,7 +32,7 @@
 				Write a Prisma schema in <code class="red">prisma/schema.prisma</code>.
 			</p>
 			<p>
-				Run <code class="red"> pnpm db:push </code> to update your database typings.
+				Run <code class="red">pnpm db:push</code> to update your database typings.
 			</p>
 			<p>
 				Remember that you're using <a
