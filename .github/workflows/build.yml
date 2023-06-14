@@ -12,6 +12,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Install Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+          target: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install pnpm
+        run: npm i -g pnpm
+      - name: Test
+        run: cargo test
       - name: Get version
         id: get_version
         run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
@@ -43,12 +57,6 @@ jobs:
           wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
           mv MacOSX11.3.sdk.tar.xz tarballs/
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
-      - name: Install Rust
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          toolchain: nightly
-          components: rustfmt
-          target: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
       - name: Build MacOS
         run: |
           export PATH="$(pwd)/osxcross/target/bin:$PATH"
@@ -78,10 +86,6 @@ jobs:
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
           files: compressed/artifacts/*
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
       - name: Publish NPM Package
         run: |
           cd pkg
