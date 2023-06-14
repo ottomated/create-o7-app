@@ -6,12 +6,12 @@
 	},
 	"dependencies": {
 		"better-sqlite3": "^8.4.0",
-		"kysely": "^0.24.2",
-		"dotenv": "^16.0.3"
+		"kysely": "^0.25.0",
+		"dotenv": "^16.1.4"
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.4",
 		"kysely-codegen": "^0.10.0",
-		"prisma": "^4.14.1"
+		"prisma": "^4.15.0"
 	}
 }
