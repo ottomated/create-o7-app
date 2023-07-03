@@ -12,6 +12,6 @@
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.4",
 		"kysely-codegen": "^0.10.1",
-		"prisma": "^4.16.1"
+		"prisma": "^4.16.2"
 	}
 }

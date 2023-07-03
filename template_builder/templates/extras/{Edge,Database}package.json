@@ -3,7 +3,7 @@
 		"postinstall": "node ./prisma/generate.cjs"
 	},
 	"dependencies": {
-		"@planetscale/database": "^1.7.0",
+		"@planetscale/database": "^1.8.0",
 		"better-sqlite3": null,
 		"kysely-planetscale": "^1.3.0"
 	},
