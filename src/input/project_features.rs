@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::utils::{get_feature_name_map, Feature};
+use crate::utils::{get_feature_name_map, Feature, DEFAULT_FEATURES};
 use anyhow::Result;
 use crossterm::style::{style, Stylize};
 use inquire::{ui::RenderConfig, MultiSelect};
@@ -35,7 +35,7 @@ pub fn prompt(render_config: &RenderConfig) -> Result<HashSet<Feature>> {
 			.collect::<Vec<_>>()
 			.join(", ")
 	})
-	.with_default(&[0, 1])
+	.with_default(DEFAULT_FEATURES)
 	.prompt()?;
 
 	let features = features

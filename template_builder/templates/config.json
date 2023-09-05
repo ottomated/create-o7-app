@@ -5,12 +5,14 @@
 		{
 			"id": "Trpc",
 			"name": "tRPC",
-			"description": "(Type-safe API)"
+			"description": "(Type-safe API)",
+			"default": true
 		},
 		{
 			"id": "Tailwind",
 			"name": "Tailwind",
-			"description": "(CSS framework)"
+			"description": "(CSS framework)",
+			"default": true
 		},
 		{
 			"id": "Database",

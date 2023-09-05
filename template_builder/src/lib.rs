@@ -34,6 +34,7 @@ struct ConfigFeature {
 	id: String,
 	name: String,
 	description: String,
+	default: Option<bool>,
 }
 
 impl TemplateFile {
@@ -66,6 +67,16 @@ impl Builder {
 	fn make_config_file(&self, config: Config) -> TokenStream {
 		let default_name = format!("./{}", config.default_name);
 		let initial_commit = config.initial_commit;
+
+		let default_features = config
+			.features
+			.iter()
+			.enumerate()
+			.filter_map(|(i, feature)| match feature.default {
+				Some(true) => Some(i),
+				_ => None,
+			});
+
 		let features = config
 			.features
 			.iter()
@@ -100,6 +111,7 @@ impl Builder {
 		quote! {
 			pub const DEFAULT_NAME: &str = #default_name;
 			pub const INITIAL_COMMIT: &str = #initial_commit;
+			pub const DEFAULT_FEATURES: &[usize] = &[#(#default_features,)*];
 
 			#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
 			pub enum Feature {
