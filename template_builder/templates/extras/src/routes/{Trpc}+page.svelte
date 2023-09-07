@@ -1,8 +1,8 @@
 <script lang="ts">
-	import NextStep from "$lib/components/NextStep.svelte";
-	import { trpc } from "$lib/trpc";
+	import NextStep from '$lib/components/NextStep.svelte';
+	import { trpc } from '$lib/trpc';
 
-	const greeting = trpc.greeting.query({ name: "the o7 stack" });
+	const greeting = trpc.greeting.query({ name: 'the o7 stack' });
 </script>
 
 <main class="flex h-screen flex-col items-center justify-center">
@@ -50,7 +50,7 @@
 
 <style>
 	code {
-		background: theme("colors.zinc.900");
-		padding: theme("spacing[0.5]");
+		background: theme('colors.zinc.900');
+		padding: theme('spacing[0.5]');
 	}
 </style>
