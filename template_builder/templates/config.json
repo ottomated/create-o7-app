@@ -9,12 +9,6 @@
 			"default": true
 		},
 		{
-			"id": "Tailwind",
-			"name": "Tailwind",
-			"description": "(CSS framework)",
-			"default": true
-		},
-		{
 			"id": "Database",
 			"name": "Database",
 			"description": "(Prisma + Kysely)"
@@ -22,7 +16,7 @@
 		{
 			"id": "Edge",
 			"name": "Edge",
-			"description": "(Cloudflare Workers + Planetscale)"
+			"description": "(Cloudflare Workers)"
 		}
 	]
 }
