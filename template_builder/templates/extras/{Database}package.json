@@ -5,13 +5,13 @@
 		"build": "vite build"
 	},
 	"dependencies": {
-		"better-sqlite3": "^8.4.0",
-		"kysely": "^0.25.0",
+		"better-sqlite3": "^8.6.0",
+		"kysely": "^0.26.3",
 		"dotenv": "^16.3.1"
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.4",
 		"kysely-codegen": "^0.10.1",
-		"prisma": "^4.16.2"
+		"prisma": "^5.2.0"
 	}
 }
