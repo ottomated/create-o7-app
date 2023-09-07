@@ -1,14 +1,10 @@
 {
-	"scripts": {
-		"postinstall": "node ./prisma/generate.cjs"
-	},
 	"dependencies": {
 		"@planetscale/database": "^1.11.0",
 		"better-sqlite3": null,
 		"kysely-planetscale": "^1.4.0"
 	},
 	"devDependencies": {
-		"@types/better-sqlite3": null,
-		"mysql2": "2.3.3"
+		"@types/better-sqlite3": null
 	}
 }

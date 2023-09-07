@@ -8,7 +8,7 @@ use std::{fs, panic, thread};
 
 use itertools::Itertools;
 
-use crate::utils::{get_feature_name_map, Feature};
+use crate::utils::{get_feature_list, Feature};
 use crate::{
 	create::create,
 	input::{install_deps::ProjectPackageManager, project_location::ProjectLocation, UserInput},
@@ -51,7 +51,7 @@ fn test_pnpm(dir: &PathBuf, args: &[&'static str]) -> Result<Output, String> {
 
 #[test]
 fn test() {
-	let features: Vec<_> = get_feature_name_map().iter().map(|f| f.feature).collect();
+	let features: Vec<_> = get_feature_list().iter().map(|f| f.feature).collect();
 
 	let combinations: Vec<HashSet<Feature>> = features
 		.iter()
