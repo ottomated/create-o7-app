@@ -6,7 +6,7 @@ export const appRouter = router({
 		.input(
 			z.object({
 				name: z.string().optional(),
-			})
+			}),
 		)
 		.query(({ input }) => {
 			return `Welcome to ${input.name ?? 'the world'}!`;

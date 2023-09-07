@@ -1,5 +1,5 @@
 <script lang="ts">
-	import NextStep from "$lib/components/NextStep.svelte";
+	import NextStep from '$lib/components/NextStep.svelte';
 </script>
 
 <main class="flex h-screen flex-col items-center justify-center">
@@ -46,7 +46,7 @@
 					class="text-blue-400 hover:underline">Kysely</a
 				>
 				instead of Prisma to make your queries, and
-				<code class="text-red-300">import {"{ db }"} from '$lib/db'</code>!
+				<code class="text-red-300">import {'{ db }'} from '$lib/db'</code>!
 			</p>
 		</NextStep>
 	</div>
@@ -54,7 +54,7 @@
 
 <style>
 	code {
-		background: theme("colors.zinc.900");
-		padding: theme("spacing[0.5]");
+		background: theme('colors.zinc.900');
+		padding: theme('spacing[0.5]');
 	}
 </style>

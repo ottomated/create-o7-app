@@ -1,8 +1,8 @@
 <script lang="ts">
-	import NextStep from "$lib/components/NextStep.svelte";
-	import { trpc } from "$lib/trpc";
+	import NextStep from '$lib/components/NextStep.svelte';
+	import { trpc } from '$lib/trpc';
 
-	const greeting = trpc.greeting.query({ name: "the o7 stack" });
+	const greeting = trpc.greeting.query({ name: 'the o7 stack' });
 </script>
 
 <main class="flex h-screen flex-col items-center justify-center">
@@ -53,7 +53,7 @@
 					class="text-blue-400 hover:underline">Kysely</a
 				>
 				instead of Prisma to make your queries, and
-				<code class="text-red-300">import {"{ db }"} from '$lib/db'</code>!
+				<code class="text-red-300">import {'{ db }'} from '$lib/db'</code>!
 			</p>
 		</NextStep>
 		<NextStep title="Create some tRPC routes" learnMore="https://trpc.io">
@@ -73,7 +73,7 @@
 
 <style>
 	code {
-		background: theme("colors.zinc.900");
-		padding: theme("spacing[0.5]");
+		background: theme('colors.zinc.900');
+		padding: theme('spacing[0.5]');
 	}
 </style>

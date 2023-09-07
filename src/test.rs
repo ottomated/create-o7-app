@@ -81,9 +81,10 @@ fn test() {
 
 					Ok(())
 				})();
-				let _ = fs::remove_dir_all(&dir);
 				if let Err(e) = result {
 					errors.write().unwrap().push((features, e));
+				} else {
+					let _ = fs::remove_dir_all(&dir);
 				}
 				thread_count.fetch_sub(1, Ordering::SeqCst);
 			});
