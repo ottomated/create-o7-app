@@ -1,10 +1,8 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use crate::utils::{get_feature_list, Feature, DEFAULT_FEATURES};
 use anyhow::Result;
-use crossterm::style::style;
 use inquire::{ui::RenderConfig, MultiSelect};
-use std::io::Write;
 
 pub fn prompt(render_config: &RenderConfig) -> Result<HashSet<Feature>> {
 	let feature_list = get_feature_list();
