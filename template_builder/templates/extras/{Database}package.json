@@ -1,7 +1,6 @@
 {
 	"scripts": {
-		"db:push": "prisma db push && node ./prisma/generate.cjs",
-		"postinstall": "prisma db push && node ./prisma/generate.cjs",
+		"db:push": "prisma db push",
 		"build": "vite build"
 	},
 	"dependencies": {
@@ -11,7 +10,7 @@
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.4",
-		"kysely-codegen": "^0.10.1",
+		"prisma-kysely": "^1.7.0",
 		"prisma": "^5.2.0"
 	}
 }

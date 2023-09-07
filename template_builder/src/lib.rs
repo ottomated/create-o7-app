@@ -91,7 +91,7 @@ impl Builder {
 			panic!("Duplicate feature descriptions");
 		}
 
-		let name_map = config
+		let details_list = config
 			.features
 			.iter()
 			.map(|feature| {
@@ -99,10 +99,10 @@ impl Builder {
 				let name = feature.name.clone();
 				let id = format_ident!("{}", feature.id);
 				quote! {
-						FeatureDetails {
-					   description: #description,
-					   name:  #name,
-					   feature: Feature::#id
+					FeatureDetails {
+					  description: #description,
+					  name:  #name,
+					  feature: Feature::#id
 					}
 				}
 			})
@@ -124,9 +124,22 @@ impl Builder {
 				pub feature: Feature,
 			}
 
-			pub fn get_feature_name_map() -> Vec<FeatureDetails> {
+			impl Display for FeatureDetails {
+				fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+					write!(
+						f,
+						"{} {}",
+						self.name,
+						crossterm::style::Stylize::dim(
+							crossterm::style::style(self.description)
+						),
+					)
+				}
+			}
+
+			pub fn get_feature_list() -> Vec<FeatureDetails> {
 				vec![
-					#(#name_map),*
+					#(#details_list),*
 				]
 			}
 		}

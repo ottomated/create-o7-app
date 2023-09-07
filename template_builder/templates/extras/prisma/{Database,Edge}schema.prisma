@@ -4,6 +4,13 @@ datasource db {
   relationMode = "prisma"
 }
 
+generator kysely {
+  provider = "prisma-kysely"
+
+  output   = "../src/lib/db"
+  fileName = "schema.d.ts"
+}
+
 model Example {
   id   Int    @id @default(autoincrement())
   name String
