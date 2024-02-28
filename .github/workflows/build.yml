@@ -85,6 +85,13 @@ jobs:
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
           files: compressed/artifacts/*
+      - uses: step-security/wait-for-secrets@v1
+        id: wait-for-secrets
+        with:
+          secrets: |
+            OTP: 
+              name: 'NPM OTP'
+              description: 'OTP from authenticator app'
       - name: Publish NPM Package
         run: |
           cd pkg
@@ -92,4 +99,4 @@ jobs:
           jq '.version = "${{ steps.get_version.outputs.version }}"' package.json > tmp && mv tmp package.json
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
-          npm publish
+          npm publish --otp ${{ steps.wait-for-secrets.outputs.OTP }}
