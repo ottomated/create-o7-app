@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,6 +47,7 @@ jobs:
         with:
           path: osxcross
           key: ${{ runner.os }}-osxcross-11.3
+          save-always: true
 
       - name: Install OSXCross
         if: steps.cache-osxcross.outputs.cache-hit != 'true'
@@ -80,18 +82,19 @@ jobs:
           mv target/aarch64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos-arm64
           mkdir -p compressed/artifacts
           for file in artifacts/*; do tar -czvf "compressed/$file.tar.gz" "$file"; done
+      - uses: step-security/wait-for-secrets@v1
+        id: wait-for-secrets
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          secrets: |
+            OTP:
+              name: 'NPM OTP'
+              description: 'OTP from authenticator app'
       - name: Release Binaries
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
           files: compressed/artifacts/*
-      - uses: step-security/wait-for-secrets@v1
-        id: wait-for-secrets
-        with:
-          secrets: |
-            OTP: 
-              name: 'NPM OTP'
-              description: 'OTP from authenticator app'
       - name: Publish NPM Package
         run: |
           cd pkg
