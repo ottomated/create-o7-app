@@ -9,14 +9,38 @@
 			"default": true
 		},
 		{
-			"id": "Database",
-			"name": "Database",
-			"description": "(Prisma + Kysely)"
-		},
-		{
 			"id": "Edge",
 			"name": "Edge",
-			"description": "(Cloudflare Workers)"
+			"description": "(Deploy to Cloudflare)",
+			"default": true
+		},
+		{
+			"id": "Database",
+			"name": "Database",
+			"options": [
+				{
+					"id": "Planetscale",
+					"name": "Planetscale"
+				},
+				{
+					"id": "D1",
+					"name": "D1 (experimental)",
+					"hidden_if_not": ["Edge"]
+				},
+				{
+					"id": "Sqlite",
+					"name": "Local SQLite"
+				},
+				{
+					"name": "None"
+				}
+			],
+			"description": ""
+		},
+		{
+			"id": "Svelte5",
+			"name": "Svelte 5",
+			"description": "(in preview)"
 		}
 	]
 }

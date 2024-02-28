@@ -5,6 +5,6 @@ pub fn main() {
 	let builder = Builder::new();
 	let res = builder.build();
 	if let Err(err) = res {
-		panic!("{}", err)
+		panic!("{:?}", err)
 	}
 }

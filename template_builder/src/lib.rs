@@ -35,6 +35,33 @@ struct ConfigFeature {
 	name: String,
 	description: String,
 	default: Option<bool>,
+	options: Option<Vec<ConfigFeatureOption>>,
+}
+
+#[derive(serde::Deserialize)]
+struct ConfigFeatureOption {
+	id: Option<String>,
+	name: String,
+	// Hide this option if any of the given features are selected
+	hidden_if: Option<Vec<String>>,
+	// Hide this option if any of the given features are not selected
+	hidden_if_not: Option<Vec<String>>,
+}
+
+fn generate_hidden_set(features: &Option<Vec<String>>) -> TokenStream {
+	match features {
+		Some(features) => {
+			let features = features
+				.iter()
+				.map(|f| {
+					let id = format_ident!("{}", f);
+					quote! { Feature::#id }
+				})
+				.collect::<Vec<_>>();
+			quote! { Some(vec![#(#features),*]) }
+		}
+		None => quote! { None },
+	}
 }
 
 impl TemplateFile {
@@ -68,19 +95,16 @@ impl Builder {
 		let default_name = format!("./{}", config.default_name);
 		let initial_commit = config.initial_commit;
 
-		let default_features = config
-			.features
-			.iter()
-			.enumerate()
-			.filter_map(|(i, feature)| match feature.default {
-				Some(true) => Some(i),
-				_ => None,
-			});
-
 		let features = config
 			.features
 			.iter()
-			.map(|feature| format_ident!("{}", feature.id));
+			.flat_map(|feature| match &feature.options {
+				Some(options) => options
+					.iter()
+					.filter_map(|o| o.id.as_ref().map(|id| format_ident!("{}", id)))
+					.collect(),
+				None => vec![format_ident!("{}", feature.id)],
+			});
 
 		let unique_descriptions = config
 			.features
@@ -97,41 +121,126 @@ impl Builder {
 			.map(|feature| {
 				let description = feature.description.clone();
 				let name = feature.name.clone();
-				let id = format_ident!("{}", feature.id);
-				quote! {
-					FeatureDetails {
-					  description: #description,
-					  name:  #name,
-					  feature: Feature::#id
+				if let Some(options) = &feature.options {
+					let options = options
+						.iter()
+						.map(|option| {
+							let feature = if let Some(id) = &option.id {
+								let id = format_ident!("{}", id);
+								quote! { Some(Feature::#id) }
+							} else {
+								quote! { None }
+							};
+							let name = option.name.clone();
+							let hidden_if = generate_hidden_set(&option.hidden_if);
+							let hidden_if_not = generate_hidden_set(&option.hidden_if_not);
+							quote! {
+								FeatureOption {
+									feature: #feature,
+									name: #name,
+									hidden_if: #hidden_if,
+									hidden_if_not: #hidden_if_not,
+								}
+							}
+						})
+						.collect::<Vec<_>>();
+
+					quote! {
+						FeatureDetails::Option(OptionFeatureDetails {
+							name: #name,
+							description: #description,
+							options: vec![
+								#(#options),*
+							],
+
+						})
+					}
+				} else {
+					let id = format_ident!("{}", feature.id);
+					let default = feature.default.unwrap_or(false);
+					quote! {
+						FeatureDetails::Boolean(BooleanFeatureDetails {
+							feature: Feature::#id,
+							name: #name,
+							description: #description,
+							default: #default,
+						})
 					}
 				}
 			})
 			.collect::<Vec<_>>();
 
 		quote! {
+			use std::collections::HashSet;
+
 			pub const DEFAULT_NAME: &str = #default_name;
 			pub const INITIAL_COMMIT: &str = #initial_commit;
-			pub const DEFAULT_FEATURES: &[usize] = &[#(#default_features,)*];
 
 			#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
 			pub enum Feature {
 				#(#features),*
 			}
 
-			pub struct FeatureDetails {
-				pub description: &'static str,
+			pub enum FeatureDetails {
+				Boolean(BooleanFeatureDetails),
+				Option(OptionFeatureDetails),
+			}
+
+			pub struct OptionFeatureDetails {
 				pub name: &'static str,
+				pub description: &'static str,
+				pub options: Vec<FeatureOption>,
+			}
+
+			pub struct FeatureOption {
+				pub feature: Option<Feature>,
+				pub name: &'static str,
+				hidden_if: Option<Vec<Feature>>,
+				hidden_if_not: Option<Vec<Feature>>,
+			}
+
+			impl Display for FeatureOption {
+				fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+					write!(f, "{}", self.name)
+				}
+			}
+
+
+			impl FeatureOption {
+				pub fn should_show(&self, features: &HashSet<Feature>) -> bool {
+					if let Some(hidden_if) = &self.hidden_if {
+						if hidden_if.iter().any(|f| features.contains(f)) {
+							return false;
+						}
+					}
+					if let Some(hidden_if_not) = &self.hidden_if_not {
+						if hidden_if_not.iter().all(|f| !features.contains(f)) {
+							return false;
+						}
+					}
+					true
+				}
+			}
+
+			pub struct BooleanFeatureDetails {
 				pub feature: Feature,
+				pub name: &'static str,
+				pub description: &'static str,
+				pub default: bool,
 			}
 
 			impl Display for FeatureDetails {
 				fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+					let (name, description) = match self {
+						FeatureDetails::Boolean(details) => (details.name, details.description),
+						FeatureDetails::Option(details) => (details.name, details.description),
+					};
 					write!(
 						f,
 						"{} {}",
-						self.name,
+						name,
 						crossterm::style::Stylize::dim(
-							crossterm::style::style(self.description)
+							crossterm::style::style(description)
 						),
 					)
 				}
