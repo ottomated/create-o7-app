@@ -1,0 +1,19 @@
+{
+	"scripts": {
+		"db:push": "node ./prisma/push.cjs"
+	},
+	"dependencies": {
+		"kysely-d1": "^0.3.0",
+		"better-sqlite3": "^9.4.3",
+		"kysely": "^0.27.2",
+		"dotenv": "^16.4.5"
+	},
+	"devDependencies": {
+		"@types/better-sqlite3": "^7.6.9",
+		"@miniflare/d1": "^2.14.2",
+		"@miniflare/shared": "^2.14.2",
+		"prisma-kysely": "^1.8.0",
+		"prisma": "^5.10.2",
+		"wrangler": "^3.30.0"
+	}
+}

@@ -6,7 +6,7 @@
 
 <p align="center">An opinionated CLI for creating type-safe Svelte apps.</p>
 <p align="center">
-<code>npm create o7-app@latest</code>
+<code>pnpm create o7-app</code>
 </p>
 <br />
 
@@ -30,17 +30,31 @@ Why both Prisma and Kysely? `create-o7-app`'s template includes Kysely for **Edg
 
 First, run the CLI to scaffold your app:
 
-**npm**
-```
-npm create o7-app@latest
-```
-**yarn**
-```
-yarn create o7-app
-```
 **pnpm**
+
 ```
 pnpm create o7-app@latest
 ```
 
+**npm**
+
+```
+npm create o7-app@latest
+```
+
+**yarn**
+
+```
+yarn create o7-app
+```
+
 Then, open your new app in your favorite IDE and get started! A good place to look first is `src/routes/+page.svelte` for your frontend or `src/lib/server/routes/_app.ts` for tRPC.
+
+## Changelog
+
+### `0.4.0`
+
+- Upgrade to SvelteKit 2 (and various other package updates)
+- Support for the Svelte 5 preview
+- Experimental support for D1 (including Prisma migrations!)
+- Remove support for Vanilla CSS (tailwind only!)

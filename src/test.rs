@@ -8,7 +8,7 @@ use std::{fs, panic, thread};
 
 use itertools::Itertools;
 
-use crate::utils::{get_feature_list, Feature};
+use crate::utils::{get_feature_list, Feature, FeatureDetails};
 use crate::{
 	create::create,
 	input::{install_deps::ProjectPackageManager, project_location::ProjectLocation, UserInput},
@@ -49,15 +49,47 @@ fn test_pnpm(dir: &PathBuf, args: &[&'static str]) -> Result<Output, String> {
 	Ok(output)
 }
 
+fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>> {
+	let mut last_step = vec![HashSet::new()];
+
+	for i in 0..features.len() {
+		let feature_details = features.get(i).unwrap();
+		let mut next = vec![];
+		for past in last_step {
+			match feature_details {
+				FeatureDetails::Boolean(details) => {
+					let mut yes = past.clone();
+					yes.insert(details.feature);
+					let no = past;
+					next.push(yes);
+					next.push(no);
+				}
+				FeatureDetails::Option(details) => {
+					for option in details.options.iter() {
+						if !option.should_show(&past) {
+							continue;
+						}
+						let mut set = past.clone();
+						if let Some(feature) = option.feature {
+							set.insert(feature);
+						}
+						next.push(set);
+					}
+				}
+			}
+		}
+		last_step = next;
+	}
+	last_step
+}
+
 #[test]
 fn test() {
-	let features: Vec<_> = get_feature_list().iter().map(|f| f.feature).collect();
-
-	let combinations: Vec<HashSet<Feature>> = features
-		.iter()
-		.powerset()
-		.map(|set| set.into_iter().cloned().collect())
-		.collect::<Vec<_>>();
+	let combinations = generate_combinations(get_feature_list());
+	// let mut combinations = vec![HashSet::new()];
+	// combinations[0].insert(Feature::Edge);
+	// combinations[0].insert(Feature::D1);
+	// combinations[0].insert(Feature::Trpc);
 
 	println!("Testing {} combinations", combinations.len());
 
