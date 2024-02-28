@@ -40,7 +40,7 @@ if (!supported) {
 }
 
 const { join } = require('path');
-const { existsSync, readdirSync, unlinkSync, mkdirSync } = require('fs');
+const { existsSync, mkdirSync } = require('fs');
 const dir = join(__dirname, "node_modules", ".bin");
 const bin = join(dir, `create-o7-app-${supported.file}`);
 
