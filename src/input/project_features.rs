@@ -5,7 +5,7 @@ use anyhow::Result;
 use crossterm::style::{style, Stylize};
 use inquire::{ui::RenderConfig, Confirm, Select};
 
-pub fn prompt(render_config: &RenderConfig) -> Result<HashSet<Feature>> {
+pub fn prompt(_render_config: &RenderConfig) -> Result<HashSet<Feature>> {
 	println!(
 		"{} {}",
 		style(">").green(),
