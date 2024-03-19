@@ -2,22 +2,33 @@ import { spawnSync } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { resolve } from 'node:path';
 import { unlinkSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import 'dotenv/config';
 
-const databaseName = process.env.DATABASE_NAME;
-if (!databaseName) {
-	console.error('DATABASE_NAME not set (must be the name of a D1 database)');
-	process.exit(1);
-}
+const isLocal = process.argv.includes('--local');
+const localFlag = isLocal ? '--local' : '--remote';
 
-const tempDb = resolve(__dirname, './temp.db');
-const migrationFile = resolve(__dirname, './temp.sql');
+let databaseName;
+
+if (isLocal) {
+	databaseName = 'DB';
+} else {
+	const databaseName = process.env.DATABASE_NAME;
+	if (!databaseName) {
+		console.error('DATABASE_NAME not set (must be the name of a D1 database)');
+		process.exit(1);
+	}
+}
+const dirname = resolve(fileURLToPath(import.meta.url), '..');
+
+const tempDb = resolve(dirname, './temp.db');
+const migrationFile = resolve(dirname, './temp.sql');
 try {
 	unlinkSync(tempDb);
 } catch (_) {
 	/* ignore */
 }
-const schema = resolve(__dirname, './schema.prisma');
+const schema = resolve(dirname, './schema.prisma');
 
 // 1. Pull current schema
 const current = JSON.parse(
@@ -28,12 +39,13 @@ const current = JSON.parse(
 			'd1',
 			'execute',
 			databaseName,
+			localFlag,
 			'--command',
 			"SELECT * FROM sqlite_schema WHERE name != '_cf_KV' AND name != 'sqlite_sequence'",
 			'--json',
 		],
-		{ encoding: 'utf-8' },
-	).stdout,
+		{ encoding: 'utf-8' }
+	).stdout
 )[0].results;
 
 // 2. create dummy db with that schema
@@ -57,7 +69,7 @@ const migration = spawnSync(
 		schema,
 		'--script',
 	],
-	{ encoding: 'utf-8' },
+	{ encoding: 'utf-8' }
 );
 if (migration.stdout.includes('-- This is an empty migration.')) {
 	console.log('No changes');
@@ -76,8 +88,16 @@ writeFileSync(migrationFile, migrationSql);
 // 4. apply migration on actual db
 const res = spawnSync(
 	`npx`,
-	['wrangler', 'd1', 'execute', databaseName, '--file', migrationFile],
-	{ stdio: 'inherit' },
+	[
+		'wrangler',
+		'd1',
+		'execute',
+		databaseName,
+		localFlag,
+		'--file',
+		migrationFile,
+	],
+	{ stdio: 'inherit' }
 );
 
 unlinkSync(tempDb);
