@@ -1,0 +1,7 @@
+# This file is only used during development - 
+# when deploying to Cloudflare Pages, you must
+# set the bindings via the Cloudflare dashboard.
+
+d1_databases = [
+	{ binding = "DB", database_name = "", database_id = "915ec857-4b93-4985-9545-43f747672e5b" },
+]
