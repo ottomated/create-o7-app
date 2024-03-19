@@ -14,6 +14,6 @@
 		"@miniflare/shared": "^2.14.2",
 		"prisma-kysely": "^1.8.0",
 		"prisma": "^5.10.2",
-		"wrangler": "^3.30.0"
+		"wrangler": "^3.34.2"
 	}
 }
