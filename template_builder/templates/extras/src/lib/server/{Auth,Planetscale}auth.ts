@@ -25,7 +25,7 @@ const adapter = new PlanetScaleAdapter(
 	{
 		user: 'User',
 		session: 'Session',
-	}
+	},
 );
 
 export const lucia = new Lucia(adapter, {
