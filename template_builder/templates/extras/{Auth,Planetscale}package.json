@@ -1,0 +1,5 @@
+{
+	"devDependencies": {
+		"@lucia-auth/adapter-mysql": "^3.0.2"
+	}
+}

@@ -1,10 +1,17 @@
 <script lang="ts">
 	import NextStep from '$lib/components/NextStep.svelte';
+	import { trpc } from '$lib/trpc';
+
+	const greeting = trpc.greeting.query({ name: 'the o7 stack' });
 </script>
 
 <main class="flex h-screen flex-col items-center justify-center">
 	<img src="/favicon.png" class="w-32" alt="o7 Logo" />
-	<h1 class="text-3xl font-bold">Welcome to the o7 stack!</h1>
+	<!--
+		Notice how there's no flash of `undefined` here: that's because of the
+		SSR in `+page.server.ts`! Try changing the `name` to see the difference.
+	-->
+	<h1 class="text-3xl font-bold">{$greeting.data}</h1>
 	<h2 class="my-6 text-2xl">Next Steps:</h2>
 	<div class="flex max-w-5xl justify-center gap-4 px-3">
 		<NextStep
@@ -36,7 +43,8 @@
 				>.
 			</p>
 			<p>
-				Insert your D1 database name into <code class="text-red-300">.env</code
+				Insert your database connection details into <code class="text-red-300"
+					>.env</code
 				>.
 			</p>
 			<p>
@@ -50,7 +58,19 @@
 					class="text-blue-400 hover:underline">Kysely</a
 				>
 				instead of Prisma to make your queries, and
-				<code class="text-red-300">import {'{ getDb }'} from '$lib/db'</code>!
+				<code class="text-red-300">import {'{ db }'} from '$lib/db'</code>!
+			</p>
+		</NextStep>
+		<NextStep title="Create some tRPC routes" learnMore="https://trpc.io">
+			<p>
+				There's an example query in <code class="text-purple-300"
+					>src/lib/server/routes/_app.ts</code
+				>.
+			</p>
+			<p>
+				Also take a look at <code class="text-purple-300">
+					src/routes/+page.server.ts</code
+				> to see how server-side rendering works!
 			</p>
 		</NextStep>
 	</div>

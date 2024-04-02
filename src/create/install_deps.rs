@@ -6,10 +6,9 @@ use anyhow::{Context, Result};
 use super::log_step_end;
 
 pub fn install_deps(input: &UserInput) -> Result<()> {
-	if input.install_deps.is_none() {
+	let Some(pm) = &input.install_deps else {
 		return Ok(());
-	}
-	let pm = input.install_deps.as_ref().unwrap();
+	};
 
 	let start = log_step_start("Installing dependencies...");
 

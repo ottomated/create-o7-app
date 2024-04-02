@@ -43,10 +43,9 @@ pub enum GitStep {
 }
 
 pub fn create_repo(input: &UserInput) -> Result<(), (GitStep, Error)> {
-	if input.git.is_none() {
+	let Some(git) = &input.git else {
 		return Ok(());
-	}
-	let git = input.git.as_ref().unwrap();
+	};
 
 	let start = log_step_start("Creating git repository...\n");
 
