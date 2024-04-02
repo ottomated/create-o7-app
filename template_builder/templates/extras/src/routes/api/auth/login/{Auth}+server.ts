@@ -1,11 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 import { generateState } from 'arctic';
 import { twitch } from '$lib/server/auth';
-
-import type { RequestEvent } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 
-export async function GET(event: RequestEvent): Promise<Response> {
+export const GET = async (event) => {
 	const state = generateState();
 	const url = await twitch.createAuthorizationURL(state, {
 		scopes: [],
@@ -20,4 +18,4 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	});
 
 	redirect(302, url.toString());
-}
+};
