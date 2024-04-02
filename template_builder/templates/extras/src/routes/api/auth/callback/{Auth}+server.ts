@@ -94,6 +94,6 @@ interface TwitchUser {
 			profile_image_url: string;
 			offline_image_url: string;
 			created_at: string;
-		}
+		},
 	];
 }

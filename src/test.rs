@@ -62,7 +62,6 @@ fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>>
 			match feature_details {
 				FeatureDetails::Boolean(details) => {
 					let (show, value) = details.should_show(&past);
-					println!("{show} {value}");
 					if !show {
 						let mut set = past.clone();
 						if value {
@@ -99,9 +98,7 @@ fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>>
 
 #[test]
 fn test() {
-	println!("a");
 	let mut combinations = generate_combinations(get_feature_list());
-	println!("{combinations:?}");
 	// let mut combinations = vec![HashSet::new()];
 	// combinations[0].insert(Feature::Edge);
 	// combinations[0].insert(Feature::D1);
