@@ -51,7 +51,7 @@ pub fn prompt(
 	let message = format!("Would you like us to run '{package_manager} install'?");
 	let mut install_deps = Confirm::new(&message)
 		.with_render_config(*render_config)
-		.with_default(true);
+		.with_default(package_manager != PackageManager::Npm);
 
 	let help = format!(
 		"Falling back to npm, as {} was not found",
