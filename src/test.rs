@@ -130,7 +130,6 @@ fn test() {
 		combinations.len()
 	);
 
-	let per_thread = max(1, combinations.len().div_ceil(num_threads));
 	let mut chunks = vec![vec![]; num_threads];
 	while !combinations.is_empty() {
 		for i in 0..num_threads {

@@ -36,7 +36,8 @@
 				},
 				{
 					"id": "Sqlite",
-					"name": "Local SQLite"
+					"name": "Local SQLite",
+					"hidden_if": ["Edge"]
 				},
 				{
 					"name": "None",
