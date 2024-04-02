@@ -16,7 +16,7 @@ export const appRouter = router({
 	}),
 	secret: authedProcedure.query(({ ctx }) => {
 		// This is a protected route
-		return `Hello, ${ctx.user.name}!`;
+		return `Hello, ${ctx.user.username}!`;
 	}),
 });
 
