@@ -1,4 +1,4 @@
-use std::cmp::{max, min};
+use std::cmp::min;
 use std::collections::HashSet;
 use std::num::NonZeroUsize;
 use std::path::PathBuf;
