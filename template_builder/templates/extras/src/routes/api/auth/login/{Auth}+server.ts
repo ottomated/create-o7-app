@@ -17,5 +17,5 @@ export const GET = async (event) => {
 		sameSite: 'lax',
 	});
 
-	redirect(302, url.toString());
+	redirect(302, url);
 };
