@@ -14,7 +14,7 @@ macro_rules! run_git {
 		let args = match $step {
 			GitStep::Init => vec!["init"],
 			GitStep::Add => vec!["add", "."],
-			GitStep::Commit => vec!["commit", "-m", crate::utils::INITIAL_COMMIT],
+			GitStep::Commit => vec!["commit", "-q", "-m", crate::utils::INITIAL_COMMIT],
 		};
 		let status = Command::new(&$git)
 			.args(args)
