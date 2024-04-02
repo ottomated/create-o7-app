@@ -1,4 +1,3 @@
-import { redirect } from '@sveltejs/kit';
 import { OAuth2RequestError } from 'arctic';
 import { generateId } from 'lucia';
 import { twitch, lucia } from '$lib/server/auth';
@@ -61,7 +60,12 @@ export const GET = async (event) => {
 				...sessionCookie.attributes,
 			});
 		}
-		redirect(302, '/');
+		return new Response(null, {
+			status: 302,
+			headers: {
+				Location: '/',
+			},
+		});
 	} catch (e) {
 		// the specific error message depends on the provider
 		if (e instanceof OAuth2RequestError) {
