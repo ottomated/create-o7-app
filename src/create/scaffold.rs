@@ -5,7 +5,6 @@ use std::fs;
 
 pub fn scaffold(input: &UserInput) -> Result<()> {
 	let templates = templates::get_templates();
-
 	for template in templates {
 		let included = match template.features {
 			Some(features) => features.is_subset(&input.features),

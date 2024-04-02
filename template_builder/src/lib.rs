@@ -36,6 +36,8 @@ struct ConfigFeature {
 	description: String,
 	default: Option<bool>,
 	options: Option<Vec<ConfigFeatureOption>>,
+	// Hide this option and auto-enable it if any of the given features are selected
+	required_if: Option<Vec<String>>,
 }
 
 #[derive(serde::Deserialize)]
@@ -158,12 +160,14 @@ impl Builder {
 				} else {
 					let id = format_ident!("{}", feature.id);
 					let default = feature.default.unwrap_or(false);
+					let required_if = generate_hidden_set(&feature.required_if);
 					quote! {
 						FeatureDetails::Boolean(BooleanFeatureDetails {
 							feature: Feature::#id,
 							name: #name,
 							description: #description,
 							default: #default,
+							required_if: #required_if,
 						})
 					}
 				}
@@ -227,6 +231,19 @@ impl Builder {
 				pub name: &'static str,
 				pub description: &'static str,
 				pub default: bool,
+				pub required_if: Option<Vec<Feature>>,
+			}
+
+			impl BooleanFeatureDetails {
+				// Returns (show, default)
+				pub fn should_show(&self, features: &HashSet<Feature>) -> (bool, bool) {
+					if let Some(required_if) = &self.required_if {
+						if required_if.iter().any(|f| features.contains(f)) {
+							return (false, true);
+						}
+					}
+					(true, self.default)
+				}
 			}
 
 			impl Display for FeatureDetails {
@@ -366,21 +383,24 @@ impl Builder {
 			let file_name = file.file_name().to_string_lossy();
 
 			let features = parse_feature_file(&file_name);
-			if features.is_none() {
+
+			let Some((files, name)) = features else {
+				println!("cargo:warning=Could not parse feature file {}", file_name);
 				continue;
-			}
-			let (features, name) = features.unwrap();
+			};
 
 			let contents = std::fs::read(file.path())
 				.with_context(|| format!("Could not read {}", path.display()))?;
 
 			let path = path.parent().unwrap().join(name);
 
-			templates.push(TemplateFile {
-				features: Some(features),
-				path,
-				contents,
-			});
+			for features in files {
+				templates.push(TemplateFile {
+					features: Some(features),
+					path: path.clone(),
+					contents: contents.clone(),
+				});
+			}
 		}
 		templates.sort_by(|a, b| a.feature_count().cmp(&b.feature_count()));
 

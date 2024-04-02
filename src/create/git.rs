@@ -14,7 +14,7 @@ macro_rules! run_git {
 		let args = match $step {
 			GitStep::Init => vec!["init"],
 			GitStep::Add => vec!["add", "."],
-			GitStep::Commit => vec!["commit", "-m", crate::utils::INITIAL_COMMIT],
+			GitStep::Commit => vec!["commit", "-q", "-m", crate::utils::INITIAL_COMMIT],
 		};
 		let status = Command::new(&$git)
 			.args(args)
@@ -43,10 +43,9 @@ pub enum GitStep {
 }
 
 pub fn create_repo(input: &UserInput) -> Result<(), (GitStep, Error)> {
-	if input.git.is_none() {
+	let Some(git) = &input.git else {
 		return Ok(());
-	}
-	let git = input.git.as_ref().unwrap();
+	};
 
 	let start = log_step_start("Creating git repository...\n");
 

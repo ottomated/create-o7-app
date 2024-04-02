@@ -17,8 +17,22 @@ pub fn prompt(_render_config: &RenderConfig) -> Result<HashSet<Feature>> {
 	for feature in feature_list.into_iter() {
 		match feature {
 			FeatureDetails::Boolean(ref details) => {
+				let (should_show, default_value) = details.should_show(&selected_features);
+				if !should_show {
+					if default_value {
+						println!(
+							"{} {} {}",
+							style(">").green(),
+							feature,
+							style("Yes, Required").yellow()
+						);
+						selected_features.insert(details.feature);
+					}
+					continue;
+				}
+
 				let yes = Confirm::new(&format!("{feature}"))
-					.with_default(details.default)
+					.with_default(default_value)
 					.prompt()?;
 				if yes {
 					selected_features.insert(details.feature);

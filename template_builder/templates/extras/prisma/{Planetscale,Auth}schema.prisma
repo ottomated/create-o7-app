@@ -1,0 +1,29 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator kysely {
+  provider = "prisma-kysely"
+
+  output   = "../src/lib/db"
+  fileName = "schema.d.ts"
+}
+
+model User {
+  id        String @id
+  twitch_id String
+  username  String
+
+  sessions Session[]
+}
+
+model Session {
+  id         String @id
+  expires_at Int
+  user_id    String
+  user       User   @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+}

@@ -3,10 +3,17 @@
 	"initial_commit": "Create o7 App",
 	"features": [
 		{
+			"id": "Auth",
+			"name": "Auth",
+			"description": "(with Lucia)",
+			"default": false
+		},
+		{
 			"id": "Trpc",
 			"name": "tRPC",
 			"description": "(Type-safe API)",
-			"default": true
+			"default": true,
+			"required_if": ["Auth"]
 		},
 		{
 			"id": "Edge",
@@ -29,10 +36,12 @@
 				},
 				{
 					"id": "Sqlite",
-					"name": "Local SQLite"
+					"name": "Local SQLite",
+					"hidden_if": ["Edge"]
 				},
 				{
-					"name": "None"
+					"name": "None",
+					"hidden_if": ["Auth"]
 				}
 			],
 			"description": ""

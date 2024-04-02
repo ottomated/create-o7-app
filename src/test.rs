@@ -1,8 +1,11 @@
+use std::cmp::min;
 use std::collections::HashSet;
+use std::num::NonZeroUsize;
 use std::path::PathBuf;
 use std::process::{Command, Output};
 use std::sync::atomic::{AtomicU16, Ordering};
 use std::sync::{Arc, RwLock};
+use std::thread::available_parallelism;
 use std::time::Duration;
 use std::{fs, panic, thread};
 
@@ -58,11 +61,20 @@ fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>>
 		for past in last_step {
 			match feature_details {
 				FeatureDetails::Boolean(details) => {
-					let mut yes = past.clone();
-					yes.insert(details.feature);
-					let no = past;
-					next.push(yes);
-					next.push(no);
+					let (show, value) = details.should_show(&past);
+					if !show {
+						let mut set = past.clone();
+						if value {
+							set.insert(details.feature);
+						}
+						next.push(set);
+					} else {
+						let mut yes = past.clone();
+						yes.insert(details.feature);
+						let no = past;
+						next.push(yes);
+						next.push(no);
+					}
 				}
 				FeatureDetails::Option(details) => {
 					for option in details.options.iter() {
@@ -78,6 +90,7 @@ fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>>
 				}
 			}
 		}
+		println!("{next:?}");
 		last_step = next;
 	}
 	last_step
@@ -85,38 +98,72 @@ fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>>
 
 #[test]
 fn test() {
-	let combinations = generate_combinations(get_feature_list());
+	let mut combinations = generate_combinations(get_feature_list());
 	// let mut combinations = vec![HashSet::new()];
 	// combinations[0].insert(Feature::Edge);
 	// combinations[0].insert(Feature::D1);
 	// combinations[0].insert(Feature::Trpc);
 
-	println!("Testing {} combinations", combinations.len());
+	let num_threads = min(
+		{
+			let possible =
+				usize::from(available_parallelism().unwrap_or(NonZeroUsize::new(1).unwrap()));
+
+			if std::env::var("CI").is_ok() {
+				if possible == 1 {
+					1usize
+				} else {
+					possible - 1
+				}
+			} else {
+				possible / 2
+			}
+		},
+		combinations.len(),
+	);
+
+	println!(
+		"Testing {} combinations on {num_threads} threads",
+		combinations.len()
+	);
+
+	let mut chunks = vec![vec![]; num_threads];
+	while !combinations.is_empty() {
+		for i in 0..num_threads {
+			let Some(c) = combinations.pop() else {
+				break;
+			};
+			chunks[i].push(c);
+		}
+	}
 
 	thread::scope(|s| {
 		let errors = Arc::new(RwLock::new(vec![]));
 		let thread_count = Arc::new(AtomicU16::new(0));
 
-		for features in combinations {
+		for chunk in chunks {
 			thread_count.fetch_add(1, Ordering::SeqCst);
-			let input = make_input(features.clone());
 			let errors = Arc::clone(&errors);
-			let thread_count = thread_count.clone();
+			let thread_count = Arc::clone(&thread_count);
 
 			s.spawn(move || {
-				let dir = input.location.path.clone();
-				let result: Result<(), String> = (|| {
-					create(input).map_err(|e| format!("{e}"))?;
-					test_pnpm(&dir, &["build"])?;
-					test_pnpm(&dir, &["eslint", "--max-warnings", "0", "."])?;
-					test_pnpm(&dir, &["svelte-check"])?;
+				for features in chunk {
+					let input = make_input(features.clone());
+					let dir = input.location.path.clone();
+					let result: Result<(), String> = (|| {
+						create(input).map_err(|e| format!("{e}"))?;
+						// Build first so sveltekit generates its tsconfig
+						test_pnpm(&dir, &["build"])?;
+						test_pnpm(&dir, &["eslint", "--max-warnings", "0", "."])?;
+						test_pnpm(&dir, &["svelte-check"])?;
 
-					Ok(())
-				})();
-				if let Err(e) = result {
-					errors.write().unwrap().push((features, e));
-				} else {
-					let _ = fs::remove_dir_all(&dir);
+						Ok(())
+					})();
+					if let Err(e) = result {
+						errors.write().unwrap().push((features, e));
+					} else {
+						let _ = fs::remove_dir_all(&dir);
+					}
 				}
 				thread_count.fetch_sub(1, Ordering::SeqCst);
 			});
