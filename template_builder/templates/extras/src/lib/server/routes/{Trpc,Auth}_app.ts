@@ -11,8 +11,12 @@ export const appRouter = router({
 		.query(({ input }) => {
 			return `Welcome to ${input.name ?? 'the world'}!`;
 		}),
-	getMe: authedProcedure.query(({ ctx }) => {
+	me: publicProcedure.query(({ ctx }) => {
 		return ctx.user;
+	}),
+	secret: authedProcedure.query(({ ctx }) => {
+		// This is a protected route
+		return `Hello, ${ctx.user.name}!`;
 	}),
 });
 
