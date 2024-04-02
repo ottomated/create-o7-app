@@ -155,9 +155,9 @@ fn test() {
 					let dir = input.location.path.clone();
 					let result: Result<(), String> = (|| {
 						create(input).map_err(|e| format!("{e}"))?;
-						test_pnpm(&dir, &["build"])?;
 						test_pnpm(&dir, &["eslint", "--max-warnings", "0", "."])?;
 						test_pnpm(&dir, &["svelte-check"])?;
+						test_pnpm(&dir, &["build"])?;
 
 						Ok(())
 					})();
