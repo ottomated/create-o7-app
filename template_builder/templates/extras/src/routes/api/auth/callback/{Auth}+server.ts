@@ -1,12 +1,11 @@
+import { redirect } from '@sveltejs/kit';
 import { OAuth2RequestError } from 'arctic';
 import { generateId } from 'lucia';
 import { twitch, lucia } from '$lib/server/auth';
-
-import type { RequestEvent } from '@sveltejs/kit';
 import { db } from '$lib/db';
 import { CLIENT_ID } from '$env/static/private';
 
-export async function GET(event: RequestEvent): Promise<Response> {
+export const GET = async (event) => {
 	const code = event.url.searchParams.get('code');
 	const state = event.url.searchParams.get('state');
 	const storedState = event.cookies.get('oauth_state') ?? null;
@@ -62,12 +61,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				...sessionCookie.attributes,
 			});
 		}
-		return new Response(null, {
-			status: 302,
-			headers: {
-				Location: '/',
-			},
-		});
+		redirect(302, '/');
 	} catch (e) {
 		// the specific error message depends on the provider
 		if (e instanceof OAuth2RequestError) {
@@ -80,7 +74,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			status: 500,
 		});
 	}
-}
+};
 
 interface TwitchUser {
 	data: [
