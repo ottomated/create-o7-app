@@ -383,21 +383,24 @@ impl Builder {
 			let file_name = file.file_name().to_string_lossy();
 
 			let features = parse_feature_file(&file_name);
-			if features.is_none() {
+
+			let Some((files, name)) = features else {
+				println!("cargo:warning=Could not parse feature file {}", file_name);
 				continue;
-			}
-			let (features, name) = features.unwrap();
+			};
 
 			let contents = std::fs::read(file.path())
 				.with_context(|| format!("Could not read {}", path.display()))?;
 
 			let path = path.parent().unwrap().join(name);
 
-			templates.push(TemplateFile {
-				features: Some(features),
-				path,
-				contents,
-			});
+			for features in files {
+				templates.push(TemplateFile {
+					features: Some(features),
+					path: path.clone(),
+					contents: contents.clone(),
+				});
+			}
 		}
 		templates.sort_by(|a, b| a.feature_count().cmp(&b.feature_count()));
 

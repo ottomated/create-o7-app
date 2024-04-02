@@ -3,9 +3,11 @@ import Database from 'better-sqlite3';
 import { DATABASE_URL } from '$env/static/private';
 import type { DB } from './schema';
 
+export const sqlite = new Database(DATABASE_URL);
+
 export const db = new Kysely<DB>({
 	dialect: new SqliteDialect({
-		database: new Database(DATABASE_URL),
+		database: sqlite,
 	}),
 });
 

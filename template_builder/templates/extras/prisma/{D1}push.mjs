@@ -13,7 +13,7 @@ let databaseName;
 if (isLocal) {
 	databaseName = 'DB';
 } else {
-	const databaseName = process.env.DATABASE_NAME;
+	databaseName = process.env.DATABASE_NAME;
 	if (!databaseName) {
 		console.error('DATABASE_NAME not set (must be the name of a D1 database)');
 		process.exit(1);
@@ -51,7 +51,7 @@ const current = JSON.parse(
 // 2. create dummy db with that schema
 const db = new Database(tempDb);
 for (const item of current) {
-	if (item.sql) {
+	if (item.sql && item.sql !== 'null') {
 		db.prepare(item.sql).run();
 	}
 }

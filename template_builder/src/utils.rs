@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use std::{
@@ -6,7 +7,7 @@ use std::{
 };
 use walkdir::WalkDir;
 
-pub fn parse_feature_file(file_name: &str) -> Option<(HashSet<String>, &str)> {
+pub fn parse_feature_file(file_name: &str) -> Option<(Vec<HashSet<String>>, &str)> {
 	let open = file_name.find('{')?;
 	if open != 0 {
 		return None;
@@ -15,10 +16,36 @@ pub fn parse_feature_file(file_name: &str) -> Option<(HashSet<String>, &str)> {
 
 	let features_string = &file_name[open + 1..close];
 
-	let features = features_string.split(',').map(|f| f.to_string()).collect();
+	let mut base_features = HashSet::new();
+	let mut or_features = Vec::new();
+
+	for feature in features_string.split(',') {
+		if feature.contains('|') {
+			let or_feature = feature
+				.split('|')
+				.map(|f| f.to_owned())
+				.collect::<HashSet<_>>();
+			or_features.push(or_feature);
+		} else {
+			base_features.insert(feature.to_owned());
+		}
+	}
+	let feature_sets = if or_features.is_empty() {
+		vec![base_features]
+	} else {
+		or_features
+			.iter()
+			.multi_cartesian_product()
+			.map(|features| {
+				let mut set = base_features.clone();
+				set.extend(features.into_iter().cloned());
+				set
+			})
+			.collect::<Vec<_>>()
+	};
 
 	let file_name = &file_name[close + 1..];
-	Some((features, file_name))
+	Some((feature_sets, file_name))
 }
 
 pub fn walk_dir(dir: &Path) -> Vec<(PathBuf, walkdir::DirEntry)> {
