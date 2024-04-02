@@ -25,7 +25,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				'Client-ID': CLIENT_ID,
 			},
 		})
-			.then((r) => r.json<TwitchUser>())
+			.then((r) => r.json() as Promise<TwitchUser>)
 			.then((u) => u.data[0]);
 
 		// Replace this with your own DB client.
@@ -94,6 +94,6 @@ interface TwitchUser {
 			profile_image_url: string;
 			offline_image_url: string;
 			created_at: string;
-		},
+		}
 	];
 }
