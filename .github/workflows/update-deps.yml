@@ -21,18 +21,26 @@ jobs:
               base: 'main',
               head: `${context.repo.owner}:updates`,
             });
-            return pullRequests[0]?.head?.ref ?? 'main';
+            // save pr number to github_env
+            if (pullRequests[0]) {
+              require('fs').appendFileSync(process.env.GITHUB_ENV,
+                `PR_NUMBER=${pullRequests[0].number}\n`
+              );
+            }
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.detect_open_pr.outputs.result }}
+            return pullRequests[0]?.head?.ref ?? 'main';
 
       - id: create_token
         uses: tibdex/github-app-token@v2
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.create_token.outputs.token }}
+          ref: ${{ steps.detect_open_pr.outputs.result }}
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -54,14 +62,33 @@ jobs:
           token: ${{ steps.create_token.outputs.token }}
           commit-message: '[ci] Update dependencies'
           title: Update dependencies
-          body: |
-            ${{ env.PR_BODY }}
+          body: ${{ env.PR_BODY }}
           branch: updates
 
       - name: Push to existing PR
         if: steps.detect_open_pr.outputs.result != 'main'
         run: |
-          git checkout -b ${{ steps.detect_open_pr.outputs.result }}
+          if git diff --quiet; then
+            echo "No changes"
+            exit 1
+          fi
           git add .
+
+          git config --local user.email "create-o7-app@users.noreply.github.com"
+          git config --local user.name "create-o7-app[bot]"
           git commit -m "[ci] Update dependencies"
-          git push origin updates
+
+          git push origin ${{ steps.detect_open_pr.outputs.result }}
+
+      - name: Comment on PR
+        if: steps.detect_open_pr.outputs.result != 'main'
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ steps.create_token.outputs.token }}
+          script: |
+            github.issues.createComment({
+              issue_number: ${{ env.PR_NUMBER }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: process.env.PR_BODY,
+            });
