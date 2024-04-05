@@ -14,7 +14,6 @@ jobs:
         id: detect_open_pr
         uses: actions/github-script@v4
         with:
-          result-encoding: string
           script: |
             const { data: pullRequests } = await github.pulls.list({
               owner: context.repo.owner,
@@ -23,12 +22,12 @@ jobs:
               base: 'main',
               head: `${context.repo.owner}:updates`,
             });
-            return pullRequests[0]?.head?.ref ?? 'main';
+            return { name: pullRequests[0]?.head?.ref ?? 'main', issue_number: pullRequests[0]?.number };
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.detect_open_pr.outputs.result }}
+          ref: ${{ steps.detect_open_pr.outputs.result.name }}
 
       - id: create_token
         uses: tibdex/github-app-token@v2
@@ -50,7 +49,7 @@ jobs:
           } >> $GITHUB_ENV
 
       - name: Open PR
-        if: steps.detect_open_pr.outputs.result == 'main'
+        if: steps.detect_open_pr.outputs.result.name == 'main'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.create_token.outputs.token }}
@@ -60,13 +59,12 @@ jobs:
           branch: updates
 
       - name: Push to existing PR
-        if: steps.detect_open_pr.outputs.result != 'main'
+        if: steps.detect_open_pr.outputs.result.name != 'main'
         run: |
           if git diff --quiet; then
             echo "No changes"
             exit 1
           fi
-          git checkout ${{ steps.detect_open_pr.outputs.result }}
           git add .
 
           git config --local user.email "create-o7-app@users.noreply.github.com"
@@ -75,14 +73,14 @@ jobs:
 
           git push origin updates
       - name: Comment on PR
-        if: steps.detect_open_pr.outputs.result != 'main'
+        if: steps.detect_open_pr.outputs.result.name != 'main'
         uses: actions/github-script@v4
         with:
           github-token: ${{ steps.create_token.outputs.token }}
           script: |
             github.issues.createComment({
-              issue_number: context.issue.number,
+              issue_number: ${{ steps.detect_open_pr.outputs.result.issue_number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: process.env.PR_BODY,
-            })
+            });
