@@ -7,8 +7,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: write
+    permissions:
+      contents: write
     steps:
       - name: Detect open PR
         id: detect_open_pr
@@ -73,8 +73,6 @@ jobs:
           git config --local user.name "create-o7-app[bot]"
           git commit -m "[ci] Update dependencies"
 
-          echo "https://github.com/ottomated:${{ steps.create_token.outputs.token }}@github.com" > ~/.git-credentials
-          git config --global credential.helper store
           git push origin updates
       - name: Comment on PR
         if: steps.detect_open_pr.outputs.result != 'main'
