@@ -48,7 +48,7 @@ jobs:
           } >> $GITHUB_ENV
 
       - name: Open PR
-        if: steps.detect_open_pr.outputs.result == 'main'
+        # if: steps.detect_open_pr.outputs.result == 'main'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.create_token.outputs.token }}
@@ -57,28 +57,28 @@ jobs:
           body: ${{ env.PR_BODY }}
           branch: updates
 
-      - name: Push to existing PR
-        if: steps.detect_open_pr.outputs.result != 'main'
-        env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-        run: |
-          if git diff --quiet; then
-            echo "No changes"
-            exit 1
-          fi
-          git checkout ${{ steps.detect_open_pr.outputs.result }}
-          git add .
-          git commit -m "[ci] Update dependencies"
-          git push origin updates
-      - name: Comment on PR
-        if: steps.detect_open_pr.outputs.result != 'main'
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ steps.generate_token.outputs.token }}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: process.env.PR_BODY,
-            })
+      # - name: Push to existing PR
+      #   if: steps.detect_open_pr.outputs.result != 'main'
+      #   env:
+      #     GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      #   run: |
+      #     if git diff --quiet; then
+      #       echo "No changes"
+      #       exit 1
+      #     fi
+      #     git checkout ${{ steps.detect_open_pr.outputs.result }}
+      #     git add .
+      #     git commit -m "[ci] Update dependencies"
+      #     git push origin updates
+      # - name: Comment on PR
+      #   if: steps.detect_open_pr.outputs.result != 'main'
+      #   uses: actions/github-script@v4
+      #   with:
+      #     github-token: ${{ steps.generate_token.outputs.token }}
+      #     script: |
+      #       github.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: process.env.PR_BODY,
+      #       })
