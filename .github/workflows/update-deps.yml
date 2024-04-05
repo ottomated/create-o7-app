@@ -22,6 +22,8 @@ jobs:
               base: 'main',
               head: `${context.repo.owner}:updates`,
             });
+            console.log(pullRequests)
+            console.log(pullRequests[0]?.head?.ref, pullRequests[0]?.number)
             return { name: pullRequests[0]?.head?.ref ?? 'main', issue_number: pullRequests[0]?.number };
 
       - name: Checkout
