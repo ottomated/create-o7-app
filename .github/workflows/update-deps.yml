@@ -7,8 +7,6 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Detect open PR
         id: detect_open_pr
@@ -74,6 +72,12 @@ jobs:
             exit 1
           fi
           git add .
+
+          # append credentials to git config
+          echo "https://ottomated:${{ steps.create_token.outputs.token }}@github.com/" > ~/.git-credentials
+          git config --global credential.helper store
+          git config --global --replace-all "url.https://github.com/.insteadOf" "ssh://git@github.com/"
+          git config --global --add "url.https://github.com/.insteadOf" "git@github.com:"
 
           git config --local user.email "create-o7-app@users.noreply.github.com"
           git config --local user.name "create-o7-app[bot]"
