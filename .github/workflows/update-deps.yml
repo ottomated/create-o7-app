@@ -28,8 +28,6 @@ jobs:
         with:
           ref: ${{ steps.detect_open_pr.outputs.result }}
 
-      - run: git checkout -b updates
-
       - id: create_token
         uses: tibdex/github-app-token@v2
         with:
@@ -63,6 +61,7 @@ jobs:
       - name: Push to existing PR
         if: steps.detect_open_pr.outputs.result != 'main'
         run: |
+          git checkout -b ${{ steps.detect_open_pr.outputs.result }}
           git add .
           git commit -m "[ci] Update dependencies"
           git push origin updates
