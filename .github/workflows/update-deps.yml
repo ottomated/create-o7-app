@@ -30,16 +30,17 @@ jobs:
 
             return pullRequests[0]?.head?.ref ?? 'main';
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.detect_open_pr.outputs.result }}
-
       - id: create_token
         uses: tibdex/github-app-token@v2
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.create_token.outputs.token }}
+          ref: ${{ steps.detect_open_pr.outputs.result }}
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -77,11 +78,7 @@ jobs:
           git config --local user.name "create-o7-app[bot]"
           git commit -m "[ci] Update dependencies"
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ env.TOKEN }}
-          branch: ${{ steps.detect_open_pr.outputs.result }}
+          git push origin ${{ steps.detect_open_pr.outputs.result }}
 
       - name: Comment on PR
         if: steps.detect_open_pr.outputs.result != 'main'
