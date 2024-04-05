@@ -4,11 +4,11 @@
 	},
 	"dependencies": {
 		"@planetscale/database": "^1.16.0",
-		"kysely": "^0.27.2",
+		"kysely": "^0.27.3",
 		"kysely-planetscale": "^1.4.0"
 	},
 	"devDependencies": {
 		"prisma-kysely": "^1.8.0",
-		"prisma": "^5.10.2"
+		"prisma": "^5.12.1"
 	}
 }
