@@ -24,7 +24,7 @@ jobs:
             });
             // save pr number to github_env
             if (pullRequests[0]) {
-              fs.appendFileSync(process.env.GITHUB_ENV,
+              require('fs').appendFileSync(process.env.GITHUB_ENV,
                 `PR_NUMBER=${pullRequests[0].number}\n`
               );
             }
