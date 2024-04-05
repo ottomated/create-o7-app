@@ -7,8 +7,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    # permissions:
+    #   contents: write
     steps:
       - name: Detect open PR
         id: detect_open_pr
@@ -62,7 +62,7 @@ jobs:
       - name: Push to existing PR
         if: steps.detect_open_pr.outputs.result != 'main'
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.create_token.outputs.token }}
         run: |
           if git diff --quiet; then
             echo "No changes"
@@ -79,7 +79,7 @@ jobs:
         if: steps.detect_open_pr.outputs.result != 'main'
         uses: actions/github-script@v4
         with:
-          github-token: ${{ steps.generate_token.outputs.token }}
+          github-token: ${{ steps.create_token.outputs.token }}
           script: |
             github.issues.createComment({
               issue_number: context.issue.number,
