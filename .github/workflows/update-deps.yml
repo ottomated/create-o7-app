@@ -12,6 +12,7 @@ jobs:
         id: detect_open_pr
         uses: actions/github-script@v4
         with:
+          result-encoding: string
           script: |
             const { data: pullRequests } = await github.pulls.list({
               owner: context.repo.owner,
