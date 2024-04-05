@@ -22,14 +22,19 @@ jobs:
               base: 'main',
               head: `${context.repo.owner}:updates`,
             });
-            console.log(pullRequests)
-            console.log(pullRequests[0]?.head?.ref, pullRequests[0]?.number)
-            return { name: pullRequests[0]?.head?.ref ?? 'main', issue_number: pullRequests[0]?.number };
+            // save pr number to github_env
+            if (pullRequests[0]) {
+              fs.appendFileSync(process.env.GITHUB_ENV,
+                `PR_NUMBER=${pullRequests[0].number}\n`
+              );
+            }
+
+            return pullRequests[0]?.head?.ref ?? 'main';
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.detect_open_pr.outputs.result.name }}
+          ref: ${{ steps.detect_open_pr.outputs.result }}
 
       - id: create_token
         uses: tibdex/github-app-token@v2
@@ -51,7 +56,7 @@ jobs:
           } >> $GITHUB_ENV
 
       - name: Open PR
-        if: steps.detect_open_pr.outputs.result.name == 'main'
+        if: steps.detect_open_pr.outputs.result == 'main'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.create_token.outputs.token }}
@@ -61,7 +66,7 @@ jobs:
           branch: updates
 
       - name: Push to existing PR
-        if: steps.detect_open_pr.outputs.result.name != 'main'
+        if: steps.detect_open_pr.outputs.result != 'main'
         run: |
           if git diff --quiet; then
             echo "No changes"
@@ -75,13 +80,13 @@ jobs:
 
           git push origin updates
       - name: Comment on PR
-        if: steps.detect_open_pr.outputs.result.name != 'main'
+        if: steps.detect_open_pr.outputs.result != 'main'
         uses: actions/github-script@v4
         with:
           github-token: ${{ steps.create_token.outputs.token }}
           script: |
             github.issues.createComment({
-              issue_number: ${{ steps.detect_open_pr.outputs.result.issue_number }},
+              issue_number: ${{ env.PR_NUMBER }},
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: process.env.PR_BODY,
