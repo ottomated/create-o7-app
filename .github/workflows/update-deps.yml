@@ -76,7 +76,7 @@ jobs:
           git config --local user.email "create-o7-app@users.noreply.github.com"
           git config --local user.name "create-o7-app[bot]"
           git commit -m "[ci] Update dependencies"
-          git remote set-url origin "https://ottomated:${{ steps.create_token.outputs.token }}@github.com/ottomated/create-o7-app.git"
+          git remote set-url origin "https://x-access-token:${{ steps.create_token.outputs.token }}@github.com/ottomated/create-o7-app.git"
 
           git push origin updates
       - name: Comment on PR
