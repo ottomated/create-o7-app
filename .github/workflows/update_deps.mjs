@@ -44,10 +44,12 @@ export async function getUpdates() {
 
 		if (updates.length) {
 			await writeFile(f, JSON.stringify(pkg, null, '\t') + '\n');
-			console.log(`### ${relative(templateRoot, f)}\n\n`);
+			console.log(`| \`${relative(templateRoot, f)}\` | old | new |`);
+			console.log('|-|-|-|');
 			for (const [name, currentVersion, latest] of updates) {
-				console.log(`- \`${name}\`: \`${currentVersion}\` -> \`${latest}\``);
+				console.log(`| ${name} | \`${currentVersion}\` | \`${latest}\` |`);
 			}
+			console.log('\n\n');
 		}
 	}
 }
