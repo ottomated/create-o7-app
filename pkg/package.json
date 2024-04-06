@@ -17,7 +17,11 @@
 		"typescript",
 		"planetscale",
 		"prisma",
-		"kysely"
+		"kysely",
+		"d1",
+		"cloudflare",
+		"lucia",
+		"authentication"
 	],
 	"bin": {
 		"create-o7-app": "run.js"
@@ -26,7 +30,9 @@
 		"postinstall": "node ./install.js"
 	},
 	"dependencies": {
-		"axios": "^1.6.7",
-		"tar": "^6.2.0"
+		"tar": "^6.2.1"
+	},
+	"engines": {
+		"node": ">=18"
 	}
 }
