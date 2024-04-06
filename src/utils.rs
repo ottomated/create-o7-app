@@ -1,6 +1,8 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::env;
 use std::fmt::Display;
+
+use serde::{Serialize, Serializer};
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
 
@@ -61,8 +63,28 @@ pub struct PackageJsonPartial<'a> {
 	pub version: Option<&'a str>,
 	pub r#type: Option<&'a str>,
 	pub scripts: Option<HashMap<&'a str, Option<&'a str>>>,
+	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
 	pub dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
+	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
 	pub dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
+}
+
+pub fn skip_if_empty(map: &Option<HashMap<&str, Option<&str>>>) -> bool {
+	match map {
+		Some(map) => map.is_empty(),
+		None => true,
+	}
+}
+
+fn sorted_map<S: Serializer>(
+	map: &Option<HashMap<&str, Option<&str>>>,
+	serializer: S,
+) -> Result<S::Ok, S::Error> {
+	// SAFETY: this should be skipped if empty already
+	let map = map.as_ref().unwrap();
+	let mut items: Vec<_> = map.iter().collect();
+	items.sort_by(|a, b| a.0.cmp(&b.0));
+	BTreeMap::from_iter(items).serialize(serializer)
 }
 
 impl<'a> PackageJsonPartial<'a> {
