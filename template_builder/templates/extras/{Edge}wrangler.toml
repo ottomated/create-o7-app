@@ -1,0 +1,6 @@
+name = "__o7__name__"
+pages_build_output_dir = "./.svelte-kit/cloudflare"
+
+# [[kv_namespaces]]
+# binding = "KV"
+# id = "<NAMESPACE_ID>"
