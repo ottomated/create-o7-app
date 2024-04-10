@@ -3,7 +3,7 @@
 		"db:push": "prisma db push"
 	},
 	"dependencies": {
-		"better-sqlite3": "^9.4.5",
+		"better-sqlite3": "^9.5.0",
 		"kysely": "^0.27.3",
 		"dotenv": "^16.4.5"
 	},
