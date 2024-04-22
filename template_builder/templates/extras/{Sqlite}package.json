@@ -8,7 +8,7 @@
 		"dotenv": "^16.4.5"
 	},
 	"devDependencies": {
-		"@types/better-sqlite3": "^7.6.9",
+		"@types/better-sqlite3": "^7.6.10",
 		"prisma-kysely": "^1.8.0",
 		"prisma": "^5.12.1"
 	}
