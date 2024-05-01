@@ -13,6 +13,6 @@
 		"@types/better-sqlite3": "^7.6.10",
 		"prisma-kysely": "^1.8.0",
 		"prisma": "^5.13.0",
-		"wrangler": "^3.52.0"
+		"wrangler": "^3.53.0"
 	}
 }
