@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"arctic": "^1.8.0",
+		"arctic": "^1.8.1",
 		"oslo": "^1.2.0"
 	},
 	"devDependencies": {
