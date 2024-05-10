@@ -30,7 +30,7 @@
 		"postinstall": "node ./install.js"
 	},
 	"dependencies": {
-		"tar": "^6.2.1"
+		"tar": "^7.1.0"
 	},
 	"engines": {
 		"node": ">=18"
