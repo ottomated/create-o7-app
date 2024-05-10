@@ -44,8 +44,8 @@ const current = JSON.parse(
 			"SELECT * FROM sqlite_schema WHERE name != '_cf_KV' AND name != 'sqlite_sequence'",
 			'--json',
 		],
-		{ encoding: 'utf-8' }
-	).stdout
+		{ encoding: 'utf-8' },
+	).stdout,
 )[0].results;
 
 // 2. create dummy db with that schema
@@ -69,7 +69,7 @@ const migration = spawnSync(
 		schema,
 		'--script',
 	],
-	{ encoding: 'utf-8' }
+	{ encoding: 'utf-8' },
 );
 if (migration.stdout.includes('-- This is an empty migration.')) {
 	console.log('No changes');
