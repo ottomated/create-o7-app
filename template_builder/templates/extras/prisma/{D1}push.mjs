@@ -97,7 +97,7 @@ const res = spawnSync(
 		'--file',
 		migrationFile,
 	],
-	{ stdio: 'inherit' }
+	{ stdio: 'inherit' },
 );
 
 unlinkSync(tempDb);
