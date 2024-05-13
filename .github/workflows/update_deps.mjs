@@ -2,6 +2,8 @@ import { resolve, basename, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 
+const isNewPr = process.argv[2] === 'main';
+
 export async function getUpdates() {
 	const projectRoot = resolve(fileURLToPath(import.meta.url), '../../..');
 	const templateRoot = join(projectRoot, 'template_builder/templates');
@@ -34,6 +36,23 @@ export async function getUpdates() {
 		return dirty;
 	}
 
+	if (isNewPr) {
+		const cargoTomlPath = join(projectRoot, 'Cargo.toml');
+		const cargoToml = await readFile(cargoTomlPath, 'utf8');
+		const version = cargoToml.match(/version = "(.*)"/)?.[1];
+		if (!version) {
+			console.error('Could not find version in Cargo.toml');
+			process.exit(1);
+		}
+		const [major, minor, patch] = version.split('.');
+		const newVersion = `${major}.${minor}.${parseInt(patch) + 1}`;
+		await writeFile(
+			cargoTomlPath,
+			cargoToml.replace(/version = "(.*)"/, `version = "${newVersion}"`),
+		);
+		console.log(`_Bumped version to ${newVersion}_\n\n`);
+	}
+
 	for await (const f of getFiles(templateRoot)) {
 		if (!/^(\{[^{}]*\})?package\.json$/.test(basename(f))) continue;
 		const pkg = JSON.parse(await readFile(f, 'utf8'));
@@ -54,7 +73,6 @@ export async function getUpdates() {
 	}
 }
 
-getUpdates();
 async function latestVersion(packageName, tag) {
 	const url = new URL(
 		encodeURIComponent(packageName).replace(/^%40/, '@'),
@@ -81,3 +99,5 @@ async function* getFiles(dir) {
 		}
 	}
 }
+
+getUpdates();

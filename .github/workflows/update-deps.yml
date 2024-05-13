@@ -46,14 +46,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
 
       - name: Do updates
         run: |
           {
             echo 'PR_BODY<<EOF'
-            node ./.github/workflows/update_deps.mjs
+            node ./.github/workflows/update_deps.mjs ${{ steps.detect_open_pr.outputs.result }}
             echo EOF
           } >> $GITHUB_ENV
+
+      - name: Cargo update
+        run: cargo update
 
       - name: Open PR
         if: steps.detect_open_pr.outputs.result == 'main'
