@@ -9,6 +9,6 @@
 	},
 	"devDependencies": {
 		"prisma-kysely": "^1.8.0",
-		"prisma": "^5.13.0"
+		"prisma": "^5.14.0"
 	}
 }
