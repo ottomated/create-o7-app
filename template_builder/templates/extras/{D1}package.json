@@ -5,7 +5,7 @@
 	},
 	"dependencies": {
 		"kysely-d1": "^0.3.0",
-		"better-sqlite3": "^10.0.0",
+		"better-sqlite3": "^11.0.0",
 		"kysely": "^0.27.3",
 		"dotenv": "^16.4.5"
 	},
@@ -13,6 +13,6 @@
 		"@types/better-sqlite3": "^7.6.10",
 		"prisma-kysely": "^1.8.0",
 		"prisma": "^5.14.0",
-		"wrangler": "^3.57.1"
+		"wrangler": "^3.58.0"
 	}
 }
