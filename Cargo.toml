@@ -1,6 +1,6 @@
 [package]
 name = "create-o7-app"
-version = "0.6.8"
+version = "0.6.9"
 edition = "2021"
 
 [dependencies]
