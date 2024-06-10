@@ -31,7 +31,7 @@ try {
 const schema = resolve(dirname, './schema.prisma');
 
 // 1. Pull current schema
-const current = JSON.parse(
+const currentRes = JSON.parse(
 	spawnSync(
 		'npx',
 		[
@@ -47,6 +47,12 @@ const current = JSON.parse(
 		{ encoding: 'utf-8' },
 	).stdout,
 )[0].results;
+if (currentRes.error) {
+	console.error(currentRes.error);
+	console.error('Have you put your database ID in wrangler.toml?');
+	process.exit(1);
+}
+const current = currentRes[0].results;
 
 // 2. create dummy db with that schema
 const db = new Database(tempDb);
