@@ -50,7 +50,7 @@ pub fn prompt() -> Result<UserInput> {
 	})
 }
 
-pub fn warn_render_config() -> RenderConfig {
+pub fn warn_render_config() -> RenderConfig<'static> {
 	RenderConfig {
 		prompt: StyleSheet {
 			att: Attributes::BOLD,

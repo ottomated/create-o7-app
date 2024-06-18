@@ -4,11 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-proc-macro2 = "1.0.66"
-anyhow = "1.0.75"
-quote = "1.0.33"
-which = "4.4.2"
-walkdir = "2.4.0"
-serde = { version = "1.0.188", features = ["derive"] }
-serde_json = "1.0.105"
-itertools = "0.12.1"
+proc-macro2 = "1.0.85"
+anyhow = "1.0.86"
+quote = "1.0.36"
+which = "6.0.1"
+walkdir = "2.5.0"
+serde = { version = "1.0.203", features = ["derive"] }
+serde_json = "1.0.117"
+itertools = "0.13.0"
