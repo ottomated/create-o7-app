@@ -12,7 +12,6 @@
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.10",
 		"prisma-kysely": "^1.8.0",
-		"prisma": "^5.15.0",
-		"wrangler": "^3.60.3"
+		"prisma": "^5.15.0"
 	}
 }

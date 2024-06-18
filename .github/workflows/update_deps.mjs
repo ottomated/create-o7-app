@@ -19,7 +19,12 @@ export async function getUpdates() {
 		let dirty = [];
 		for (const [name, currentVersion] of Object.entries(pkg[key])) {
 			if (currentVersion === null) continue;
-			const tag = currentVersion.includes('-next') ? 'next' : 'latest';
+			let tag = 'latest';
+			if (currentVersion.includes('-next')) {
+				tag = 'next';
+			} if (currentVersion.includes('8.0.0-alpha')) {
+				tag = 'rc-v8';
+			}
 			let prefix = currentVersion[0];
 			if (prefix !== '^' && prefix !== '~') {
 				prefix = '';

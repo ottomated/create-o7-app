@@ -1,11 +1,7 @@
-use std::{
-	ffi::OsStr,
-	fs,
-	path::PathBuf,
-};
+use std::{ffi::OsStr, fs, path::PathBuf};
 
 use crate::utils::DEFAULT_NAME;
-use anyhow::Result;
+use anyhow::{bail, Result};
 use dunce::canonicalize;
 use inquire::{ui::RenderConfig, validator::Validation, Confirm, Text};
 
@@ -37,7 +33,7 @@ fn get_project_name(input: &str) -> Result<ProjectLocation> {
 	};
 	let file_name = get_file_name(&path);
 	if path.is_file() {
-		return Err(anyhow::anyhow!("{} is a file that exists", file_name));
+		bail!("{} is a file that exists", file_name);
 	}
 	Ok(ProjectLocation {
 		name: file_name,

@@ -1,7 +1,7 @@
 use std::{ffi::OsStr, process::Command};
 
-use crate::{create::log_step_start, input::UserInput};
-use anyhow::{Context, Result};
+use crate::{create::log_step_start, input::UserInput, utils::PackageManager};
+use anyhow::{bail, Context, Result};
 
 use super::log_step_end;
 
@@ -31,7 +31,28 @@ pub fn install_deps(input: &UserInput) -> Result<()> {
 	println!();
 
 	if !cmd.success() {
-		return Err(anyhow::anyhow!("Could not install dependencies"));
+		bail!("Could not install dependencies");
+	}
+
+	// Run svelte-kit sync
+	let mut sync = match pm.package_manager {
+		PackageManager::Yarn => {
+			let mut sync = Command::new(&pm.exec_path);
+			sync.args(&["exec", "svelte-kit", "sync"]);
+			sync
+		}
+		_ => {
+			let mut sync = Command::new(input.location.path.join("node_modules/.bin/svelte-kit"));
+			sync.arg("sync");
+			sync
+		}
+	};
+	sync.current_dir(&input.location.path);
+
+	let sync = sync.status().context("Failed to run svelte-kit sync")?;
+
+	if !sync.success() {
+		bail!("Could not run svelte-kit sync");
 	}
 
 	log_step_end(start);
