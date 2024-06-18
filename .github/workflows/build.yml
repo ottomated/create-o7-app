@@ -91,7 +91,7 @@ jobs:
               name: 'NPM OTP'
               description: 'OTP from authenticator app'
       - name: Release Binaries
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
           files: compressed/artifacts/*
