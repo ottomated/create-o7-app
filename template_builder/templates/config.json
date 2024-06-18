@@ -13,7 +13,9 @@
 			"name": "tRPC",
 			"description": "(Type-safe API)",
 			"default": true,
-			"required_if": ["Auth"]
+			"required_if": [
+				"Auth"
+			]
 		},
 		{
 			"id": "Edge",
@@ -32,19 +34,34 @@
 				{
 					"id": "D1",
 					"name": "D1 (experimental)",
-					"hidden_if_not": ["Edge"]
+					"hidden_if_not": [
+						"Edge"
+					]
 				},
 				{
 					"id": "Sqlite",
 					"name": "Local SQLite",
-					"hidden_if": ["Edge"]
+					"hidden_if": [
+						"Edge"
+					]
 				},
 				{
 					"name": "None",
-					"hidden_if": ["Auth"]
+					"hidden_if": [
+						"Auth"
+					]
 				}
 			],
 			"description": ""
+		},
+		{
+			"id": "Sidecar",
+			"name": "Sidecar",
+			"description": "(Additional Cloudflare worker for Durable Objects, etc.)",
+			"hidden_if_not": [
+				"Edge"
+			],
+			"default": false
 		},
 		{
 			"id": "Svelte5",
