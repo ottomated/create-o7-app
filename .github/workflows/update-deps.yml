@@ -14,7 +14,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const { data: pullRequests } = await github.pulls.list({
+            const { data: pullRequests } = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
@@ -93,7 +93,7 @@ jobs:
         with:
           github-token: ${{ steps.create_token.outputs.token }}
           script: |
-            github.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: ${{ env.PR_NUMBER }},
               owner: context.repo.owner,
               repo: context.repo.repo,
