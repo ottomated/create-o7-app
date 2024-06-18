@@ -1,7 +1,7 @@
 use std::{ffi::OsStr, fs, path::PathBuf};
 
 use crate::utils::DEFAULT_NAME;
-use anyhow::Result;
+use anyhow::{bail, Result};
 use dunce::canonicalize;
 use inquire::{ui::RenderConfig, validator::Validation, Confirm, Text};
 
