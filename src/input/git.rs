@@ -8,11 +8,16 @@ use super::{project_location::ProjectLocation, warn_render_config};
 pub fn prompt(render_config: &RenderConfig, location: &ProjectLocation) -> Result<Option<PathBuf>> {
 	let git_path = which::which("git");
 
+	let mut closest_git_root = None;
+
 	let git = match git_path {
 		Ok(git_path) => {
+			closest_git_root = get_closest_git_root(&git_path, &location.path)?;
+
 			let git = Confirm::new("Initialize a new git repository?")
 				.with_render_config(*render_config)
-				.with_default(true)
+				// Default to true if not in a git repo
+				.with_default(closest_git_root.is_none())
 				.prompt()?;
 			if git {
 				git_path
@@ -35,7 +40,6 @@ pub fn prompt(render_config: &RenderConfig, location: &ProjectLocation) -> Resul
 			return Ok(None);
 		}
 	};
-	let closest_git_root = get_closest_git_root(&git, &location.path)?;
 
 	if let Some(closest_git_root) = closest_git_root {
 		let init = Confirm::new(
