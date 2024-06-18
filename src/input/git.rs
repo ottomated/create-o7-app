@@ -8,7 +8,7 @@ use super::{project_location::ProjectLocation, warn_render_config};
 pub fn prompt(render_config: &RenderConfig, location: &ProjectLocation) -> Result<Option<PathBuf>> {
 	let git_path = which::which("git");
 
-	let mut closest_git_root = None;
+	let closest_git_root;
 
 	let git = match git_path {
 		Ok(git_path) => {
