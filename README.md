@@ -11,7 +11,7 @@
 <br />
 
 <p align="center">
-	<img src="https://i.imgur.com/K122UVq.gif">
+	<img src="https://github.com/ottomated/create-o7-app/assets/31470743/24427098-4d2d-443c-bf70-f8f8972e8bb6">
 </p>
 
 <h2>What is the o7 Stack?</h2>
@@ -22,7 +22,7 @@
 - [Typescript](https://www.typescriptlang.org/)
 - [Prisma](https://www.prisma.io/)
 - [Kysely](https://github.com/kysely-org/kysely)
-- [Cloudflare Workers](https://workers.cloudflare.com/)
+- [Lucia](https://lucia-auth.com/)
 
 Why both Prisma and Kysely? `create-o7-app`'s template includes Kysely for **Edge support** and **fast cold starts**, with all the convenience of using Prisma to define your database model.
 
@@ -30,31 +30,23 @@ Why both Prisma and Kysely? `create-o7-app`'s template includes Kysely for **Edg
 
 First, run the CLI to scaffold your app:
 
-**pnpm**
-
-```
-pnpm create o7-app@latest
-```
-
-**npm**
-
-```
+```bash
+pnpm create o7-app
+# OR
+bun create o7-app
+# OR
 npm create o7-app@latest
-```
-
-**yarn**
-
-```
+# OR
 yarn create o7-app
 ```
 
 Then, open your new app in your favorite IDE and get started! A good place to look first is `src/routes/+page.svelte` for your frontend or `src/lib/server/routes/_app.ts` for tRPC.
 
-## Changelog
+<!-- ## Changelog
 
 ### `0.4.0`
 
 - Upgrade to SvelteKit 2 (and various other package updates)
 - Support for the Svelte 5 preview
 - Experimental support for D1 (including Prisma migrations!)
-- Remove support for Vanilla CSS (tailwind only!)
+- Remove support for Vanilla CSS (tailwind only!) -->
