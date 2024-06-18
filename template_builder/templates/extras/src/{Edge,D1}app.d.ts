@@ -1,17 +1,19 @@
-/// <reference types="@sveltejs/kit" />
 /// <reference types="@cloudflare/workers-types" />
 
-declare namespace App {
-	interface Platform {
-		env: {
-			// KV: KVNamespace;
-			DB: D1Database;
-		};
-		context: ExecutionContext;
-	}
+declare global {
+	namespace App {
+		interface Platform {
+			env: {
+				DB: D1Database;
+			};
+			context: ExecutionContext;
+		}
 
-	// interface Locals {}
-	// interface Error {}
-	// interface Session {}
-	// interface Stuff {}
+		// interface Locals {}
+		// interface Error {}
+		// interface Session {}
+		// interface Stuff {}
+	}
 }
+
+export {};
