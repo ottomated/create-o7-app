@@ -42,6 +42,13 @@ yarn create o7-app
 
 Then, open your new app in your favorite IDE and get started! A good place to look first is `src/routes/+page.svelte` for your frontend or `src/lib/server/routes/_app.ts` for tRPC.
 
+## Upcoming
+
+- [ ] Add a template for a websocket backend using Durable Objects
+- [ ] Detect when a user has instantiated a bunch of templates and stop giving them the tutorial stuff
+- [ ] Replace the dependency on `@tanstack/svelte-query` with a more lightweight tRPC client
+- [ ] Add Turso support
+
 <!-- ## Changelog
 
 ### `0.4.0`
