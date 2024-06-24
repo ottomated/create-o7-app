@@ -46,7 +46,7 @@ const currentRes = JSON.parse(
 		],
 		{ encoding: 'utf-8' },
 	).stdout,
-)[0].results;
+);
 if (currentRes.error) {
 	console.error(currentRes.error);
 	console.error('Have you put your database ID in wrangler.toml?');
@@ -77,6 +77,12 @@ const migration = spawnSync(
 	],
 	{ encoding: 'utf-8' },
 );
+if (migration.status !== 0) {
+	console.error('Prisma error:');
+	console.error(migration.stderr);
+	unlinkSync(tempDb);
+	process.exit(0);
+}
 if (migration.stdout.includes('-- This is an empty migration.')) {
 	console.log('No changes');
 	unlinkSync(tempDb);
