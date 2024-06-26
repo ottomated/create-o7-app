@@ -65,7 +65,7 @@ if (migration.stdout.includes('-- This is an empty migration.')) {
 	process.exit(0);
 }
 
-const migrationSql = migration.stdout
+const migrationSql = migration.stdout;
 
 console.log(migrationSql);
 
