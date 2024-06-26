@@ -1,11 +1,16 @@
 import { Kysely, type RawBuilder, sql } from 'kysely';
 import { LibsqlDialect } from '@ottomated/kysely-libsql';
 import type { DB } from './schema';
+import { dev } from '$app/environment';
 import { TURSO_TOKEN, TURSO_URL } from '$env/static/private';
 import { createClient } from '@libsql/client';
 
 if (!TURSO_URL || !TURSO_TOKEN) {
-	throw new Error('TURSO_URL and TURSO_TOKEN must be set');
+	if (dev) {
+		throw new Error('TURSO_URL and TURSO_TOKEN must be set');
+	} else {
+		console.warn('TURSO_URL and TURSO_TOKEN must be set');
+	}
 }
 
 export const dbClient = createClient({
