@@ -9,7 +9,7 @@ import { dbClient } from '$lib/db';
 const adapter = new LibSQLAdapter(dbClient, {
 	user: 'User',
 	session: 'Session',
-})
+});
 
 export const lucia = new Lucia(adapter, {
 	sessionCookie: {
