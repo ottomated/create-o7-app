@@ -1,10 +1,10 @@
 {
 	"scripts": {
-		"db:push": "node ./prisma/push.mjs",
-		"db:push:local": "node ./prisma/push.mjs --local"
+		"db:push": "node ./prisma/push.mjs"
 	},
 	"dependencies": {
-		"kysely-d1": "^0.3.0"
+		"@ottomated/kysely-libsql": "^0.4.0",
+		"@libsql/client": "^0.6.0"
 	},
 	"devDependencies": {
 		"dotenv": "^16.4.5",

@@ -26,18 +26,22 @@
 			"name": "Database",
 			"options": [
 				{
-					"id": "Planetscale",
-					"name": "Planetscale"
-				},
-				{
 					"id": "D1",
-					"name": "D1 (experimental)",
+					"name": "D1",
 					"hidden_if_not": ["Edge"]
 				},
 				{
 					"id": "Sqlite",
 					"name": "Local SQLite",
 					"hidden_if": ["Edge"]
+				},
+				{
+					"id": "Turso",
+					"name": "Turso"
+				},
+				{
+					"id": "Planetscale",
+					"name": "Planetscale"
 				},
 				{
 					"name": "None",
