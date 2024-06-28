@@ -5,13 +5,13 @@
 	},
 	"dependencies": {
 		"kysely-d1": "^0.3.0",
-		"better-sqlite3": "^11.0.0",
+		"better-sqlite3": "^11.1.1",
 		"kysely": "^0.27.3",
 		"dotenv": "^16.4.5"
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.10",
 		"prisma-kysely": "^1.8.0",
-		"prisma": "^5.16.0"
+		"prisma": "^5.16.1"
 	}
 }
