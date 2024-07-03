@@ -82,14 +82,6 @@ jobs:
           mv target/aarch64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos-arm64
           mkdir -p compressed/artifacts
           for file in artifacts/*; do tar -czvf "compressed/$file.tar.gz" "$file"; done
-      - uses: step-security/wait-for-secrets@v1
-        id: wait-for-secrets
-        with:
-          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          secrets: |
-            OTP:
-              name: 'NPM OTP'
-              description: 'OTP from authenticator app'
       - name: Release Binaries
         uses: softprops/action-gh-release@v2
         with:
@@ -102,4 +94,4 @@ jobs:
           jq '.version = "${{ steps.get_version.outputs.version }}"' package.json > tmp && mv tmp package.json
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
-          npm publish --otp ${{ steps.wait-for-secrets.outputs.OTP }}
+          npm publish

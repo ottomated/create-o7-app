@@ -47,7 +47,7 @@ Then, open your new app in your favorite IDE and get started! A good place to lo
 - [ ] Add a template for a websocket backend using Durable Objects
 - [ ] Detect when a user has instantiated a bunch of templates and stop giving them the tutorial stuff
 - [ ] Replace the dependency on `@tanstack/svelte-query` with a more lightweight tRPC client
-- [ ] Add Turso support
+- [x] Add Turso support
 
 <!-- ## Changelog
 
