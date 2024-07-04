@@ -104,6 +104,7 @@ jobs:
       - name: Release Binaries
         uses: softprops/action-gh-release@v2
         with:
+          body_path: CHANGELOG-release.md
           tag_name: ${{ steps.get_version.outputs.version }}
           files: compressed/artifacts/*
       - name: Publish NPM Package
