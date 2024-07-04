@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.7.1] - 2024-07-04
+
+
+### docs
+
+- Add changelog link to readme
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1](https://github.com/ottomated/create-o7-app/commit/2599ac0ccc17280208645f85fec93fe9636c71bd)
+
+
 ## [0.7.0] - 2024-07-03
 
 
@@ -475,6 +490,7 @@
 ### fixes
 
 - add readme
+
 
 
 
