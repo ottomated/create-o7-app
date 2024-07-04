@@ -39,7 +39,7 @@ jobs:
           # Full changelog
           pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} -o CHANGELOG.md
           # Changelog for the release
-          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} --unreleased -o CHANGELOG-release.md
+          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} --latest --strip all -o CHANGELOG-release.md
 
           cat CHANGELOG-release.md
           exit 1
