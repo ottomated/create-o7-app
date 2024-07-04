@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
@@ -28,13 +30,21 @@ jobs:
             echo "NPM version is the same as the version in Cargo.toml, exiting"
             exit 1
           fi
+      - name: Install pnpm
+        run: npm i -g pnpm
+
+      - name: Generate changelogs
+        run: |
+          # Full changelog
+          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} -o CHANGELOG.md
+          # Changelog for the release
+          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} --latest --strip header -o CHANGELOG-release.md
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt
           targets: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
-      - name: Install pnpm
-        run: npm i -g pnpm
       - name: Test
         run: cargo test
       - name: Install MinGW
@@ -82,6 +92,15 @@ jobs:
           mv target/aarch64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos-arm64
           mkdir -p compressed/artifacts
           for file in artifacts/*; do tar -czvf "compressed/$file.tar.gz" "$file"; done
+
+      - name: Commit changelog
+        run: |
+          git add CHANGELOG.md
+          git config --local user.email "create-o7-app@users.noreply.github.com"
+          git config --local user.name "create-o7-app[bot]"
+          git commit -m "ci: Update changelog for ${{ steps.get_version.outputs.version }}"
+          git push
+
       - name: Release Binaries
         uses: softprops/action-gh-release@v2
         with:
