@@ -42,7 +42,10 @@ jobs:
 
       - name: Commit changelog
         run: |
-          git add CHANGELOG.md && git commit -m "ci: update changelog"
+          git add CHANGELOG.md
+          git config --local user.email "create-o7-app@users.noreply.github.com"
+          git config --local user.name "create-o7-app[bot]"
+          git commit -m "ci: update changelog"
           git push
 
       - name: Test
