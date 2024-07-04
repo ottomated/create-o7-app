@@ -29,11 +29,6 @@ jobs:
       #       echo "NPM version is the same as the version in Cargo.toml, exiting"
       #       exit 1
       #     fi
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
-          targets: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
       - name: Install pnpm
         run: npm i -g pnpm
 
@@ -42,12 +37,18 @@ jobs:
 
       - name: Commit changelog
         run: |
-          git add CHANGELOG.md
-          git config --local user.email "create-o7-app@users.noreply.github.com"
-          git config --local user.name "create-o7-app[bot]"
-          git commit -m "ci: update changelog"
-          git push
+          cat CHANGELOG.md
+          # git add CHANGELOG.md
+          # git config --local user.email "create-o7-app@users.noreply.github.com"
+          # git config --local user.name "create-o7-app[bot]"
+          # git commit -m "ci: update changelog"
+          # git push
 
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+          targets: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
       - name: Test
         run: cargo test
       - name: Install MinGW
