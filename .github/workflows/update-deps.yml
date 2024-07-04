@@ -83,7 +83,7 @@ jobs:
 
           git config --local user.email "create-o7-app@users.noreply.github.com"
           git config --local user.name "create-o7-app[bot]"
-          git commit -m "[ci] Update dependencies"
+          git commit -m "ci: Update dependencies"
 
           git push origin ${{ steps.detect_open_pr.outputs.result }}
 

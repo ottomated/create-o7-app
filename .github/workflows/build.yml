@@ -23,29 +23,26 @@ jobs:
       - name: Get version
         id: get_version
         run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
-      # - name: Compare version to NPM
-      #   run: |
-      #     NPM_VERSION=$(npm view create-o7-app version)
-      #     MY_VERSION=${{ steps.get_version.outputs.version }}
-      #     if [ "$NPM_VERSION" == "$MY_VERSION" ]; then
-      #       echo "NPM version is the same as the version in Cargo.toml, exiting"
-      #       exit 1
-      #     fi
+      - name: Compare version to NPM
+        run: |
+          NPM_VERSION=$(npm view create-o7-app version)
+          MY_VERSION=${{ steps.get_version.outputs.version }}
+          if [ "$NPM_VERSION" == "$MY_VERSION" ]; then
+            echo "NPM version is the same as the version in Cargo.toml, exiting"
+            exit 1
+          fi
       - name: Install pnpm
         run: npm i -g pnpm
 
-      - name: Generate changelog
-        run: pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} -o CHANGELOG.md
-
-      - name: Commit changelog
+      - name: Generate changelogs
         run: |
-          cat CHANGELOG.md
+          # Full changelog
+          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} -o CHANGELOG.md
+          # Changelog for the release
+          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} --unreleased -o CHANGELOG-release.md
+
+          cat CHANGELOG-release.md
           exit 1
-          # git add CHANGELOG.md
-          # git config --local user.email "create-o7-app@users.noreply.github.com"
-          # git config --local user.name "create-o7-app[bot]"
-          # git commit -m "ci: update changelog"
-          # git push
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -99,6 +96,15 @@ jobs:
           mv target/aarch64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos-arm64
           mkdir -p compressed/artifacts
           for file in artifacts/*; do tar -czvf "compressed/$file.tar.gz" "$file"; done
+
+      - name: Commit changelog
+        run: |
+          git add CHANGELOG.md
+          git config --local user.email "create-o7-app@users.noreply.github.com"
+          git config --local user.name "create-o7-app[bot]"
+          git commit -m "ci: Update changelog for ${{ steps.get_version.outputs.version }}"
+          git push
+
       - name: Release Binaries
         uses: softprops/action-gh-release@v2
         with:
