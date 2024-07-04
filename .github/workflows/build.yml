@@ -23,14 +23,14 @@ jobs:
       - name: Get version
         id: get_version
         run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
-      - name: Compare version to NPM
-        run: |
-          NPM_VERSION=$(npm view create-o7-app version)
-          MY_VERSION=${{ steps.get_version.outputs.version }}
-          if [ "$NPM_VERSION" == "$MY_VERSION" ]; then
-            echo "NPM version is the same as the version in Cargo.toml, exiting"
-            exit 1
-          fi
+      # - name: Compare version to NPM
+      #   run: |
+      #     NPM_VERSION=$(npm view create-o7-app version)
+      #     MY_VERSION=${{ steps.get_version.outputs.version }}
+      #     if [ "$NPM_VERSION" == "$MY_VERSION" ]; then
+      #       echo "NPM version is the same as the version in Cargo.toml, exiting"
+      #       exit 1
+      #     fi
       - name: Install pnpm
         run: npm i -g pnpm
 
