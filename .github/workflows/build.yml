@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - changelog-ci
 
 jobs:
   build:
@@ -35,6 +36,15 @@ jobs:
           targets: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
       - name: Install pnpm
         run: npm i -g pnpm
+
+      - name: Generate changelog
+        run: pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} -o CHANGELOG.md
+
+      - name: Commit changelog
+        run: |
+          git add CHANGELOG.md && git commit -m "ci: update changelog"
+          git push
+
       - name: Test
         run: cargo test
       - name: Install MinGW
