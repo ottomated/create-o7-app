@@ -1,4 +1,4 @@
-import { resolve, basename, join, basename } from 'node:path';
+import { resolve, basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 
@@ -59,7 +59,8 @@ export async function getUpdates() {
 	}
 
 	for await (const f of getFiles(templateRoot)) {
-		if (!/^(\{[^{}]*\})?package\.json$/.test(basename(f))) continue;
+		const groups = basename(f).match(/^(\{[^{}]*\})?package\.json$/);
+		if (!groups) continue;
 		const pkg = JSON.parse(await readFile(f, 'utf8'));
 		const updates = await Promise.all([
 			processDependencies(pkg, 'dependencies'),
@@ -68,8 +69,8 @@ export async function getUpdates() {
 
 		if (updates.length) {
 			await writeFile(f, JSON.stringify(pkg, null, '\t') + '\n');
-			const packageName = basename(f).replace(/\|/g, '\\|');
-			console.log(`| \`${packageName}\` | old | new |`);
+			const features = prettifyFeatures(groups[1]);
+			console.log(`| \`${features}\` | old | new |`);
 			console.log('|-|-|-|');
 			for (const [name, currentVersion, latest] of updates) {
 				console.log(`| ${name} | \`${currentVersion}\` | \`${latest}\` |`);
@@ -79,6 +80,12 @@ export async function getUpdates() {
 	}
 }
 
+/**
+ * 
+ * @param {string} packageName 
+ * @param {string} tag 
+ * @returns {Promise<string>}
+ */
 async function latestVersion(packageName, tag) {
 	const url = new URL(
 		encodeURIComponent(packageName).replace(/^%40/, '@'),
@@ -94,6 +101,11 @@ async function latestVersion(packageName, tag) {
 	return data?.['dist-tags']?.[tag];
 }
 
+/**
+ * 
+ * @param {string} dir 
+ * @returns {AsyncGenerator<string>}
+ */
 async function* getFiles(dir) {
 	const dirents = await readdir(dir, { withFileTypes: true });
 	for (const dirent of dirents) {
@@ -104,6 +116,16 @@ async function* getFiles(dir) {
 			yield res;
 		}
 	}
+}
+/**
+ * @param {string | undefined} features 
+ */
+function prettifyFeatures(features) {
+	if (features === undefined) return 'base';
+	return features
+		.substring(1, features.length - 1) // strip {}
+		.replace(/,/g, ', ') // add spaces to commas
+		.replace(/\|/g, ' \\| ') // escape and prettify pipes
 }
 
 getUpdates();
