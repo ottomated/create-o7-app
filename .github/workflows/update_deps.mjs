@@ -68,7 +68,7 @@ export async function getUpdates() {
 
 		if (updates.length) {
 			await writeFile(f, JSON.stringify(pkg, null, '\t') + '\n');
-			const packageName = relative(templateRoot, f).replace('|', '\\|');
+			const packageName = relative(templateRoot, f).replace(/\|/g, '\\|');
 			console.log(`| \`${packageName}\` | old | new |`);
 			console.log('|-|-|-|');
 			for (const [name, currentVersion, latest] of updates) {
