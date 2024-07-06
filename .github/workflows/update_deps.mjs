@@ -1,4 +1,4 @@
-import { resolve, basename, join, relative } from 'node:path';
+import { resolve, basename, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 
@@ -68,7 +68,7 @@ export async function getUpdates() {
 
 		if (updates.length) {
 			await writeFile(f, JSON.stringify(pkg, null, '\t') + '\n');
-			const packageName = relative(templateRoot, f).replace(/\|/g, '\\|');
+			const packageName = basename(f).replace(/\|/g, '\\|');
 			console.log(`| \`${packageName}\` | old | new |`);
 			console.log('|-|-|-|');
 			for (const [name, currentVersion, latest] of updates) {
