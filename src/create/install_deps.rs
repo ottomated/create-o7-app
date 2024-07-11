@@ -24,7 +24,7 @@ pub fn install_deps(input: &UserInput) -> Result<()> {
 			"Failed to execute {:?}",
 			pm.exec_path
 				.file_name()
-				.unwrap_or(&OsStr::new("package manager"))
+				.unwrap_or(OsStr::new("package manager"))
 		)
 	})?;
 
@@ -38,7 +38,7 @@ pub fn install_deps(input: &UserInput) -> Result<()> {
 	let mut sync = match pm.package_manager {
 		PackageManager::Yarn => {
 			let mut sync = Command::new(&pm.exec_path);
-			sync.args(&["exec", "svelte-kit", "sync"]);
+			sync.args(["exec", "svelte-kit", "sync"]);
 			sync
 		}
 		_ => {

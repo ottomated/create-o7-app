@@ -27,11 +27,9 @@ pub fn prompt(render_config: &RenderConfig, location: &ProjectLocation) -> Resul
 		}
 		Err(_) => {
 			let warn = style("!").red();
-			let message = style(format!(
-				"Git not found - https://github.com/git-guides/install-git"
-			))
-			.yellow()
-			.bold();
+			let message = style("Git not found - https://github.com/git-guides/install-git")
+				.yellow()
+				.bold();
 			println!("{warn} {message}");
 			println!(
 				"  {}",
@@ -66,7 +64,7 @@ fn get_closest_git_root(git: &PathBuf, directory: &PathBuf) -> Result<Option<Str
 		.find(|dir| dir.exists())
 		.context("Could not find closest existing directory")?;
 
-	let output = Command::new(&git)
+	let output = Command::new(git)
 		.current_dir(closest_existing_dir)
 		.arg("rev-parse")
 		.arg("--show-toplevel")

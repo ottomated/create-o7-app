@@ -56,7 +56,7 @@ pub fn create(input: UserInput) -> Result<()> {
 }
 
 pub fn log_step_error(err: &anyhow::Error) {
-	let end = style(format!("❌  Error:",)).red().bold();
+	let end = style("❌  Error:").red().bold();
 	println!("{end} {}\n", style(err.to_string()).red());
 }
 

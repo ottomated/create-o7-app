@@ -83,7 +83,7 @@ fn sorted_map<S: Serializer>(
 	// SAFETY: this should be skipped if empty already
 	let map = map.as_ref().unwrap();
 	let mut items: Vec<_> = map.iter().collect();
-	items.sort_by(|a, b| a.0.cmp(&b.0));
+	items.sort_by(|a, b| a.0.cmp(b.0));
 	BTreeMap::from_iter(items).serialize(serializer)
 }
 

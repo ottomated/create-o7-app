@@ -63,7 +63,7 @@ fn get_shortest_path(path: &Path) -> String {
 
 	let relative = match std::env::current_dir() {
 		Ok(current_dir) => {
-			pathdiff::diff_paths(&absolute, &current_dir).map(|path| format!("{}", path.display()))
+			pathdiff::diff_paths(&absolute, current_dir).map(|path| format!("{}", path.display()))
 		}
 		Err(_) => None,
 	};
