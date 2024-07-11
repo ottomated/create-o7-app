@@ -38,6 +38,10 @@ struct ConfigFeature {
 	options: Option<Vec<ConfigFeatureOption>>,
 	// Hide this option and auto-enable it if any of the given features are selected
 	required_if: Option<Vec<String>>,
+	// Hide this option if any of the given features are selected
+	hidden_if: Option<Vec<String>>,
+	// Hide this option if any of the given features are not selected
+	hidden_if_not: Option<Vec<String>>,
 }
 
 #[derive(serde::Deserialize)]
@@ -123,6 +127,10 @@ impl Builder {
 			.map(|feature| {
 				let description = feature.description.clone();
 				let name = feature.name.clone();
+
+				let hidden_if = generate_hidden_set(&feature.hidden_if);
+				let hidden_if_not = generate_hidden_set(&feature.hidden_if_not);
+
 				if let Some(options) = &feature.options {
 					let options = options
 						.iter()
@@ -154,7 +162,8 @@ impl Builder {
 							options: vec![
 								#(#options),*
 							],
-
+							hidden_if: #hidden_if,
+							hidden_if_not: #hidden_if_not,
 						})
 					}
 				} else {
@@ -168,6 +177,8 @@ impl Builder {
 							description: #description,
 							default: #default,
 							required_if: #required_if,
+							hidden_if: #hidden_if,
+							hidden_if_not: #hidden_if_not,
 						})
 					}
 				}
@@ -194,6 +205,8 @@ impl Builder {
 				pub name: &'static str,
 				pub description: &'static str,
 				pub options: Vec<FeatureOption>,
+				hidden_if: Option<Vec<Feature>>,
+				hidden_if_not: Option<Vec<Feature>>,
 			}
 
 			pub struct FeatureOption {
@@ -209,6 +222,21 @@ impl Builder {
 				}
 			}
 
+			impl OptionFeatureDetails {
+				pub fn should_show(&self, features: &HashSet<Feature>) -> bool {
+					if let Some(hidden_if) = &self.hidden_if {
+						if hidden_if.iter().any(|f| features.contains(f)) {
+							return false;
+						}
+					}
+					if let Some(hidden_if_not) = &self.hidden_if_not {
+						if hidden_if_not.iter().all(|f| !features.contains(f)) {
+							return false;
+						}
+					}
+					true
+				}
+			}
 
 			impl FeatureOption {
 				pub fn should_show(&self, features: &HashSet<Feature>) -> bool {
@@ -232,6 +260,8 @@ impl Builder {
 				pub description: &'static str,
 				pub default: bool,
 				pub required_if: Option<Vec<Feature>>,
+				hidden_if: Option<Vec<Feature>>,
+				hidden_if_not: Option<Vec<Feature>>,
 			}
 
 			impl BooleanFeatureDetails {
@@ -240,6 +270,16 @@ impl Builder {
 					if let Some(required_if) = &self.required_if {
 						if required_if.iter().any(|f| features.contains(f)) {
 							return (false, true);
+						}
+					}
+					if let Some(hidden_if) = &self.hidden_if {
+						if hidden_if.iter().any(|f| features.contains(f)) {
+							return (false, false);
+						}
+					}
+					if let Some(hidden_if_not) = &self.hidden_if_not {
+						if hidden_if_not.iter().all(|f| !features.contains(f)) {
+							return (false, false);
 						}
 					}
 					(true, self.default)

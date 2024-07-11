@@ -57,14 +57,15 @@ commit_parsers = [
 	{ message = "^refactor", group = "<!-- 2 -->refactor" },
 	{ message = "^doc", group = "<!-- 3 -->docs" },
 	{ message = "^perf", group = "<!-- 4 -->performance" },
+	{ message = "^internal", group = "<!-- 5 -->internal" },
 	{ message = "^chore\\(release\\): prepare for", skip = true },
 	{ message = "^chore: Release", skip = true },
 	{ message = "^ci: Update changelog", skip = true },
 	{ message = "^chore\\(deps.*\\)", skip = true },
 	{ message = "^chore\\(pr\\)", skip = true },
 	{ message = "^chore\\(pull\\)", skip = true },
-	{ message = "^ci: Update dependencies", group = "<!-- 6 -->Dependencies" },
-	{ message = "^chore|^ci", group = "<!-- 5 -->misc" },
+	{ message = "^ci: Update dependencies", group = "<!-- 7 -->Dependencies" },
+	{ message = "^chore|^ci", group = "<!-- 6 -->misc" },
 ]
 protect_breaking_commits = false
 filter_commits = false

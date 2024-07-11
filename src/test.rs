@@ -77,6 +77,11 @@ fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>>
 					}
 				}
 				FeatureDetails::Option(details) => {
+					let show = details.should_show(&past);
+					if !show {
+						next.push(past);
+						continue;
+					}
 					for option in details.options.iter() {
 						if !option.should_show(&past) {
 							continue;
