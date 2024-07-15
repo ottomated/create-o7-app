@@ -79,14 +79,16 @@ impl TemplateFile {
 	}
 }
 
-impl Builder {
-	pub fn new() -> Self {
+impl Default for Builder {
+	fn default() -> Self {
 		let out_dir = Path::new(&env::var("OUT_DIR").expect("OUT_DIR not set")).to_path_buf();
 		let rustfmt = which("rustfmt").ok();
 
 		Self { out_dir, rustfmt }
 	}
+}
 
+impl Builder {
 	pub fn build(&self) -> Result<()> {
 		let templates = self.load_templates()?;
 		let config = self.load_config()?;
@@ -342,10 +344,12 @@ impl Builder {
 			};
 			if path == "package.json" {
 				let contents: PackageJsonPartial = serde_json::from_slice(&template.contents)
-					.expect(&format!(
-						"Could not parse package.json with features {:?}",
-						template.features
-					));
+					.unwrap_or_else(|_| {
+						panic!(
+							"Could not parse package.json with features {:?}",
+							template.features
+						)
+					});
 				let package_json = quote! {
 					TemplateFile {
 						path: #path,
@@ -442,7 +446,7 @@ impl Builder {
 				});
 			}
 		}
-		templates.sort_by(|a, b| a.feature_count().cmp(&b.feature_count()));
+		templates.sort_by_key(|t| t.feature_count());
 
 		Ok(templates)
 	}

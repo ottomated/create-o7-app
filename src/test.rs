@@ -134,6 +134,7 @@ fn test() {
 
 	let mut chunks = vec![vec![]; num_threads];
 	while !combinations.is_empty() {
+		#[allow(clippy::needless_range_loop)]
 		for i in 0..num_threads {
 			let Some(c) = combinations.pop() else {
 				break;
