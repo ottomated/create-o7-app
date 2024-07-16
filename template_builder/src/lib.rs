@@ -195,6 +195,10 @@ impl Builder {
 
 			#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
 			pub enum Feature {
+				Npm,
+				Pnpm,
+				Yarn,
+				Bun,
 				#(#features),*
 			}
 

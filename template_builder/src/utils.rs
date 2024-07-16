@@ -74,6 +74,7 @@ pub struct PackageJsonPartial<'a> {
 	scripts: Option<HashMap<&'a str, Option<&'a str>>>,
 	dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
+	workspaces: Option<Vec<&'a str>>,
 }
 
 impl ToTokens for PackageJsonPartial<'_> {
@@ -112,24 +113,19 @@ impl ToTokens for PackageJsonPartial<'_> {
 			}
 			None => pieces.push(quote! { dev_dependencies: None }),
 		}
+		match &self.workspaces {
+			Some(workspaces) => {
+				let workspaces = workspaces
+					.iter()
+					.map(|workspace| quote! { #workspace })
+					.collect::<Vec<_>>();
+				pieces.push(quote! { workspaces: Some(vec![#(#workspaces),*]) })
+			}
+			None => pieces.push(quote! { workspaces: None }),
+		}
 		tokens.extend(quote! { PackageJsonPartial {
 			#(#pieces),*
 		} });
-		// let version = self.version;
-		// let _type = self.r#type;
-		// let scripts = self.scripts.map();
-		// let dependencies = self.dependencies;
-		// let dev_dependencies = self.dev_dependencies;
-		// tokens.extend(quote! {
-		// 	PackageJsonPartial {
-		// 		name: #name,
-		// 		version: #version,
-		// 		r#type: #_type,
-		// 		scripts: #scripts,
-		// 		dependencies: #dependencies,
-		// 		dev_dependencies: #dev_dependencies,
-		// 	}
-		// })
 	}
 }
 

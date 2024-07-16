@@ -39,7 +39,7 @@ pub fn prompt(
 						println!("{warn} {message}");
 						println!(
 						"  {}",
-						style("(you must install a package manager, such as npm, before developing)").yellow().dim()
+						style("(you must install a package manager, such as pnpm, before developing)").yellow().dim()
 					);
 						return Ok(None);
 					}

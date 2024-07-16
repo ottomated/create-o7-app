@@ -1,0 +1,7 @@
+{
+	"workspaces": [
+		"common",
+		"worker",
+		"."
+	]
+}

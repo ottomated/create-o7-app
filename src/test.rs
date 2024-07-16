@@ -154,7 +154,8 @@ fn test() {
 
 			s.spawn(move || {
 				for features in chunk {
-					let input = make_input(features.clone());
+					let features_debug = features.clone();
+					let input = make_input(features);
 					let dir = input.location.path.clone();
 					let result: Result<(), String> = (|| {
 						create(input).map_err(|e| format!("{e}"))?;
@@ -166,7 +167,7 @@ fn test() {
 						Ok(())
 					})();
 					if let Err(e) = result {
-						errors.write().unwrap().push((features, e));
+						errors.write().unwrap().push((features_debug, e));
 					} else {
 						let _ = fs::remove_dir_all(&dir);
 					}

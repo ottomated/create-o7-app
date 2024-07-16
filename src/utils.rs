@@ -6,7 +6,7 @@ use serde::{Serialize, Serializer};
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq, clap::ValueEnum)]
 pub enum PackageManager {
 	Npm,
 	Pnpm,
@@ -21,6 +21,14 @@ impl PackageManager {
 			PackageManager::Pnpm => format!("pnpm {script}"),
 			PackageManager::Yarn => format!("yarn {script}"),
 			PackageManager::Bun => format!("bun run {script}"),
+		}
+	}
+	pub fn to_feature(&self) -> Feature {
+		match self {
+			PackageManager::Npm => Feature::Npm,
+			PackageManager::Pnpm => Feature::Pnpm,
+			PackageManager::Yarn => Feature::Yarn,
+			PackageManager::Bun => Feature::Bun,
 		}
 	}
 }
@@ -63,6 +71,8 @@ pub struct PackageJsonPartial<'a> {
 	pub version: Option<&'a str>,
 	pub r#type: Option<&'a str>,
 	pub scripts: Option<HashMap<&'a str, Option<&'a str>>>,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub workspaces: Option<Vec<&'a str>>,
 	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
 	pub dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
@@ -97,6 +107,9 @@ impl<'a> PackageJsonPartial<'a> {
 		}
 		if other.r#type.is_some() {
 			self.r#type = other.r#type;
+		}
+		if other.workspaces.is_some() {
+			self.workspaces = other.workspaces;
 		}
 		merge_hashmaps(&mut self.scripts, other.scripts);
 		merge_hashmaps(&mut self.dependencies, other.dependencies);
