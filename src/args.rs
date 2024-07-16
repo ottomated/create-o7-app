@@ -1,4 +1,3 @@
-use anyhow::Context;
 use clap::Parser;
 
 use crate::utils::PackageManager;
