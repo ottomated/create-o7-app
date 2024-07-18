@@ -1,0 +1,19 @@
+{
+	"name": "create-o7-app-telemetry-server",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy",
+		"cf-typegen": "wrangler types"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20240712.0",
+		"typescript": "^5.5.2",
+		"wrangler": "^3.60.3"
+	},
+	"dependencies": {
+		"zod": "^3.23.8"
+	}
+}
