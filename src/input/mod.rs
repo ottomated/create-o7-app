@@ -5,7 +5,10 @@ pub mod project_location;
 
 use std::{collections::HashSet, path::PathBuf};
 
-use crate::utils::{get_package_manager, Feature, PackageManager};
+use crate::{
+	telemetry,
+	utils::{get_package_manager, Feature, PackageManager},
+};
 
 use self::{install_deps::ProjectPackageManager, project_location::ProjectLocation};
 use anyhow::Result;
@@ -26,6 +29,8 @@ pub fn prompt() -> Result<UserInput> {
 		// pnpm create sometimes eats the first line of output
 		println!();
 	}
+
+	telemetry::print_initial_warning();
 
 	let render_config = RenderConfig {
 		prompt: StyleSheet {

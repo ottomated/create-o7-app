@@ -1,12 +1,14 @@
 use std::collections::{BTreeMap, HashMap};
 use std::env;
 use std::fmt::Display;
+use std::sync::Mutex;
 
+use once_cell::sync::Lazy;
 use serde::{Serialize, Serializer};
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
 
-#[derive(Debug, Clone, Eq, PartialEq, clap::ValueEnum)]
+#[derive(Debug, Clone, Eq, PartialEq, clap::ValueEnum, serde::Serialize)]
 pub enum PackageManager {
 	Npm,
 	Pnpm,
@@ -44,7 +46,13 @@ impl Display for PackageManager {
 	}
 }
 
+pub static PACKAGE_MANAGER_OVERRIDE: Lazy<Mutex<Option<PackageManager>>> =
+	Lazy::new(|| Mutex::new(None));
+
 pub fn get_package_manager() -> PackageManager {
+	if let Some(package_manager) = PACKAGE_MANAGER_OVERRIDE.lock().unwrap().as_ref() {
+		return package_manager.clone();
+	}
 	// This environment variable is set by npm and yarn but pnpm seems less consistent
 	let user_agent = env::var("npm_config_user_agent");
 

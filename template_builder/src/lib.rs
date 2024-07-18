@@ -193,7 +193,7 @@ impl Builder {
 			pub const DEFAULT_NAME: &str = #default_name;
 			pub const INITIAL_COMMIT: &str = #initial_commit;
 
-			#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone)]
+			#[derive(Debug, Hash, Eq, PartialEq, Copy, Clone, serde::Serialize)]
 			pub enum Feature {
 				Npm,
 				Pnpm,
