@@ -6,7 +6,7 @@ use crate::{
 use crossterm::style::{style, Stylize};
 use serde::Serialize;
 
-const TELEMETRY_URL: &str = "http://localhost:8787/report";
+const TELEMETRY_URL: &str = "https://o7-telemetry.ottomated.net/report";
 
 pub fn print_initial_warning() {
 	if get_cookie_bool("telemetry_warned", false) {
