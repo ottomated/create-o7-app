@@ -32,15 +32,14 @@ pub fn prompt(
 					}
 					Err(_) => {
 						let warn = style("!").red();
-						let message = style(format!(
-							"No package manager installed - https://volta.sh to install"
-						))
-						.yellow()
-						.bold();
+						let message =
+							style("No package manager installed - https://volta.sh to install")
+								.yellow()
+								.bold();
 						println!("{warn} {message}");
 						println!(
 						"  {}",
-						style("(you must install a package manager, such as npm, before developing)").yellow().dim()
+						style("(you must install a package manager, such as pnpm, before developing)").yellow().dim()
 					);
 						return Ok(None);
 					}

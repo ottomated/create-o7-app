@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"target": "es2021",
+		"lib": ["es2021"],
+		"moduleResolution": "node",
+		"module": "es2022",
+		"allowJs": true,
+		"checkJs": false,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"allowSyntheticDefaultImports": true,
+		"noUncheckedIndexedAccess": true,
+		"noEmit": true,
+		"isolatedModules": true,
+		"types": ["@cloudflare/workers-types/experimental"]
+	}
+}

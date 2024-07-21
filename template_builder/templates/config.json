@@ -51,6 +51,13 @@
 			"description": ""
 		},
 		{
+			"id": "Sidecar",
+			"name": "Sidecar",
+			"description": "(Additional worker for websockets, etc.)",
+			"hidden_if_not": ["Edge"],
+			"default": false
+		},
+		{
 			"id": "Svelte5",
 			"name": "Svelte 5",
 			"description": "(in preview)"

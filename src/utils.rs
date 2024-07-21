@@ -1,12 +1,14 @@
 use std::collections::{BTreeMap, HashMap};
 use std::env;
 use std::fmt::Display;
+use std::sync::Mutex;
 
+use once_cell::sync::Lazy;
 use serde::{Serialize, Serializer};
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq, clap::ValueEnum, serde::Serialize)]
 pub enum PackageManager {
 	Npm,
 	Pnpm,
@@ -23,6 +25,14 @@ impl PackageManager {
 			PackageManager::Bun => format!("bun run {script}"),
 		}
 	}
+	pub fn to_feature(&self) -> Feature {
+		match self {
+			PackageManager::Npm => Feature::Npm,
+			PackageManager::Pnpm => Feature::Pnpm,
+			PackageManager::Yarn => Feature::Yarn,
+			PackageManager::Bun => Feature::Bun,
+		}
+	}
 }
 
 impl Display for PackageManager {
@@ -36,7 +46,13 @@ impl Display for PackageManager {
 	}
 }
 
+pub static PACKAGE_MANAGER_OVERRIDE: Lazy<Mutex<Option<PackageManager>>> =
+	Lazy::new(|| Mutex::new(None));
+
 pub fn get_package_manager() -> PackageManager {
+	if let Some(package_manager) = PACKAGE_MANAGER_OVERRIDE.lock().unwrap().as_ref() {
+		return package_manager.clone();
+	}
 	// This environment variable is set by npm and yarn but pnpm seems less consistent
 	let user_agent = env::var("npm_config_user_agent");
 
@@ -63,6 +79,8 @@ pub struct PackageJsonPartial<'a> {
 	pub version: Option<&'a str>,
 	pub r#type: Option<&'a str>,
 	pub scripts: Option<HashMap<&'a str, Option<&'a str>>>,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub workspaces: Option<Vec<&'a str>>,
 	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
 	pub dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
@@ -83,7 +101,7 @@ fn sorted_map<S: Serializer>(
 	// SAFETY: this should be skipped if empty already
 	let map = map.as_ref().unwrap();
 	let mut items: Vec<_> = map.iter().collect();
-	items.sort_by(|a, b| a.0.cmp(&b.0));
+	items.sort_by(|a, b| a.0.cmp(b.0));
 	BTreeMap::from_iter(items).serialize(serializer)
 }
 
@@ -97,6 +115,9 @@ impl<'a> PackageJsonPartial<'a> {
 		}
 		if other.r#type.is_some() {
 			self.r#type = other.r#type;
+		}
+		if other.workspaces.is_some() {
+			self.workspaces = other.workspaces;
 		}
 		merge_hashmaps(&mut self.scripts, other.scripts);
 		merge_hashmaps(&mut self.dependencies, other.dependencies);

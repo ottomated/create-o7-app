@@ -39,6 +39,10 @@ pub fn prompt(_render_config: &RenderConfig) -> Result<HashSet<Feature>> {
 				}
 			}
 			FeatureDetails::Option(ref details) => {
+				let should_show = details.should_show(&selected_features);
+				if !should_show {
+					continue;
+				}
 				let possible_options = details
 					.options
 					.iter()

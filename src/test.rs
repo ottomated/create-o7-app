@@ -77,6 +77,11 @@ fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>>
 					}
 				}
 				FeatureDetails::Option(details) => {
+					let show = details.should_show(&past);
+					if !show {
+						next.push(past);
+						continue;
+					}
 					for option in details.options.iter() {
 						if !option.should_show(&past) {
 							continue;
@@ -129,6 +134,7 @@ fn test() {
 
 	let mut chunks = vec![vec![]; num_threads];
 	while !combinations.is_empty() {
+		#[allow(clippy::needless_range_loop)]
 		for i in 0..num_threads {
 			let Some(c) = combinations.pop() else {
 				break;
@@ -148,7 +154,8 @@ fn test() {
 
 			s.spawn(move || {
 				for features in chunk {
-					let input = make_input(features.clone());
+					let features_debug = features.clone();
+					let input = make_input(features);
 					let dir = input.location.path.clone();
 					let result: Result<(), String> = (|| {
 						create(input).map_err(|e| format!("{e}"))?;
@@ -160,7 +167,7 @@ fn test() {
 						Ok(())
 					})();
 					if let Err(e) = result {
-						errors.write().unwrap().push((features, e));
+						errors.write().unwrap().push((features_debug, e));
 					} else {
 						let _ = fs::remove_dir_all(&dir);
 					}

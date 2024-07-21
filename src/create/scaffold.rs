@@ -19,7 +19,7 @@ pub fn scaffold(input: &UserInput) -> Result<()> {
 		if !included {
 			continue;
 		}
-		let target_path = input.location.path.join(&template.path);
+		let target_path = input.location.path.join(template.path);
 		let folder = target_path.parent();
 		if let Some(folder) = folder {
 			fs::create_dir_all(folder)

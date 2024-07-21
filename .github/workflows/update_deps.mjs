@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 
 const isNewPr = process.argv[2] === 'main';
+const dryRun = process.argv.includes('--dry-run');
 
 export async function getUpdates() {
 	const projectRoot = resolve(fileURLToPath(import.meta.url), '../../..');
@@ -19,10 +20,12 @@ export async function getUpdates() {
 		let dirty = [];
 		for (const [name, currentVersion] of Object.entries(pkg[key])) {
 			if (currentVersion === null) continue;
+			if (name === 'common') continue;
 			let tag = 'latest';
 			if (currentVersion.includes('-next')) {
 				tag = 'next';
-			} if (currentVersion.includes('8.0.0-alpha')) {
+			}
+			if (currentVersion.includes('8.0.0-alpha')) {
 				tag = 'rc-v8';
 			}
 			let prefix = currentVersion[0];
@@ -51,10 +54,12 @@ export async function getUpdates() {
 		}
 		const [major, minor, patch] = version.split('.');
 		const newVersion = `${major}.${minor}.${parseInt(patch) + 1}`;
-		await writeFile(
-			cargoTomlPath,
-			cargoToml.replace(/version = "(.*)"/, `version = "${newVersion}"`),
-		);
+		if (!dryRun) {
+			await writeFile(
+				cargoTomlPath,
+				cargoToml.replace(/version = "(.*)"/, `version = "${newVersion}"`),
+			);
+		}
 		console.log(`_Bumped version to ${newVersion}_\n\n`);
 	}
 
@@ -68,7 +73,9 @@ export async function getUpdates() {
 		]).then((results) => results.flat());
 
 		if (updates.length) {
-			await writeFile(f, JSON.stringify(pkg, null, '\t') + '\n');
+			if (!dryRun) {
+				await writeFile(f, JSON.stringify(pkg, null, '\t') + '\n');
+			}
 			const features = prettifyFeatures(groups[1]);
 			console.log(`| \`${features}\` | old | new |`);
 			console.log('|-|-|-|');
@@ -81,9 +88,9 @@ export async function getUpdates() {
 }
 
 /**
- * 
- * @param {string} packageName 
- * @param {string} tag 
+ *
+ * @param {string} packageName
+ * @param {string} tag
  * @returns {Promise<string>}
  */
 async function latestVersion(packageName, tag) {
@@ -102,8 +109,8 @@ async function latestVersion(packageName, tag) {
 }
 
 /**
- * 
- * @param {string} dir 
+ *
+ * @param {string} dir
  * @returns {AsyncGenerator<string>}
  */
 async function* getFiles(dir) {
@@ -118,14 +125,14 @@ async function* getFiles(dir) {
 	}
 }
 /**
- * @param {string | undefined} features 
+ * @param {string | undefined} features
  */
 function prettifyFeatures(features) {
 	if (features === undefined) return 'base';
 	return features
 		.substring(1, features.length - 1) // strip {}
 		.replace(/,/g, ', ') // add spaces to commas
-		.replace(/\|/g, ' \\| ') // escape and prettify pipes
+		.replace(/\|/g, ' \\| '); // escape and prettify pipes
 }
 
 getUpdates();

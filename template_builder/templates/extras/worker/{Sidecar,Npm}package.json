@@ -1,0 +1,18 @@
+{
+	"name": "worker",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy"
+	},
+	"dependencies": {
+		"common": "^0.0.0",
+		"hono": "^4.5.1"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20240718.0",
+		"typescript": "^5.5.3",
+		"wrangler": "^3.65.1"
+	}
+}

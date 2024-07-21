@@ -1,0 +1,10 @@
+{
+	"name": "common",
+	"version": "0.0.0",
+	"private": true,
+	"types": "./src/common.ts",
+	"module": "./src/common.ts",
+	"dependencies": {
+		"zod": "^3.23.8"
+	}
+}

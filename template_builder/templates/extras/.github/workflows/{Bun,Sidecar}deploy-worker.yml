@@ -1,0 +1,31 @@
+name: Deploy Sidecar Worker
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'worker/**'
+      - 'common/**'
+      - '.github/workflows/deploy-worker.yml'
+      - 'bun.lockb'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        working-directory: worker
+        run: bun install --frozen-lockfile
+
+      - name: Deploy
+        working-directory: worker
+        run: bun run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

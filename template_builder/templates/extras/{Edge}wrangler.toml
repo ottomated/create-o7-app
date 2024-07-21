@@ -1,6 +1,6 @@
 name = "__o7__name__"
 pages_build_output_dir = "./.svelte-kit/cloudflare"
-compatibility_date = "2024-06-03"
+compatibility_date = "2024-07-01"
 
 # [[kv_namespaces]]
 # binding = "KV"
