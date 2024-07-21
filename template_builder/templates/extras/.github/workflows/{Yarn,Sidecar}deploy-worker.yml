@@ -1,0 +1,36 @@
+name: Deploy Sidecar Worker
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'worker/**'
+      - 'common/**'
+      - '.github/workflows/deploy-worker.yml'
+      - 'yarn.lock'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install yarn
+        run: yarn set version berry
+
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'yarn'
+
+      - name: Install dependencies
+        working-directory: worker
+        run: yarn install --immutable
+
+      - name: Deploy
+        working-directory: worker
+        run: yarn run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
