@@ -46,6 +46,5 @@ Then, open your new app in your favorite IDE and get started! A good place to lo
 
 ## Upcoming
 
-- [ ] Add a template for a websocket backend using Durable Objects
-- [ ] Detect when a user has instantiated a bunch of templates and stop giving them the tutorial stuff
+- [ ] Move the tutorial to a README file
 - [ ] Replace the dependency on `@tanstack/svelte-query` with a more lightweight tRPC client
