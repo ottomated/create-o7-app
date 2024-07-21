@@ -2,10 +2,6 @@ import { DurableObject } from 'cloudflare:workers';
 import { Hono } from 'hono';
 import { ServerToClient, clientToServerSchema } from 'common';
 
-type Env = {
-	SOCKET_OBJECT: DurableObjectNamespace<SocketObject>;
-};
-
 export class SocketObject extends DurableObject {
 	constructor(ctx: DurableObjectState, env: Env) {
 		super(ctx, env);
