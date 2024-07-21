@@ -4,15 +4,16 @@
 	"private": true,
 	"scripts": {
 		"dev": "wrangler dev",
-		"deploy": "wrangler deploy"
+		"deploy": "wrangler deploy",
+		"typegen": "wrangler types"
 	},
 	"dependencies": {
 		"common": "workspace:*",
-		"hono": "^4.4.13"
+		"hono": "^4.5.1"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240701.0",
-		"typescript": "^5.5.2",
-		"wrangler": "^3.60.3"
+		"@cloudflare/workers-types": "^4.20240718.0",
+		"typescript": "^5.5.3",
+		"wrangler": "^3.65.1"
 	}
 }
