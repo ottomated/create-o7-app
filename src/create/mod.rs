@@ -28,7 +28,12 @@ pub fn create(mut input: UserInput) -> Result<()> {
 	fs::create_dir_all(&input.location.path).context("Could not create project directory")?;
 
 	// Add the package manager to the features
-	input.features.insert(get_package_manager().to_feature());
+	let package_manager = input
+		.install_deps
+		.as_ref()
+		.map(|p| p.package_manager.clone())
+		.unwrap_or_else(get_package_manager);
+	input.features.insert(package_manager.to_feature());
 
 	println!();
 	// Scaffold (copy files)
