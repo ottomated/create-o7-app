@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.1] - 2024-07-22
+
+
+
+
+**Dependency Updates:** [1](https://github.com/ottomated/create-o7-app/commit/180aadbccb5040122b796a19ba40f01d5e1974b2)
+
+
 ## [0.8.0] - 2024-07-22
 
 
