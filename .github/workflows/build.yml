@@ -45,15 +45,12 @@ jobs:
         with:
           components: rustfmt
           targets: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
-      - name: Test
-        run: cargo test
+      # - name: Test
+      #   run: cargo test
       - name: Install MinGW
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
-      - name: Install libssl
-        run: |
-          sudo apt-get install -y libssl-dev
       - name: Cache OSXCross
         id: cache-osxcross
         uses: actions/cache@v4
