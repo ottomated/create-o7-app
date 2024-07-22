@@ -67,7 +67,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.create_token.outputs.token }}
-          commit-message: '[ci] Update dependencies'
+          commit-message: 'ci: Update dependencies'
           title: Update dependencies
           body: ${{ env.PR_BODY }}
           branch: updates
