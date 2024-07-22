@@ -1,9 +1,59 @@
 # Changelog
 
+## [0.8.0] - 2024-07-22
+
+
+### features
+
+- Use wrangler typegen
+
+- Github action to deploy sidecar worker
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1](https://github.com/ottomated/create-o7-app/commit/a1271cb6ecfe9f2e9a89b25b13f5cd0dbd189120)
+
+
 ## [0.7.3] - 2024-07-14
 
 
+### features
 
+- Initialize Sidecar worker template (additional Cloudflare worker with a websocket server)
+
+- Enable/disable telemetry
+
+- Add "cookies" for storing config on disk
+
+- Create telemetry server
+
+- Optionally report telemetry
+
+
+
+
+### internal
+
+- Allow option features to be conditionally hidden
+
+
+
+
+### misc
+
+- Fix clippy suggestions
+
+- Update workers compatibility_date to 2024-07-01
+
+- Fix clippy issues
+
+
+
+
+<br/>
 
 **Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/b3c333943dda2fa7a85bba3c370ace5908fcd9e9) [2,](https://github.com/ottomated/create-o7-app/commit/53d0536ec95d4acb6d307b91e7b557d7b647d537) [3,](https://github.com/ottomated/create-o7-app/commit/6ed780938e2d93eab2d991340641364be1446121) [4](https://github.com/ottomated/create-o7-app/commit/33cdf06fb5a1164435b81ee55082a30448cc3810)
 
