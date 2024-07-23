@@ -1,0 +1,36 @@
+name: "Build Linux"
+description: "Build the Linux binaries"
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: x86_64-unknown-linux-musl
+    - name: Cache Rust
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Install MUSL
+      shell: bash
+      run: |
+        sudo apt-get install -y musl-tools
+    - name: Build Linux
+      shell: bash
+      run: cargo build --release --target x86_64-unknown-linux-musl
+    - name: Compress Artifact
+      shell: bash
+      run: |
+        mkdir -p compressed/artifacts
+        tar -czvf compressed/create-o7-app-linux.tar.gz -C target/x86_64-unknown-linux-musl/release create-o7-app
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: create-o7-app-linux
+        path: compressed/create-o7-app-*.tar.gz

@@ -5,11 +5,102 @@ on:
       - main
 
 jobs:
-  build:
+  get-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get version
+        id: get_version
+        run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
+      - name: Compare version to NPM
+        run: |
+          NPM_VERSION=$(curl -s https://registry.npmjs.org/create-o7-app | jq -r '.["dist-tags"].latest')
+          MY_VERSION=${{ steps.get_version.outputs.version }}
+          if [ "$NPM_VERSION" == "$MY_VERSION" ]; then
+            echo "NPM version is the same as the version in Cargo.toml, exiting"
+            exit 1
+          fi
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache Cargo
+        id: cache-cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Run Cargo Fetch
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: cargo fetch
+
+  build-linux:
+    needs: get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ./.github/actions
+      - uses: ./.github/actions/build-linux
+
+  build-macos:
+    needs: get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ./.github/actions
+      - uses: ./.github/actions/build-macos
+        with:
+          target: x86_64
+  
+  build-macos-arm64:
+    needs: get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ./.github/actions
+      - uses: ./.github/actions/build-macos
+        with:
+          target: aarch64
+
+  build-windows:
+    needs: get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ./.github/actions
+      - uses: ./.github/actions/build-windows
+        with:
+          target: x86_64
+  
+  build-windows-32:
+    needs: get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ./.github/actions
+      - uses: ./.github/actions/build-windows
+        with:
+          target: i686
+
+  release:
+    needs: 
+      - get-version
+      - build-linux
+      - build-macos
+      - build-macos-arm64
+      - build-windows
+      - build-windows-32 
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,102 +110,38 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Get version
-        id: get_version
-        run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
-      - name: Compare version to NPM
-        run: |
-          NPM_VERSION=$(npm view create-o7-app version)
-          MY_VERSION=${{ steps.get_version.outputs.version }}
-          if [ "$NPM_VERSION" == "$MY_VERSION" ]; then
-            echo "NPM version is the same as the version in Cargo.toml, exiting"
-            exit 1
-          fi
       - name: Install pnpm
-        run: npm i -g pnpm
-
+        run: npm install -g pnpm
       - name: Generate changelogs
         run: |
           # Full changelog
-          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} -o CHANGELOG.md
+          pnpx git-cliff --tag ${{ needs.get-version.outputs.version }} -o CHANGELOG.md
           # Changelog for the release
-          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} --unreleased --strip header -o CHANGELOG-release.md
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
-          targets: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
-      # - name: Test
-      #   run: cargo test
-      - name: Install MinGW
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
-      - name: Install MUSL
-        run: |
-          sudo apt-get install -y musl-tools
-      - name: Cache OSXCross
-        id: cache-osxcross
-        uses: actions/cache@v4
-        with:
-          path: osxcross
-          key: ${{ runner.os }}-osxcross-11.3
-          save-always: true
-
-      - name: Install OSXCross
-        if: steps.cache-osxcross.outputs.cache-hit != 'true'
-        run: |
-          git clone https://github.com/tpoechtrager/osxcross
-          cd osxcross
-          sudo tools/get_dependencies.sh
-          wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
-          mv MacOSX11.3.sdk.tar.xz tarballs/
-          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
-      - name: Build Linux
-        run: cargo build --release --target x86_64-unknown-linux-musl
-      - name: Build MacOS
-        run: |
-          export PATH="$(pwd)/osxcross/target/bin:$PATH"
-          export LIBZ_SYS_STATIC=1
-          export CC=o64-clang
-          export CXX=o64-clang++
-          cargo build --release --target x86_64-apple-darwin
-          cargo build --release --target aarch64-apple-darwin
-      - name: Build Windows
-        run: cargo build --release --target x86_64-pc-windows-gnu
-      - name: Build Windows 32
-        run: cargo build --release --target i686-pc-windows-gnu
-      - name: Copy Artifacts
-        run: |
-          mkdir artifacts
-          mv target/x86_64-unknown-linux-musl/release/create-o7-app artifacts/create-o7-app-linux
-          mv target/x86_64-pc-windows-gnu/release/create-o7-app.exe artifacts/create-o7-app-win64.exe
-          mv target/i686-pc-windows-gnu/release/create-o7-app.exe artifacts/create-o7-app-win32.exe
-          mv target/x86_64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos
-          mv target/aarch64-apple-darwin/release/create-o7-app artifacts/create-o7-app-macos-arm64
-          mkdir -p compressed/artifacts
-          for file in artifacts/*; do tar -czvf "compressed/$file.tar.gz" "$file"; done
-
+          pnpx git-cliff --tag ${{ needs.get-version.outputs.version }} --unreleased --strip header -o CHANGELOG-release.md
       - name: Commit changelog
         run: |
           git add CHANGELOG.md
           git config --local user.email "create-o7-app@users.noreply.github.com"
           git config --local user.name "create-o7-app[bot]"
-          git commit -m "ci: Update changelog for ${{ steps.get_version.outputs.version }}"
+          git commit -m "ci: Update changelog for ${{ needs.get-version.outputs.version }}"
           git push
-
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: create-o7-app-*
+          path: artifacts
+          merge-multiple: true
       - name: Release Binaries
         uses: softprops/action-gh-release@v2
         with:
           body_path: CHANGELOG-release.md
-          tag_name: ${{ steps.get_version.outputs.version }}
-          files: compressed/artifacts/*
+          tag_name: ${{ needs.get-version.outputs.version }}
+          files: artifacts/create-o7-app-*.tar.gz
       - name: Publish NPM Package
         run: |
           cd pkg
           cp ../README.md .
-          jq '.version = "${{ steps.get_version.outputs.version }}"' package.json > tmp && mv tmp package.json
+          jq '.version = "${{ needs.get-version.outputs.version }}"' package.json > tmp && mv tmp package.json
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
           npm publish

@@ -1,0 +1,67 @@
+name: "Build Windows"
+description: "Build the Windows binaries"
+
+inputs:
+  target:
+    description: |
+      'Target to build'
+      'Options: x86_64, i686'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Check target
+      shell: bash
+      run: |
+        if [ "${{ inputs.target }}" != "x86_64" ] && [ "${{ inputs.target }}" != "i686" ]; then
+          echo "Invalid target"
+          exit 1
+        fi
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ inputs.target }}-pc-windows-gnu
+    - name: Cache Rust
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Install MinGW
+      shell: bash
+      run: |
+        sudo apt-get update
+        if [ "$TARGET" == "x86_64" ]; then
+          sudo apt-get install -y gcc-mingw-w64-x86-64
+        fi
+        if [ "$TARGET" == "i686" ]; then
+          sudo apt-get install -y gcc-mingw-w64-i686
+        fi
+      env:
+        TARGET: ${{ inputs.target }}
+    - name: Build Windows
+      shell: bash
+      run: cargo build --release --target "$TARGET-pc-windows-gnu"
+      env:
+        TARGET: ${{ inputs.target }}
+    - name: Compress Artifact
+      shell: bash
+      run: |
+        mkdir -p compressed/artifacts
+        if [ "$TARGET" == "x86_64" ]; then
+          tar -czvf compressed/create-o7-app-win64.tar.gz -C target/x86_64-pc-windows-gnu/release create-o7-app.exe
+        fi
+        if [ "$TARGET" == "i686" ]; then
+          tar -czvf compressed/create-o7-app-win32.tar.gz -C target/i686-pc-windows-gnu/release create-o7-app.exe
+        fi
+      env:
+        TARGET: ${{ inputs.target }}
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: create-o7-app-windows-${{ inputs.target }}
+        path: compressed/create-o7-app-*.tar.gz
