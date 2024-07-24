@@ -41,63 +41,211 @@ jobs:
     needs: get-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          sparse-checkout: ./.github/actions
-      - uses: ./.github/actions/build-linux
+          targets: x86_64-unknown-linux-musl
+      - name: Cache Rust
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install MUSL
+        shell: bash
+        run: |
+          sudo apt-get install -y musl-tools
+      - name: Build Linux
+        shell: bash
+        run: cargo build --release --target x86_64-unknown-linux-musl
+      - name: Compress Artifact
+        shell: bash
+        run: |
+          mkdir -p compressed/artifacts
+          tar -czvf compressed/create-o7-app-linux.tar.gz -C target/x86_64-unknown-linux-musl/release create-o7-app
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: create-o7-app-linux
+          path: compressed/create-o7-app-*.tar.gz
 
   build-macos:
     needs: get-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          sparse-checkout: ./.github/actions
-      - uses: ./.github/actions/build-macos
+          targets: x86_64-apple-darwin
+      - name: Cache Rust
+        uses: actions/cache@v4
         with:
-          target: x86_64
-  
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache OSXCross
+        id: cache-osxcross
+        uses: actions/cache@v4
+        with:
+          path: osxcross
+          key: ${{ runner.os }}-osxcross-11.3
+          save-always: true
+      - name: Install OSXCross
+        if: steps.cache-osxcross.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/tpoechtrager/osxcross
+          cd osxcross
+          sudo tools/get_dependencies.sh
+          wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
+          mv MacOSX11.3.sdk.tar.xz tarballs/
+          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+      - name: Build MacOS
+        run: |
+          export PATH="$(pwd)/osxcross/target/bin:$PATH"
+          export LIBZ_SYS_STATIC=1
+          export CC=o64-clang
+          export CXX=o64-clang++
+          cargo build --release --target x86_64-apple-darwin
+      - name: Compress Artifact
+        run: |
+          mkdir -p compressed/artifacts
+          tar -czvf compressed/create-o7-app-macos.tar.gz -C target/x86_64-apple-darwin/release create-o7-app
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: create-o7-app-macos-x86_64
+          path: compressed/create-o7-app-*.tar.gz
+
   build-macos-arm64:
     needs: get-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          sparse-checkout: ./.github/actions
-      - uses: ./.github/actions/build-macos
+          targets: aarch64-apple-darwin
+      - name: Cache Rust
+        uses: actions/cache@v4
         with:
-          target: aarch64
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache OSXCross
+        id: cache-osxcross
+        uses: actions/cache@v4
+        with:
+          path: osxcross
+          key: ${{ runner.os }}-osxcross-11.3
+          save-always: true
+      - name: Install OSXCross
+        if: steps.cache-osxcross.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/tpoechtrager/osxcross
+          cd osxcross
+          sudo tools/get_dependencies.sh
+          wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
+          mv MacOSX11.3.sdk.tar.xz tarballs/
+          UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+      - name: Build MacOS
+        run: |
+          export PATH="$(pwd)/osxcross/target/bin:$PATH"
+          export LIBZ_SYS_STATIC=1
+          export CC=o64-clang
+          export CXX=o64-clang++
+          cargo build --release --target aarch64-apple-darwin
+      - name: Compress Artifact
+        run: |
+          mkdir -p compressed/artifacts
+          tar -czvf compressed/create-o7-app-macos-arm64.tar.gz -C target/aarch64-apple-darwin/release create-o7-app
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: create-o7-app-macos-aarch64
+          path: compressed/create-o7-app-*.tar.gz
 
   build-windows:
     needs: get-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          sparse-checkout: ./.github/actions
-      - uses: ./.github/actions/build-windows
+          targets: x86_64-pc-windows-gnu
+      - name: Cache Rust
+        uses: actions/cache@v4
         with:
-          target: x86_64
-  
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install MinGW
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-x86-64
+      - name: Build Windows
+        run: cargo build --release --target x86_64-pc-windows-gnu
+      - name: Compress Artifact
+        run: |
+          mkdir -p compressed/artifacts
+          tar -czvf compressed/create-o7-app-win64.exe.tar.gz -C target/x86_64-pc-windows-gnu/release create-o7-app.exe
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: create-o7-app-windows-x86_64
+          path: compressed/create-o7-app-*.tar.gz
+
   build-windows-32:
     needs: get-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          sparse-checkout: ./.github/actions
-      - uses: ./.github/actions/build-windows
+          targets: i686-pc-windows-gnu
+      - name: Cache Rust
+        uses: actions/cache@v4
         with:
-          target: i686
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install MinGW
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-i686
+      - name: Build Windows
+        run: cargo build --release --target i686-pc-windows-gnu
+      - name: Compress Artifact
+        run: |
+          mkdir -p compressed/artifacts
+          tar -czvf compressed/create-o7-app-win32.exe.tar.gz -C target/i686-pc-windows-gnu/release create-o7-app.exe
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: create-o7-app-windows-i686
+          path: compressed/create-o7-app-*.tar.gz
 
   release:
-    needs: 
+    needs:
       - get-version
       - build-linux
       - build-macos
       - build-macos-arm64
       - build-windows
-      - build-windows-32 
+      - build-windows-32
     runs-on: ubuntu-latest
     permissions:
       contents: write
