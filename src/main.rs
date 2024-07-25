@@ -3,8 +3,6 @@ mod cookie;
 mod create;
 mod input;
 mod telemetry;
-#[cfg(test)]
-mod test;
 mod utils;
 
 use anyhow::Result;

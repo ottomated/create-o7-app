@@ -1,12 +1,14 @@
 mod utils;
 
 use anyhow::{Context, Result};
+use itertools::Itertools;
 use proc_macro2::{Literal, TokenStream};
 use quote::{format_ident, quote};
 use std::collections::HashSet;
 use std::env::{self, current_dir};
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::str::FromStr;
 use utils::{parse_feature_file, walk_dir, PackageJsonPartial};
 use which::which;
 
@@ -187,8 +189,16 @@ impl Builder {
 			})
 			.collect::<Vec<_>>();
 
+		let features_match = features
+			.clone()
+			.into_iter()
+			.map(|f| format!("r#\"{}\"# => Ok(Feature::{}),\n", f, f))
+			.join("");
+		let features_token = TokenStream::from_str(&features_match).unwrap();
+
 		quote! {
 			use std::collections::HashSet;
+			use std::str::FromStr;
 
 			pub const DEFAULT_NAME: &str = #default_name;
 			pub const INITIAL_COMMIT: &str = #initial_commit;
@@ -200,6 +210,16 @@ impl Builder {
 				Yarn,
 				Bun,
 				#(#features),*
+			}
+
+			impl FromStr for Feature {
+				type Err = ();
+				fn from_str(input: &str) -> Result<Feature, Self::Err> {
+						match input {
+								#features_token
+								_ => Err(()),
+						}
+				}
 			}
 
 			pub enum FeatureDetails {

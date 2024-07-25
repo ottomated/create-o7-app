@@ -3,20 +3,38 @@ on:
   pull_request:
 
 jobs:
-  test:
+  generate-features:
     runs-on: ubuntu-latest
+    outputs:
+      features: ${{ steps.generate-features.outputs.features }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
+      - name: Generate features
+        id: generate-features
+        run: cargo run --bin generate-features >> "$GITHUB_OUTPUT"
+  
+  test:
+    needs: generate-features
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        features: ${{ fromJson(needs.generate-features.outputs.features) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: Install pnpm
         run: npm i -g pnpm
-      - name: Test
-        run: cargo test
+      - name: Save features to file
+        run: echo "${{ matrix.features }}" > features.txt
+      - name: Run test
+        run: cargo test --test integration_test
+
