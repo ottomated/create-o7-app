@@ -27,6 +27,6 @@ tempfile = "3.10.1"
 itertools = "0.13.0"
 
 [profile.release]
-opt-level = 'z' # Optimize for size
+opt-level = 's' # Optimize for size
 lto = true
 strip = true
