@@ -1,9 +1,7 @@
-use std::{collections::HashSet, fmt};
+use std::collections::HashSet;
 
 use anyhow::Result;
-use create_o7_app::utils::{get_feature_list, Feature, FeatureDetails};
-
-use serde::Serialize;
+use create_o7_app::utils::{get_feature_list, FeatureDetails};
 
 fn main() -> Result<()> {
 	let features = get_feature_list();

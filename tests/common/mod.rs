@@ -10,8 +10,9 @@ use std::time::Duration;
 use std::{fs, panic, thread};
 
 use create_o7_app::create::create;
+use create_o7_app::input::install_deps::ProjectPackageManager;
 use create_o7_app::input::{project_location::ProjectLocation, UserInput};
-use create_o7_app::utils::{get_feature_list, Feature, FeatureDetails};
+use create_o7_app::utils::{get_feature_list, Feature, FeatureDetails, PackageManager};
 use itertools::Itertools;
 
 fn make_input(features: HashSet<Feature>) -> UserInput {
@@ -22,7 +23,10 @@ fn make_input(features: HashSet<Feature>) -> UserInput {
 			path: tmp.path().join("o7-test"),
 		},
 		features,
-		install_deps: None,
+		install_deps: Some(ProjectPackageManager {
+			package_manager: PackageManager::Pnpm,
+			exec_path: which::which("pnpm").unwrap(),
+		}),
 		git: None,
 	}
 }
@@ -132,7 +136,6 @@ pub fn run_feature(features: HashSet<Feature>) -> Result<(), String> {
 	let result: Result<(), String> = (|| {
 		create(input).map_err(|e| format!("{e}"))?;
 		// Build first so sveltekit generates its tsconfig
-		test_pnpm(&dir, &["install"])?;
 		test_pnpm(&dir, &["build"])?;
 		test_pnpm(&dir, &["eslint", "--max-warnings", "0", "."])?;
 		test_pnpm(&dir, &["svelte-check"])?;
