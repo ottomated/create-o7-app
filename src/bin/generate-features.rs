@@ -54,7 +54,7 @@ fn main() -> Result<()> {
 	}
 
 	println!(
-		"features=[\n{}\n]",
+		"features=[{}]",
 		last_step
 			.iter()
 			.map(|hashset| format!(
@@ -67,7 +67,7 @@ fn main() -> Result<()> {
 			))
 			.filter(|s| s != "\"\"")
 			.collect::<Vec<_>>()
-			.join("\n")
+			.join(",")
 	);
 
 	Ok(())
