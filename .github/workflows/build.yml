@@ -23,19 +23,6 @@ jobs:
             echo "NPM version is the same as the version in Cargo.toml, exiting"
             exit 1
           fi
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-      - name: Cache Cargo
-        id: cache-cargo
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Run Cargo Fetch
-        if: steps.cache-cargo.outputs.cache-hit != 'true'
-        run: cargo fetch
 
   build-linux:
     needs: get-version
@@ -48,12 +35,7 @@ jobs:
         with:
           targets: x86_64-unknown-linux-musl
       - name: Cache Rust
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        uses: Swatinem/rust-cache@v2
       - name: Install MUSL
         shell: bash
         run: |
@@ -83,12 +65,7 @@ jobs:
         with:
           targets: x86_64-apple-darwin
       - name: Cache Rust
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        uses: Swatinem/rust-cache@v2
       - name: Cache OSXCross
         id: cache-osxcross
         uses: actions/cache@v4
@@ -133,12 +110,7 @@ jobs:
         with:
           targets: aarch64-apple-darwin
       - name: Cache Rust
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        uses: Swatinem/rust-cache@v2
       - name: Cache OSXCross
         id: cache-osxcross
         uses: actions/cache@v4
@@ -183,12 +155,7 @@ jobs:
         with:
           targets: x86_64-pc-windows-gnu
       - name: Cache Rust
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        uses: Swatinem/rust-cache@v2
       - name: Install MinGW
         run: |
           sudo apt-get update
@@ -216,12 +183,7 @@ jobs:
         with:
           targets: i686-pc-windows-gnu
       - name: Cache Rust
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        uses: Swatinem/rust-cache@v2
       - name: Install MinGW
         run: |
           sudo apt-get update
