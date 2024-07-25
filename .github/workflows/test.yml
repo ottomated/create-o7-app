@@ -14,6 +14,8 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: test
       - name: Generate features
         id: generate-features
         run: cargo run --bin generate-features >> "$GITHUB_OUTPUT"
@@ -33,13 +35,17 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: test
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Install pnpm
-        run: npm i -g pnpm
       - name: Save features to file
         run: echo "${{ matrix.features }}" > features.txt
       - name: Run test
