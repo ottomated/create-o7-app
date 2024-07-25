@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get_version.outputs.version }}
+      should_continue: ${{ steps.compare_version.outputs.should_continue }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,16 +17,21 @@ jobs:
         id: get_version
         run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
       - name: Compare version to NPM
+        id: compare_version
         run: |
           NPM_VERSION=$(curl -s https://registry.npmjs.org/create-o7-app | jq -r '.["dist-tags"].latest')
           MY_VERSION=${{ steps.get_version.outputs.version }}
           if [ "$NPM_VERSION" == "$MY_VERSION" ]; then
             echo "NPM version is the same as the version in Cargo.toml, exiting"
-            exit 1
+            echo "should_continue=false" >> $GITHUB_OUTPUT
+          else
+            echo "NPM version is not the same as the version in Cargo.toml, continuing"
+            echo "should_continue=true" >> $GITHUB_OUTPUT
           fi
 
   build-linux:
     needs: get-version
+    if: ${{ needs.get-version.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,14 +43,10 @@ jobs:
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
       - name: Install MUSL
-        shell: bash
-        run: |
-          sudo apt-get install -y musl-tools
+        run: sudo apt-get install -y musl-tools
       - name: Build Linux
-        shell: bash
         run: cargo build --release --target x86_64-unknown-linux-musl
       - name: Compress Artifact
-        shell: bash
         run: |
           mkdir -p compressed/artifacts
           tar -czvf compressed/create-o7-app-linux.tar.gz -C target/x86_64-unknown-linux-musl/release create-o7-app
@@ -56,6 +58,7 @@ jobs:
 
   build-macos:
     needs: get-version
+    if: ${{ needs.get-version.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -101,6 +104,7 @@ jobs:
 
   build-macos-arm64:
     needs: get-version
+    if: ${{ needs.get-version.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -146,6 +150,7 @@ jobs:
 
   build-windows:
     needs: get-version
+    if: ${{ needs.get-version.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -174,6 +179,7 @@ jobs:
 
   build-windows-32:
     needs: get-version
+    if: ${{ needs.get-version.outputs.should_continue == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
