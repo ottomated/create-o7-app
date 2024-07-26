@@ -6,7 +6,7 @@ use crate::{
 use crossterm::style::{style, Stylize};
 use serde::Serialize;
 
-const TELEMETRY_URL: &str = "https://o7-telemetry.ottomated.net/report";
+const TELEMETRY_URL: &str = "http://o7-telemetry.ottomated.net/report";
 
 pub fn print_initial_warning() {
 	if get_cookie_bool("telemetry_warned", false) {
@@ -76,8 +76,7 @@ pub fn report(report: TelemetryReport) {
 	if !get_cookie_bool("telemetry", true) {
 		return;
 	}
-	let client = reqwest::blocking::Client::new();
-	let res = client.post(TELEMETRY_URL).json(&report).send();
+	let res = ureq::post(TELEMETRY_URL).send_json(report);
 	if cfg!(debug_assertions) {
 		if let Err(err) = res {
 			eprintln!("{err}\n{err:?}");
