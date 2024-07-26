@@ -61,15 +61,3 @@ pub fn create_repo(input: &UserInput) -> Result<(), (GitStep, Error)> {
 
 	Ok(())
 }
-
-// fn run_git(git: PathBuf, dir: PathBuf, args: &[&'static str]) -> Result<()> {
-// 	let cmd = Command::new(git)
-// 		.args(args)
-// 		.current_dir(dir)
-// 		.stdout(Stdio::inherit())
-// 		.stderr(Stdio::inherit())
-// 		.status()
-// 		.with_context(|| format!("Failed to execute git {}", args.iter().join(" ")))?;
-
-// 	Ok(cmd)
-// }
