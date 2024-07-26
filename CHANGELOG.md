@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.2] - 2024-07-26
+
+
+### performance
+
+- Use a smaller HTTP client to optimize binary size
+
+
+
 ## [0.8.1] - 2024-07-22
 
 
