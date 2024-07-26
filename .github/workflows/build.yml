@@ -28,6 +28,14 @@ jobs:
             echo "NPM version is not the same as the version in Cargo.toml, continuing"
             echo "should_continue=true" >> $GITHUB_OUTPUT
           fi
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
+      - name: Run Cargo fetch
+        run: cargo fetch
 
   build-linux:
     needs: get-version
@@ -42,6 +50,8 @@ jobs:
           targets: x86_64-unknown-linux-musl
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
       - name: Install MUSL
         run: sudo apt-get install -y musl-tools
       - name: Build Linux
@@ -69,6 +79,8 @@ jobs:
           targets: x86_64-apple-darwin
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
       - name: Cache OSXCross
         id: cache-osxcross
         uses: actions/cache@v4
@@ -115,6 +127,8 @@ jobs:
           targets: aarch64-apple-darwin
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
       - name: Cache OSXCross
         id: cache-osxcross
         uses: actions/cache@v4
@@ -161,6 +175,8 @@ jobs:
           targets: x86_64-pc-windows-gnu
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
       - name: Install MinGW
         run: |
           sudo apt-get update
@@ -190,6 +206,8 @@ jobs:
           targets: i686-pc-windows-gnu
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
       - name: Install MinGW
         run: |
           sudo apt-get update
