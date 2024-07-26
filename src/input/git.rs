@@ -80,23 +80,3 @@ fn get_closest_git_root(git: &PathBuf, directory: &PathBuf) -> Result<Option<Str
 
 	Ok(Some(output.trim().to_string()))
 }
-
-// fn get_git_version(git: &PathBuf) -> Result<(u16, u16)> {
-// 	let version = Command::new(&git)
-// 		.arg("--version")
-// 		.output()
-// 		.context("Failed to execute 'git --version'")?
-// 		.stdout;
-// 	let version = String::from_utf8(version).context("'git --version' output is invalid UTF-8")?;
-
-// 	let regex = Regex::new(r"(\d+)\.(\d+)(?:\.\d+)?").context("Failed to compile regex")?;
-
-// 	let version = regex
-// 		.captures(&version)
-// 		.context("Failed to find version in 'git --version' output")?;
-
-// 	let major = version.get(1).unwrap().as_str().parse().unwrap();
-// 	let minor = version.get(2).unwrap().as_str().parse().unwrap();
-
-// 	Ok((major, minor))
-// }
