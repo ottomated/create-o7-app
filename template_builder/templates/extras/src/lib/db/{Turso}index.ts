@@ -1,5 +1,5 @@
 import { Kysely, type RawBuilder, sql } from 'kysely';
-import { LibsqlDialect } from '@ottomated/kysely-libsql';
+import { LibsqlDialect } from '@libsql/kysely-libsql';
 import type { DB } from './schema';
 import { dev } from '$app/environment';
 import { TURSO_TOKEN, TURSO_URL } from '$env/static/private';

@@ -3,8 +3,8 @@
 		"db:push": "node ./prisma/push.mjs"
 	},
 	"dependencies": {
-		"@ottomated/kysely-libsql": "^0.4.0",
-		"@libsql/client": "^0.7.0"
+		"@libsql/kysely-libsql": "^0.4.1",
+		"@libsql/client": "^0.8.0"
 	},
 	"devDependencies": {
 		"dotenv": "^16.4.5",
