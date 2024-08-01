@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.8.4] - 2024-08-01
+
+
+### misc
+
+- Switch to the official kysely-libsql, since they merged my changes
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/0821da41386f40ac930f2582b5e33064d431f39c) [2,](https://github.com/ottomated/create-o7-app/commit/9f8d5f356b980a3df68e08abb806bcb385907248) [3,](https://github.com/ottomated/create-o7-app/commit/7aa6d99720a7d5df772e9c274cc9b0b3508f9240) [4,](https://github.com/ottomated/create-o7-app/commit/af95672af70d8fe3e983bc7267ec559577b4db92) [5,](https://github.com/ottomated/create-o7-app/commit/67402aa5eb962ae3be4ca6fe88c068c966e39bbd) [6](https://github.com/ottomated/create-o7-app/commit/86af4039db5aac73c579cb6659734104e7fc1f11)
+
+
 ## [0.8.3] - 2024-07-27
 
 
