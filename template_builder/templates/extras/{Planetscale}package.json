@@ -4,6 +4,6 @@
 	},
 	"dependencies": {
 		"kysely-planetscale": "^1.4.0",
-		"@planetscale/database": "^1.18.0"
+		"@planetscale/database": "^1.19.0"
 	}
 }
