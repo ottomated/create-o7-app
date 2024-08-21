@@ -8,7 +8,7 @@
 	},
 	"devDependencies": {
 		"dotenv": "^16.4.5",
-		"better-sqlite3": "^11.1.2",
+		"better-sqlite3": "^11.2.0",
 		"@types/better-sqlite3": "^7.6.11"
 	}
 }
