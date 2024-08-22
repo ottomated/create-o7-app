@@ -1,6 +1,6 @@
 {
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240815.0",
+		"@cloudflare/workers-types": "^4.20240821.1",
 		"@sveltejs/adapter-cloudflare": "^4.7.2",
 		"wrangler": "^3.72.1",
 		"@sveltejs/adapter-auto": null
