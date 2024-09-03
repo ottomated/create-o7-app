@@ -11,7 +11,7 @@ jobs:
     steps:
       - id: shards
         run: |
-          shard_count=5
+          shard_count=4
 
           echo "count=[$shard_count]" >> $GITHUB_OUTPUT
           max_shard=$((shard_count - 1))
