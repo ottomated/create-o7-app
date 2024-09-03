@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.8.7] - 2024-09-03
+
+
+### performance
+
+- Run tests in parallel
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/95be06cb8eae207fca23707d9e31cf7f45a9b9ad) [2,](https://github.com/ottomated/create-o7-app/commit/e3429ad793c222bfb18e55de26bb0eee6baec213) [3,](https://github.com/ottomated/create-o7-app/commit/f43cf828742bf0f64417913e2d45f2c52b574af0) [4,](https://github.com/ottomated/create-o7-app/commit/266f0b4ed4c099aa4ab99baadbaa4ac247fd4088) [5,](https://github.com/ottomated/create-o7-app/commit/8db8ce8770bab70be87bf0191c3ab341e9dd97ef) [6,](https://github.com/ottomated/create-o7-app/commit/5c4cdfe03b959c14549ad2709aec5d5a51503346) [7,](https://github.com/ottomated/create-o7-app/commit/7ee97b56a8c877d6ac3380ea7564726ba5d4e6f3) [8,](https://github.com/ottomated/create-o7-app/commit/d7f07a91341ebf0348076289a82a39d80363b88e) [9,](https://github.com/ottomated/create-o7-app/commit/4ade898bc2ded8cbb0c66035759f4d54e8cf7698) [10,](https://github.com/ottomated/create-o7-app/commit/0c996d8771bfdeda4e84c5d023bd6a0ec1ebccf0) [11,](https://github.com/ottomated/create-o7-app/commit/8178eff7f1862cea589ba5a8617e505ad8c67d21) [12,](https://github.com/ottomated/create-o7-app/commit/a0b9e1d3a1f267b49899424efa18a60eb08d0fc7) [13,](https://github.com/ottomated/create-o7-app/commit/72dfa3f23cf2a6ea719b2579925fd2116e3a2d88) [14,](https://github.com/ottomated/create-o7-app/commit/ecfa255e183b171b80db8998ca3f6e963a28751d) [15,](https://github.com/ottomated/create-o7-app/commit/961f53aa0532f6a630f8ced461731a68de100eb7) [16,](https://github.com/ottomated/create-o7-app/commit/4aaf5c83dbec2de1b318cad8b88dee72bbf53b2d) [17,](https://github.com/ottomated/create-o7-app/commit/5d6c95349d9b7071d0a16a3e6a36b365a2cc7e5b) [18,](https://github.com/ottomated/create-o7-app/commit/4966c818ca07929b77b4fd9e5392fabf965ca6a4) [19,](https://github.com/ottomated/create-o7-app/commit/4a454458c5a1285bd25bbf4dfc97e859a20f2df1) [20,](https://github.com/ottomated/create-o7-app/commit/848713f8839a14fe46268aff7a57d4f2d6bca7b3) [21,](https://github.com/ottomated/create-o7-app/commit/f718159b74cf8ce5c799c4285e9b27ec599c862d) [22,](https://github.com/ottomated/create-o7-app/commit/491943e0ffa7ae03e0b5fec92ffabee9ac1c8bb8) [23,](https://github.com/ottomated/create-o7-app/commit/460d293e28087ccbefe3be58afc36802449044ee) [24,](https://github.com/ottomated/create-o7-app/commit/81780177736b22dff4ee2a1dd48b300c48b16c05) [25](https://github.com/ottomated/create-o7-app/commit/905c5987fc33eb0c299435a36f6b514771ec3f84)
+
+
 ## [0.8.6] - 2024-08-09
 
 
