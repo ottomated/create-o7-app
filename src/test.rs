@@ -95,15 +95,40 @@ fn generate_combinations(features: Vec<FeatureDetails>) -> Vec<HashSet<Feature>>
 				}
 			}
 		}
-		println!("{next:?}");
 		last_step = next;
 	}
 	last_step
 }
 
+fn create_shard(combinations: Vec<HashSet<Feature>>) -> Vec<HashSet<Feature>> {
+	let shard_index = std::env::var("SHARD")
+		.ok()
+		.and_then(|s| s.parse::<usize>().ok());
+	let shard_count = std::env::var("SHARD_COUNT")
+		.ok()
+		.and_then(|s| s.parse::<usize>().ok());
+
+	if shard_index.is_none() || shard_count.is_none() {
+		return combinations;
+	}
+	let shard_index = shard_index.unwrap();
+	let shard_count = shard_count.unwrap();
+
+	let mut chunk = vec![];
+	for (i, item) in combinations.into_iter().enumerate() {
+		let index = i % shard_count;
+		if index == shard_index {
+			chunk.push(item);
+		}
+	}
+	chunk
+}
+
 #[test]
 fn test() {
-	let mut combinations = generate_combinations(get_feature_list());
+	let combinations = generate_combinations(get_feature_list());
+	let mut combinations = create_shard(combinations);
+
 	// let mut combinations = vec![HashSet::new()];
 	// combinations[0].insert(Feature::Edge);
 	// combinations[0].insert(Feature::D1);
