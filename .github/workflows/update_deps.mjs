@@ -5,6 +5,8 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 const isNewPr = process.argv[2] === 'main';
 const dryRun = process.argv.includes('--dry-run');
 
+const IGNORE_DEPS = ['common', '@libsql/client'];
+
 export async function getUpdates() {
 	const projectRoot = resolve(fileURLToPath(import.meta.url), '../../..');
 	const templateRoot = join(projectRoot, 'template_builder/templates');
@@ -20,7 +22,8 @@ export async function getUpdates() {
 		let dirty = [];
 		for (const [name, currentVersion] of Object.entries(pkg[key])) {
 			if (currentVersion === null) continue;
-			if (name === 'common') continue;
+			if (IGNORE_DEPS.includes(name)) continue;
+
 			let tag = 'latest';
 			if (currentVersion.includes('-next')) {
 				tag = 'next';
