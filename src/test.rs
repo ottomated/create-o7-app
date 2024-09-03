@@ -113,13 +113,15 @@ fn create_shard(combinations: Vec<HashSet<Feature>>) -> Vec<HashSet<Feature>> {
 	}
 	let shard_index = shard_index.unwrap();
 	let shard_count = shard_count.unwrap();
-	let chunk_size = (combinations.len() + shard_count - 1) / shard_count;
 
-	let mut chunks = combinations.chunks(chunk_size);
-	chunks
-		.nth(shard_index)
-		.expect("Invalid shard index")
-		.to_vec()
+	let mut chunk = vec![];
+	for (i, item) in combinations.into_iter().enumerate() {
+		let index = i % shard_count;
+		if index == shard_index {
+			chunk.push(item);
+		}
+	}
+	chunk
 }
 
 #[test]
