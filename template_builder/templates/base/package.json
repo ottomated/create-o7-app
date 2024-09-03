@@ -13,7 +13,7 @@
 		"@eslint/js": "^9.9.1",
 		"@sveltejs/adapter-auto": "^3.2.4",
 		"@sveltejs/kit": "^2.5.25",
-		"@sveltejs/vite-plugin-svelte": "^4.0.0-next.6",
+		"@sveltejs/vite-plugin-svelte": "^3.1.2",
 		"autoprefixer": "^10.4.20",
 		"eslint": "^9.9.1",
 		"eslint-config-prettier": "^9.1.0",
