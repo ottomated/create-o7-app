@@ -10,12 +10,12 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
-		"@eslint/js": "^9.11.0",
+		"@eslint/js": "^9.11.1",
 		"@sveltejs/adapter-auto": "^3.2.5",
 		"@sveltejs/kit": "^2.5.28",
 		"@sveltejs/vite-plugin-svelte": "^3.1.2",
 		"autoprefixer": "^10.4.20",
-		"eslint": "^9.11.0",
+		"eslint": "^9.11.1",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.2.1",
 		"eslint-plugin-svelte": "^2.44.0",
@@ -27,7 +27,7 @@
 		"prettier-plugin-tailwindcss": "^0.6.6",
 		"svelte": "^4.2.19",
 		"svelte-check": "^4.0.2",
-		"tailwindcss": "^3.4.12",
+		"tailwindcss": "^3.4.13",
 		"typescript": "~5.6.2",
 		"typescript-eslint": "^8.0.0-alpha.62",
 		"vite": "^5.4.7"
