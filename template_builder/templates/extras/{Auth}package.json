@@ -4,6 +4,6 @@
 		"oslo": "^1.2.1"
 	},
 	"devDependencies": {
-		"lucia": "^3.2.0"
+		"lucia": "^3.2.1"
 	}
 }
