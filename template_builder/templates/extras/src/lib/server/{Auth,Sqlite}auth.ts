@@ -1,3 +1,4 @@
+import type { Selectable } from 'kysely';
 import { Lucia } from 'lucia';
 import { BetterSqlite3Adapter } from '@lucia-auth/adapter-sqlite';
 import { dev } from '$app/environment';
@@ -34,6 +35,6 @@ export function initLucia(origin: string) {
 declare module 'lucia' {
 	interface Register {
 		Lucia: typeof lucia;
-		DatabaseUserAttributes: DB['User'];
+		DatabaseUserAttributes: Selectable<DB['User']>;
 	}
 }
