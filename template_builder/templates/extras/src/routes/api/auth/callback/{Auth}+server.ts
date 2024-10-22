@@ -1,8 +1,14 @@
-import { OAuth2RequestError } from 'arctic';
-import { generateId } from 'lucia';
-import { twitch, lucia } from '$lib/server/auth';
+import { OAuth2Tokens } from 'arctic';
 import { db } from '$lib/db';
 import { CLIENT_ID } from '$env/static/private';
+import { error, redirect } from '@sveltejs/kit';
+import {
+	createSession,
+	generateId,
+	generateSessionToken,
+	twitch,
+} from '$lib/auth';
+import { dev } from '$app/environment';
 
 export const GET = async (event) => {
 	const code = event.url.searchParams.get('code');
@@ -14,70 +20,55 @@ export const GET = async (event) => {
 			status: 400,
 		});
 	}
-
+	let tokens: OAuth2Tokens;
 	try {
-		const tokens = await twitch.validateAuthorizationCode(code);
-		const twitchUser = await fetch('https://api.twitch.tv/helix/users', {
-			headers: {
-				Authorization: `Bearer ${tokens.accessToken}`,
-				'Client-ID': CLIENT_ID,
-			},
-		})
-			.then((r) => r.json() as Promise<TwitchUser>)
-			.then((u) => u.data[0]);
-
-		// Replace this with your own DB client.
-		const existingUser = await db
-			.selectFrom('User')
-			.select('id')
-			.where('twitch_id', '=', twitchUser.id)
-			.executeTakeFirst();
-
-		if (existingUser) {
-			const session = await lucia.createSession(existingUser.id, {});
-			const sessionCookie = lucia.createSessionCookie(session.id);
-			event.cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '.',
-				...sessionCookie.attributes,
-			});
-		} else {
-			const userId = generateId(15);
-
-			// Replace this with your own DB client.
-			await db
-				.insertInto('User')
-				.values({
-					id: userId,
-					twitch_id: twitchUser.id,
-					username: twitchUser.display_name,
-				})
-				.execute();
-
-			const session = await lucia.createSession(userId, {});
-			const sessionCookie = lucia.createSessionCookie(session.id);
-			event.cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '.',
-				...sessionCookie.attributes,
-			});
-		}
-		return new Response(null, {
-			status: 302,
-			headers: {
-				Location: '/',
-			},
-		});
-	} catch (e) {
-		// the specific error message depends on the provider
-		if (e instanceof OAuth2RequestError) {
-			// invalid code
-			return new Response(null, {
-				status: 400,
-			});
-		}
-		return new Response(null, {
-			status: 500,
-		});
+		tokens = await twitch.validateAuthorizationCode(code);
+	} catch (err) {
+		console.error('Invalid code or client ID', err);
+		// Invalid code or client ID
+		return error(400, 'Authentication failed');
 	}
+
+	const twitchUser = await fetch('https://api.twitch.tv/helix/users', {
+		headers: {
+			Authorization: `Bearer ${tokens.accessToken()}`,
+			'Client-ID': CLIENT_ID,
+		},
+	})
+		.then((r) => r.json() as Promise<TwitchUser>)
+		.then((u) => u.data[0]);
+
+	let user = await db
+		.selectFrom('User')
+		.select('id')
+		.where('twitch_id', '=', twitchUser.id)
+		.executeTakeFirst();
+
+	if (!user) {
+		user = {
+			id: generateId(15),
+		};
+		await db
+			.insertInto('User')
+			.values({
+				id: user.id,
+				twitch_id: twitchUser.id,
+				username: twitchUser.display_name,
+			})
+			.execute();
+	}
+
+	const sessionToken = generateSessionToken();
+	const session = await createSession(sessionToken, user.id);
+
+	event.cookies.set('session', sessionToken, {
+		path: '/',
+		httpOnly: true,
+		sameSite: 'lax',
+		expires: session.expiresAt,
+		secure: !dev,
+	});
+	redirect(302, '/');
 };
 
 interface TwitchUser {

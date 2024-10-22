@@ -1,5 +1,0 @@
-{
-	"devDependencies": {
-		"@lucia-auth/adapter-sqlite": "^3.0.2"
-	}
-}

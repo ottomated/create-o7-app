@@ -1,6 +1,6 @@
 import { TRPCError, initTRPC } from '@trpc/server';
 import type { Context } from './context';
-import { transformer } from '$lib/trpc/transformer';
+import { transformer } from '$lib/trpc';
 
 const t = initTRPC.context<Context>().create({
 	transformer,

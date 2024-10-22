@@ -2,8 +2,5 @@
 	"dependencies": {
 		"arctic": "^2.0.1",
 		"oslo": "^1.2.1"
-	},
-	"devDependencies": {
-		"lucia": "^3.2.2"
 	}
 }
