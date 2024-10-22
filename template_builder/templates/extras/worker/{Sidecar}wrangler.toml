@@ -1,7 +1,7 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "__o7__name__-worker"
 main = "src/worker.ts"
-compatibility_date = "2024-07-01"
+compatibility_date = "2024-09-02"
 
 [[durable_objects.bindings]]
 name = "SOCKET_OBJECT"
@@ -9,4 +9,4 @@ class_name = "SocketObject"
 
 [[migrations]]
 tag = "v1"
-new_classes = ["SocketObject"]
+new_sqlite_classes = ["SocketObject"]
