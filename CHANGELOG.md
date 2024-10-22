@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.9.0] - 2024-10-22
+
+
+### features
+
+- Update for Svelte 5 release
+
+- Update cloudflare worker compatibility date to 2024-09-02
+
+- Migrate to lucia v4 (removed the lucia library, implemented auth manually)
+
+
+
+
+### fixes
+
+- Add tailwind plugin to prettier config
+
+
+
+
+### misc
+
+- update telemetry server packages
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/41af5a1a6e49821fb8a9d85358f344fe0bc229ee) [2,](https://github.com/ottomated/create-o7-app/commit/d2227405b16030e95a6727dbabb8541ad7775f90) [3,](https://github.com/ottomated/create-o7-app/commit/3b2425713b0a282455d1420fc53b18cb1e1bdfcc) [4,](https://github.com/ottomated/create-o7-app/commit/d0935ea268a7648e562e93cf8b48ec49c8d8c901) [5,](https://github.com/ottomated/create-o7-app/commit/cfc193728ae8dd4f6dcf8d1ec7550ee89dd5f58a) [6,](https://github.com/ottomated/create-o7-app/commit/86f63e426395a60053f65dfc6f546ebe6cc02651) [7,](https://github.com/ottomated/create-o7-app/commit/165f3ad37ae4bbe745b36838b30b03897296e0cc) [8,](https://github.com/ottomated/create-o7-app/commit/afefb5ddc57ba5fb6cdfe0afca65cb90a127902d) [9](https://github.com/ottomated/create-o7-app/commit/1b108c83dc9d87f72f3eb4fd6f987832b532d8cb)
+
+
 ## [0.8.13] - 2024-10-12
 
 
