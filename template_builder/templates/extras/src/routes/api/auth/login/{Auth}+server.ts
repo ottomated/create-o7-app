@@ -1,13 +1,11 @@
 import { redirect } from '@sveltejs/kit';
 import { generateState } from 'arctic';
-import { twitch } from '$lib/server/auth';
+import { twitch } from '$lib/auth';
 import { dev } from '$app/environment';
 
 export const GET = async (event) => {
 	const state = generateState();
-	const url = await twitch.createAuthorizationURL(state, {
-		scopes: [],
-	});
+	const url = twitch.createAuthorizationURL(state, []);
 
 	event.cookies.set('oauth_state', state, {
 		path: '/',

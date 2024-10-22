@@ -1,3 +1,6 @@
+import { createTRPCSvelte } from 'trpc-svelte-query';
+import { httpBatchLink } from '@trpc/client';
+import type { AppRouter } from '$lib/server/routes/_app';
 import { parse, stringify, uneval } from 'devalue';
 
 export const transformer = {
@@ -10,3 +13,12 @@ export const transformer = {
 		deserialize: (object: string) => (0, eval)(`(${object})`),
 	},
 };
+
+export const trpc = createTRPCSvelte<AppRouter>({
+	links: [
+		httpBatchLink({
+			url: '/api/trpc',
+		}),
+	],
+	transformer,
+});

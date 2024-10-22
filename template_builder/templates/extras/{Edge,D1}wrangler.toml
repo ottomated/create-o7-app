@@ -1,6 +1,6 @@
 name = "__o7__name__"
 pages_build_output_dir = "./.svelte-kit/cloudflare"
-compatibility_date = "2024-07-01"
+compatibility_date = "2024-09-02"
 
 # Run `pnpm wrangler d1 create <name>` before deploying!
 [[d1_databases]]

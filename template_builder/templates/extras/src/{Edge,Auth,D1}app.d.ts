@@ -10,8 +10,8 @@ declare global {
 		}
 
 		interface Locals {
-			user: import('lucia').User | null;
-			session: import('lucia').Session | null;
+			user: import('$lib/auth').User | null;
+			session: import('$lib/auth').Session | null;
 		}
 		// interface Error {}
 		// interface Session {}
