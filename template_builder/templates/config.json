@@ -5,7 +5,7 @@
 		{
 			"id": "Auth",
 			"name": "Auth",
-			"description": "(with Lucia)",
+			"description": "",
 			"default": false
 		},
 		{
