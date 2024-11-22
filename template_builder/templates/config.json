@@ -5,7 +5,7 @@
 		{
 			"id": "Auth",
 			"name": "Auth",
-			"description": "",
+			"description": "(based off lucia)",
 			"default": false
 		},
 		{
