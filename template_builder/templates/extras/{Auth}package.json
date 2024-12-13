@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"arctic": "^2.3.0",
+		"arctic": "^2.3.1",
 		"oslo": "^1.2.1"
 	}
 }
