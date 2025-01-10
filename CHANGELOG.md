@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.9.8] - 2025-01-10
+
+
+### misc
+
+- update cloudflare compatibility_date to 2025-01-09
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/2eb015cd82199b30aa077049d893928909712c39) [2,](https://github.com/ottomated/create-o7-app/commit/c0b75bf879268e55f7c1648cf20b7f75449bf248) [3,](https://github.com/ottomated/create-o7-app/commit/0d1dd7b55d28f0bc3c6ddfaa8428f59137024301) [4,](https://github.com/ottomated/create-o7-app/commit/5ea5568e8a25af554d7a1b575dde4d0cbf37aa2b) [5,](https://github.com/ottomated/create-o7-app/commit/e7a266495c043efcf732509ee94304f49042fa2e) [6,](https://github.com/ottomated/create-o7-app/commit/fb608c0d7653f6f329cdc64bd5f5e151bb6d0b8d) [7,](https://github.com/ottomated/create-o7-app/commit/492084895bc89ca0c8664b8b9292bde0e5c199f4) [8,](https://github.com/ottomated/create-o7-app/commit/f1e3dc5ba59a5ceba1cde2c966e8c2e2094dd1c8) [9,](https://github.com/ottomated/create-o7-app/commit/d1ec540fbb8cc53abaacd879af7dfd57bc47baaa) [10,](https://github.com/ottomated/create-o7-app/commit/71aa9c77b1799f36354cea6a782fb22256be7796) [11,](https://github.com/ottomated/create-o7-app/commit/8edab0e77da673b1d0e3d141f4ef73530c31f0f0) [12,](https://github.com/ottomated/create-o7-app/commit/e2cd448abf88730654c8b21468862cc15b3bbe6f) [13,](https://github.com/ottomated/create-o7-app/commit/a5ba9a3278863e2593711be66881f52270e5f0f0) [14](https://github.com/ottomated/create-o7-app/commit/210fba76839cc37f3723ded33f5e509e70436332)
+
+
 ## [0.9.7] - 2024-12-25
 
 
