@@ -9,10 +9,10 @@
 	},
 	"dependencies": {
 		"common": "workspace:*",
-		"hono": "^4.6.17"
+		"hono": "^4.6.18"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250121.0",
+		"@cloudflare/workers-types": "^1.20250124.0",
 		"typescript": "^5.7.3",
 		"wrangler": "^3.105.0"
 	}
