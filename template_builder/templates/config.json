@@ -13,7 +13,9 @@
 			"name": "tRPC",
 			"description": "(Type-safe API)",
 			"default": true,
-			"required_if": ["Auth"]
+			"required_if": [
+				"Auth"
+			]
 		},
 		{
 			"id": "Edge",
@@ -28,12 +30,16 @@
 				{
 					"id": "D1",
 					"name": "D1",
-					"hidden_if_not": ["Edge"]
+					"hidden_if_not": [
+						"Edge"
+					]
 				},
 				{
 					"id": "Sqlite",
 					"name": "Local SQLite",
-					"hidden_if": ["Edge"]
+					"hidden_if": [
+						"Edge"
+					]
 				},
 				{
 					"id": "Turso",
@@ -45,7 +51,9 @@
 				},
 				{
 					"name": "None",
-					"hidden_if": ["Auth"]
+					"hidden_if": [
+						"Auth"
+					]
 				}
 			],
 			"description": ""
@@ -54,7 +62,15 @@
 			"id": "Sidecar",
 			"name": "Sidecar",
 			"description": "(Additional worker for websockets, etc.)",
-			"hidden_if_not": ["Edge"],
+			"hidden_if_not": [
+				"Edge"
+			],
+			"default": false
+		},
+		{
+			"id": "Tailwind4",
+			"name": "Tailwind 4",
+			"description": "(supported only by VERY modern browsers, not recommended)",
 			"default": false
 		}
 	]
