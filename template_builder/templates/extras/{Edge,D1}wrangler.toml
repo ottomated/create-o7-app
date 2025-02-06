@@ -1,9 +1,0 @@
-name = "__o7__name__"
-pages_build_output_dir = "./.svelte-kit/cloudflare"
-compatibility_date = "2025-02-04"
-
-# Run `pnpm wrangler d1 create <name>` before deploying!
-[[d1_databases]]
-binding = "DB"
-database_name = ""
-database_id = "<DATABASE_ID>"
