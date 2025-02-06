@@ -5,7 +5,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 const isNewPr = process.argv[2] === 'main';
 const dryRun = process.argv.includes('--dry-run');
 
-const IGNORE_DEPS = ['common', '@libsql/client'];
+const IGNORE_DEPS = ['common'];
 
 export async function getUpdates() {
 	const projectRoot = resolve(fileURLToPath(import.meta.url), '../../..');
@@ -27,6 +27,9 @@ export async function getUpdates() {
 			let tag = 'latest';
 			if (currentVersion.includes('-next')) {
 				tag = 'next';
+			}
+			if (name === 'tailwindcss' && currentVersion[1] === '3') {
+				tag = '3';
 			}
 			let prefix = currentVersion[0];
 			if (prefix !== '^' && prefix !== '~') {
@@ -105,6 +108,13 @@ async function latestVersion(packageName, tag) {
 		},
 	});
 	const data = await res.json();
+
+	if (packageName === 'tailwindcss' && tag === '3') {
+		const v3Versions = Object.keys(data?.versions ?? {}).filter(v => Bun.semver.satisfies(v, '3')).sort(Bun.semver.order);
+		const mostRecent = v3Versions[v3Versions.length - 1];
+		return mostRecent;
+	}
+
 	return data?.['dist-tags']?.[tag];
 }
 
