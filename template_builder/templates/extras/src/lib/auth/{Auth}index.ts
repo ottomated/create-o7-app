@@ -1,24 +1,35 @@
 import { Twitch } from 'arctic';
-import { Base32Encoding, encodeHex } from 'oslo/encoding';
-import { generateRandomString, sha256 } from 'oslo/crypto';
+import {
+	encodeBase32LowerCaseNoPadding,
+	encodeHexLowerCase,
+} from '@oslojs/encoding';
+import { sha256 } from '@oslojs/crypto/sha2';
+import { generateRandomString, type RandomReader } from '@oslojs/crypto/random';
 import type { Selectable } from 'kysely';
 import { db } from '$lib/db';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import type { DB } from '$lib/db/schema';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
-const base32 = new Base32Encoding('abcdefghijklmnopqrstuvwxyz234567');
+
+const random: RandomReader = {
+	read(bytes: Uint8Array): void {
+		crypto.getRandomValues(bytes);
+	},
+};
 
 export function generateId(length = 15): string {
-	return generateRandomString(length, 'abcdefghijklmnopqrstuvwxyz0123456789');
+	return generateRandomString(
+		random,
+		'abcdefghijklmnopqrstuvwxyz0123456789',
+		length,
+	);
 }
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
 	crypto.getRandomValues(bytes);
-	const token = base32.encode(bytes, {
-		includePadding: false,
-	});
+	const token = encodeBase32LowerCaseNoPadding(bytes);
 	return token;
 }
 
@@ -26,7 +37,7 @@ export async function createSession(
 	token: string,
 	userId: string,
 ): Promise<Session> {
-	const sessionId = encodeHex(await sha256(new TextEncoder().encode(token)));
+	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: Session = {
 		id: sessionId,
 		userId,
@@ -46,7 +57,7 @@ export async function createSession(
 export async function validateSessionToken(
 	token: string,
 ): Promise<SessionValidationResult> {
-	const sessionId = encodeHex(await sha256(new TextEncoder().encode(token)));
+	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const row = await db
 		.selectFrom('Session as s')
 		.innerJoin('User as u', 'u.id', 's.user_id')
