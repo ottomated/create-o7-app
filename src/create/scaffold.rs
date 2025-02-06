@@ -1,7 +1,7 @@
 use super::templates;
 use crate::input::UserInput;
 use anyhow::{Context, Result};
-use std::fs;
+use std::{collections::HashSet, fs};
 
 const REPLACABLE_EXTENSIONS: [&str; 2] = ["html", "toml"];
 const NAME_PLACEHOLDER: &[u8] = b"__o7__name__";
@@ -11,14 +11,21 @@ pub fn scaffold(input: &UserInput) -> Result<()> {
 
 	let name_replacement = input.location.name.as_bytes();
 
+	let files_to_delete: HashSet<_> = templates
+		.iter()
+		.filter(|t| t.is_delete && t.features.is_subset(&input.features))
+		.map(|t| t.path)
+		.collect();
+
 	for template in templates {
-		let included = match template.features {
-			Some(features) => features.is_subset(&input.features),
-			None => true,
-		};
+		if files_to_delete.contains(&template.path) {
+			continue;
+		}
+		let included = template.features.is_subset(&input.features);
 		if !included {
 			continue;
 		}
+
 		let target_path = input.location.path.join(template.path);
 		let folder = target_path.parent();
 		if let Some(folder) = folder {

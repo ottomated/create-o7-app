@@ -17,7 +17,8 @@ pub struct Builder {
 
 #[derive(Debug)]
 struct TemplateFile {
-	features: Option<HashSet<String>>,
+	features: HashSet<String>,
+	is_delete: bool,
 	path: PathBuf,
 	contents: Vec<u8>,
 }
@@ -72,10 +73,7 @@ fn generate_hidden_set(features: &Option<Vec<String>>) -> TokenStream {
 
 impl TemplateFile {
 	fn feature_count(&self) -> usize {
-		match self.features.as_ref() {
-			Some(features) => features.len(),
-			None => 0,
-		}
+		self.features.len()
 	}
 }
 
@@ -335,16 +333,15 @@ impl Builder {
 
 		for template in templates {
 			let path = template.path.to_string_lossy();
-			let features = match &template.features {
-				Some(features) => {
-					let mut tokens = vec![];
-					for feature in features {
-						let ident = format_ident!("{}", feature);
-						tokens.push(quote! { Feature::#ident });
-					}
-					quote! { Some(HashSet::from([#(#tokens),*])) }
+			let features = if template.features.is_empty() {
+				quote! { HashSet::new() }
+			} else {
+				let mut tokens = vec![];
+				for feature in &template.features {
+					let ident = format_ident!("{}", feature);
+					tokens.push(quote! { Feature::#ident });
 				}
-				None => quote! { None },
+				quote! { HashSet::from([#(#tokens),*]) }
 			};
 			if path == "package.json" {
 				let contents: PackageJsonPartial = serde_json::from_slice(&template.contents)
@@ -357,20 +354,23 @@ impl Builder {
 				let package_json = quote! {
 					TemplateFile {
 						path: #path,
+						is_delete: false,
 						contents: #contents,
 						features: #features,
 					}
 				};
-				if template.features.is_none() {
+				if template.features.is_empty() {
 					package_jsons.0 = Some(package_json);
 				} else {
 					package_jsons.1.push(package_json);
 				}
 			} else {
 				let contents = Literal::byte_string(&template.contents);
+				let is_delete = template.is_delete;
 				template_files.push(quote! {
 					TemplateFile {
 						path: #path,
+						is_delete: #is_delete,
 						contents: #contents,
 						features: #features,
 					}
@@ -386,7 +386,8 @@ impl Builder {
 			pub struct TemplateFile<T> {
 				pub path: &'static str,
 				pub contents: T,
-				pub features: Option<HashSet<Feature>>,
+				pub is_delete: bool,
+				pub features: HashSet<Feature>,
 			}
 			pub fn get_templates() -> Vec<TemplateFile<&'static [u8]>> {
 				vec![
@@ -420,7 +421,8 @@ impl Builder {
 				.with_context(|| format!("Could not read {}", path.display()))?;
 
 			templates.push(TemplateFile {
-				features: None,
+				features: HashSet::new(),
+				is_delete: false,
 				path,
 				contents,
 			});
@@ -432,7 +434,7 @@ impl Builder {
 
 			let features = parse_feature_file(&file_name);
 
-			let Some((files, name)) = features else {
+			let Some((files, is_delete, name)) = features else {
 				println!("cargo:warning=Could not parse feature file {}", file_name);
 				continue;
 			};
@@ -444,7 +446,8 @@ impl Builder {
 
 			for features in files {
 				templates.push(TemplateFile {
-					features: Some(features),
+					features,
+					is_delete,
 					path: path.clone(),
 					contents: contents.clone(),
 				});

@@ -7,7 +7,7 @@ use std::{
 };
 use walkdir::WalkDir;
 
-pub fn parse_feature_file(file_name: &str) -> Option<(Vec<HashSet<String>>, &str)> {
+pub fn parse_feature_file(file_name: &str) -> Option<(Vec<HashSet<String>>, bool, &str)> {
 	let open = file_name.find('{')?;
 	if open != 0 {
 		return None;
@@ -44,8 +44,14 @@ pub fn parse_feature_file(file_name: &str) -> Option<(Vec<HashSet<String>>, &str
 			.collect::<Vec<_>>()
 	};
 
-	let file_name = &file_name[close + 1..];
-	Some((feature_sets, file_name))
+	let rest = &file_name[close + 1..];
+
+	let (file_name, is_delete) = match rest.strip_prefix("DELETE:") {
+		Some(rest) => (rest, true),
+		None => (rest, false),
+	};
+
+	Some((feature_sets, is_delete, file_name))
 }
 
 pub fn walk_dir(dir: &Path) -> Vec<(PathBuf, walkdir::DirEntry)> {

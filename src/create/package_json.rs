@@ -10,10 +10,7 @@ pub fn create_package_json(input: &UserInput) -> Result<()> {
 	let mut package_json = base.contents;
 
 	for extra in extras {
-		let included = match &extra.features {
-			Some(features) => features.is_subset(&input.features),
-			None => true,
-		};
+		let included = extra.features.is_subset(&input.features);
 		if !included {
 			continue;
 		}
