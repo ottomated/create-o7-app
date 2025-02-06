@@ -1,7 +1,3 @@
 {
-	"workspaces": [
-		"common",
-		"worker",
-		"."
-	]
+	"workspaces": ["common", "worker", "."]
 }

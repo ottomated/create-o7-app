@@ -86,6 +86,7 @@ pub struct PackageJsonPartial<'a> {
 impl ToTokens for PackageJsonPartial<'_> {
 	fn to_tokens(&self, tokens: &mut TokenStream) {
 		let mut pieces = vec![];
+		pieces.push(quote! { package_manager: None });
 		match self.name {
 			Some(name) => pieces.push(quote! { name: Some(#name) }),
 			None => pieces.push(quote! { name: None }),

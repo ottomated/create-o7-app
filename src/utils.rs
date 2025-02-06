@@ -85,6 +85,7 @@ pub struct PackageJsonPartial<'a> {
 	pub dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
 	pub dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
+	pub package_manager: Option<String>,
 }
 
 pub fn skip_if_empty(map: &Option<HashMap<&str, Option<&str>>>) -> bool {
@@ -118,6 +119,9 @@ impl<'a> PackageJsonPartial<'a> {
 		}
 		if other.workspaces.is_some() {
 			self.workspaces = other.workspaces;
+		}
+		if other.package_manager.is_some() {
+			self.package_manager = other.package_manager;
 		}
 		merge_hashmaps(&mut self.scripts, other.scripts);
 		merge_hashmaps(&mut self.dependencies, other.dependencies);

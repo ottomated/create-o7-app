@@ -19,6 +19,8 @@ pub fn create_package_json(input: &UserInput) -> Result<()> {
 
 	package_json.name = Some(&input.location.name);
 
+	package_json.package_manager = input.install_deps.as_ref().and_then(|p| p.version_string());
+
 	let target_path = &input.location.path.join("package.json");
 	let formatter = PrettyFormatter::with_indent(b"\t");
 	let buf = Vec::new();

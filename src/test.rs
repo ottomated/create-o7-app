@@ -28,6 +28,7 @@ fn make_input(features: HashSet<Feature>) -> UserInput {
 		features,
 		install_deps: Some(ProjectPackageManager {
 			package_manager: PackageManager::Pnpm,
+			package_manager_version: None,
 			exec_path: which::which("pnpm").unwrap(),
 		}),
 		git: None,
