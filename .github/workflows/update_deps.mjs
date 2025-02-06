@@ -5,7 +5,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 const isNewPr = process.argv[2] === 'main';
 const dryRun = process.argv.includes('--dry-run');
 
-const IGNORE_DEPS = ['common'];
+const IGNORE_DEPS = ['common', '@libsql/client' /* kysely-libsql is perpetually behind */];
 
 export async function getUpdates() {
 	const projectRoot = resolve(fileURLToPath(import.meta.url), '../../..');
