@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"common": "workspace:*",
-		"hono": "^4.6.20"
+		"hono": "^4.7.0"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250204.0",
