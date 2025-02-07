@@ -85,6 +85,15 @@ pub struct PackageJsonPartial<'a> {
 	pub dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
 	pub dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
+	pub package_manager: Option<String>,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub pnpm: Option<PnpmPackageJson<'a>>,
+}
+
+#[derive(serde::Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct PnpmPackageJson<'a> {
+	pub only_built_dependencies: Option<HashSet<&'a str>>,
 }
 
 pub fn skip_if_empty(map: &Option<HashMap<&str, Option<&str>>>) -> bool {
@@ -119,9 +128,33 @@ impl<'a> PackageJsonPartial<'a> {
 		if other.workspaces.is_some() {
 			self.workspaces = other.workspaces;
 		}
+		if other.package_manager.is_some() {
+			self.package_manager = other.package_manager;
+		}
 		merge_hashmaps(&mut self.scripts, other.scripts);
 		merge_hashmaps(&mut self.dependencies, other.dependencies);
 		merge_hashmaps(&mut self.dev_dependencies, other.dev_dependencies);
+
+		match (&mut self.pnpm, other.pnpm) {
+			(_, None) => {}
+			(None, Some(pnpm)) => {
+				self.pnpm = Some(pnpm);
+			}
+			(Some(old), Some(new)) => {
+				match (
+					&mut old.only_built_dependencies,
+					new.only_built_dependencies,
+				) {
+					(_, None) => {}
+					(None, Some(new)) => {
+						old.only_built_dependencies = Some(new);
+					}
+					(Some(ref mut old), Some(new)) => {
+						old.extend(new);
+					}
+				}
+			}
+		}
 	}
 }
 

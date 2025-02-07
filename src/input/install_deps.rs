@@ -1,14 +1,27 @@
-use std::path::PathBuf;
+use std::{
+	ffi::OsStr,
+	path::{Path, PathBuf},
+	process::Command,
+};
 
 use crate::utils::PackageManager;
-use anyhow::Result;
+use anyhow::{Context, Result};
 use crossterm::style::{style, Stylize};
 use inquire::{ui::RenderConfig, Confirm};
 
 #[derive(Debug)]
 pub struct ProjectPackageManager {
 	pub package_manager: PackageManager,
+	pub package_manager_version: Option<String>,
 	pub exec_path: PathBuf,
+}
+
+impl ProjectPackageManager {
+	pub fn version_string(&self) -> Option<String> {
+		self.package_manager_version
+			.as_ref()
+			.map(|version| format!("{manager}@{version}", manager = self.package_manager))
+	}
 }
 
 pub fn prompt(
@@ -65,8 +78,38 @@ pub fn prompt(
 		return Ok(None);
 	}
 
+	let version = match get_package_manager_version(&path) {
+		Ok(version) => Some(version),
+		Err(err) => {
+			println!("{}", style(err).red());
+			None
+		}
+	};
+
 	Ok(Some(ProjectPackageManager {
 		package_manager,
+		package_manager_version: version,
 		exec_path: path,
 	}))
+}
+
+fn get_package_manager_version(exec_path: &Path) -> Result<String> {
+	let output = Command::new(exec_path)
+		.arg("--version")
+		.output()
+		.with_context(|| {
+			format!(
+				"Failed to execute {:?} --version",
+				exec_path
+					.file_name()
+					.unwrap_or(OsStr::new("package manager"))
+			)
+		})?;
+
+	let version = String::from_utf8(output.stdout)
+		.context("package manager version is invalid UTF-8")?
+		.trim()
+		.to_string();
+
+	Ok(version)
 }

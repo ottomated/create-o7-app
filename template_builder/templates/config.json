@@ -56,6 +56,12 @@
 			"description": "(Additional worker for websockets, etc.)",
 			"hidden_if_not": ["Edge"],
 			"default": false
+		},
+		{
+			"id": "Tailwind4",
+			"name": "Tailwind 4",
+			"description": "(supported only by VERY modern browsers, not recommended)",
+			"default": false
 		}
 	]
 }

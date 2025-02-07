@@ -1,0 +1,23 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "__o7__name__-worker",
+	"main": "src/worker.ts",
+	"compatibility_date": "2025-02-04",
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "SOCKET_OBJECT",
+				"class_name": "SocketObject"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["SocketObject"]
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}

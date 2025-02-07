@@ -7,7 +7,7 @@ use std::{
 };
 use walkdir::WalkDir;
 
-pub fn parse_feature_file(file_name: &str) -> Option<(Vec<HashSet<String>>, &str)> {
+pub fn parse_feature_file(file_name: &str) -> Option<(Vec<HashSet<String>>, bool, &str)> {
 	let open = file_name.find('{')?;
 	if open != 0 {
 		return None;
@@ -44,8 +44,14 @@ pub fn parse_feature_file(file_name: &str) -> Option<(Vec<HashSet<String>>, &str
 			.collect::<Vec<_>>()
 	};
 
-	let file_name = &file_name[close + 1..];
-	Some((feature_sets, file_name))
+	let rest = &file_name[close + 1..];
+
+	let (file_name, is_delete) = match rest.strip_prefix("DELETE:") {
+		Some(rest) => (rest, true),
+		None => (rest, false),
+	};
+
+	Some((feature_sets, is_delete, file_name))
 }
 
 pub fn walk_dir(dir: &Path) -> Vec<(PathBuf, walkdir::DirEntry)> {
@@ -75,11 +81,41 @@ pub struct PackageJsonPartial<'a> {
 	dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	workspaces: Option<Vec<&'a str>>,
+	pnpm: Option<PnpmPackageJson<'a>>,
 }
 
+#[derive(serde::Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct PnpmPackageJson<'a> {
+	#[serde(borrow)]
+	only_built_dependencies: Option<HashSet<&'a str>>,
+}
+
+impl ToTokens for PnpmPackageJson<'_> {
+	fn to_tokens(&self, tokens: &mut TokenStream) {
+		match &self.only_built_dependencies {
+			Some(deps) => {
+				let items: Vec<_> = deps.iter().collect();
+				tokens.extend(quote! { PnpmPackageJson {
+					only_built_dependencies: Some(HashSet::from([#(#items),*])),
+				} });
+			}
+			None => {
+				tokens.extend(quote! { PnpmPackageJson {
+					only_built_dependencies: None,
+				} });
+			}
+		}
+	}
+}
 impl ToTokens for PackageJsonPartial<'_> {
 	fn to_tokens(&self, tokens: &mut TokenStream) {
 		let mut pieces = vec![];
+		pieces.push(quote! { package_manager: None });
+		match &self.pnpm {
+			Some(pnpm) => pieces.push(quote! { pnpm: Some(#pnpm) }),
+			None => pieces.push(quote! { pnpm: None }),
+		}
 		match self.name {
 			Some(name) => pieces.push(quote! { name: Some(#name) }),
 			None => pieces.push(quote! { name: None }),

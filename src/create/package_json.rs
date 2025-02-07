@@ -1,5 +1,5 @@
 use super::templates;
-use crate::input::UserInput;
+use crate::{input::UserInput, utils::PackageManager};
 use anyhow::{Context, Result};
 use serde::Serialize;
 use serde_json::{ser::PrettyFormatter, Serializer};
@@ -10,10 +10,7 @@ pub fn create_package_json(input: &UserInput) -> Result<()> {
 	let mut package_json = base.contents;
 
 	for extra in extras {
-		let included = match &extra.features {
-			Some(features) => features.is_subset(&input.features),
-			None => true,
-		};
+		let included = extra.features.is_subset(&input.features);
 		if !included {
 			continue;
 		}
@@ -21,6 +18,16 @@ pub fn create_package_json(input: &UserInput) -> Result<()> {
 	}
 
 	package_json.name = Some(&input.location.name);
+
+	package_json.package_manager = input.install_deps.as_ref().and_then(|p| p.version_string());
+
+	if !input
+		.install_deps
+		.as_ref()
+		.is_some_and(|pm| pm.package_manager == PackageManager::Pnpm)
+	{
+		package_json.pnpm = None;
+	}
 
 	let target_path = &input.location.path.join("package.json");
 	let formatter = PrettyFormatter::with_indent(b"\t");

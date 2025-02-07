@@ -1,7 +1,10 @@
 use anyhow::{Context, Result};
 use crossterm::style::{style, Stylize};
 use inquire::{ui::RenderConfig, Confirm};
-use std::{path::PathBuf, process::Command};
+use std::{
+	path::{Path, PathBuf},
+	process::Command,
+};
 
 use super::{project_location::ProjectLocation, warn_render_config};
 
@@ -56,7 +59,7 @@ pub fn prompt(render_config: &RenderConfig, location: &ProjectLocation) -> Resul
 	// if
 }
 
-fn get_closest_git_root(git: &PathBuf, directory: &PathBuf) -> Result<Option<String>> {
+fn get_closest_git_root(git: &PathBuf, directory: &Path) -> Result<Option<String>> {
 	let closest_existing_dir = directory
 		.parent()
 		.unwrap_or(directory)

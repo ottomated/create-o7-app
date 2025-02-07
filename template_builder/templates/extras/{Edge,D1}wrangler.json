@@ -1,0 +1,17 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "__o7__name__",
+	"pages_build_output_dir": "./.svelte-kit/cloudflare",
+	"compatibility_date": "2025-02-04",
+	"d1_databases": [
+		/* Run `pnpm wrangler d1 create <name>` before deploying! */
+		{
+			"binding": "DB",
+			"database_name": "",
+			"database_id": ""
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}

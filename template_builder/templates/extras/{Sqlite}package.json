@@ -3,9 +3,12 @@
 		"db:push": "prisma db push"
 	},
 	"dependencies": {
-		"better-sqlite3": "^11.7.2"
+		"better-sqlite3": "^11.8.1"
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.12"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": ["better-sqlite3"]
 	}
 }

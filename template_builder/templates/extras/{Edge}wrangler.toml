@@ -1,7 +1,0 @@
-name = "__o7__name__"
-pages_build_output_dir = "./.svelte-kit/cloudflare"
-compatibility_date = "2025-01-09"
-
-# [[kv_namespaces]]
-# binding = "KV"
-# id = "<NAMESPACE_ID>"

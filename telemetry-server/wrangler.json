@@ -1,0 +1,18 @@
+{
+	"name": "create-o7-app-telemetry-server",
+	"main": "src/worker.ts",
+	"compatibility_date": "2025-02-04",
+	"routes": [
+		{
+			"pattern": "o7-telemetry.ottomated.net",
+			"custom_domain": true
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "create-o7-app-telemetry",
+			"database_id": "02c3355b-e276-4f18-98ab-44a61cef7e07"
+		}
+	]
+}
