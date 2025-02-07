@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.10.0] - 2025-02-07
+
+
+### features
+
+- Add ability for templates to delete files
+
+- Tailwind 4 support
+
+- Move to wrangler.json, enable observability by default
+
+- Add packageManager field to package.json automatically
+
+- Support pnpm "onlyBuiltDependencies"
+
+
+
+
+### misc
+
+- update tar
+
+- Update telemetry server packages
+
+- Update cloudflare compatibility_date to 2025-02-04
+
+- Update from deprecated oslo package to the Oslo project
+
+- Update dependencies
+
+- Switch to ottomated-maintained kysely-libsql
+
+
+
 ## [0.9.8] - 2025-01-10
 
 
