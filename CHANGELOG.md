@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.10.1] - 2025-02-07
+
+
+### misc
+
+- Update rust dependencies
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1](https://github.com/ottomated/create-o7-app/commit/54b4f4157f8f74433367d4fde21242d8fb22ece0)
+
+
 ## [0.10.0] - 2025-02-07
 
 
