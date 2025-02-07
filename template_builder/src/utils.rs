@@ -81,12 +81,41 @@ pub struct PackageJsonPartial<'a> {
 	dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	workspaces: Option<Vec<&'a str>>,
+	pnpm: Option<PnpmPackageJson<'a>>,
 }
 
+#[derive(serde::Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct PnpmPackageJson<'a> {
+	#[serde(borrow)]
+	only_built_dependencies: Option<HashSet<&'a str>>,
+}
+
+impl ToTokens for PnpmPackageJson<'_> {
+	fn to_tokens(&self, tokens: &mut TokenStream) {
+		match &self.only_built_dependencies {
+			Some(deps) => {
+				let items: Vec<_> = deps.iter().collect();
+				tokens.extend(quote! { PnpmPackageJson {
+					only_built_dependencies: Some(HashSet::from([#(#items),*])),
+				} });
+			}
+			None => {
+				tokens.extend(quote! { PnpmPackageJson {
+					only_built_dependencies: None,
+				} });
+			}
+		}
+	}
+}
 impl ToTokens for PackageJsonPartial<'_> {
 	fn to_tokens(&self, tokens: &mut TokenStream) {
 		let mut pieces = vec![];
 		pieces.push(quote! { package_manager: None });
+		match &self.pnpm {
+			Some(pnpm) => pieces.push(quote! { pnpm: Some(#pnpm) }),
+			None => pieces.push(quote! { pnpm: None }),
+		}
 		match self.name {
 			Some(name) => pieces.push(quote! { name: Some(#name) }),
 			None => pieces.push(quote! { name: None }),

@@ -380,7 +380,7 @@ impl Builder {
 
 		let (base, extras) = package_jsons;
 		quote! {
-			use crate::utils::{Feature, PackageJsonPartial};
+			use crate::utils::{Feature, PackageJsonPartial, PnpmPackageJson};
 			use std::collections::{HashSet, HashMap};
 			#[derive(Debug)]
 			pub struct TemplateFile<T> {

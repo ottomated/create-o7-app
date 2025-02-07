@@ -10,5 +10,8 @@
 		"dotenv": "^16.4.7",
 		"better-sqlite3": "^11.8.1",
 		"@types/better-sqlite3": "^7.6.12"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": ["better-sqlite3"]
 	}
 }
