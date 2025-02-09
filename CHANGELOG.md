@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.10.2] - 2025-02-09
+
+
+### fixes
+
+- properly replace name in wrangler.json
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/e9f96069276b8638babbfbb4f7162c85fb9d9514) [2](https://github.com/ottomated/create-o7-app/commit/1a20058342b5a2ce2c6beb9128f3d5ce627d86fa)
+
+
 ## [0.10.1] - 2025-02-07
 
 
