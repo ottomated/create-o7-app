@@ -92,7 +92,13 @@ if (migration.stdout.includes('-- This is an empty migration.')) {
 const migrationSql = migration.stdout
 	.replace(/^PRAGMA foreign_keys=OFF;/gm, 'PRAGMA defer_foreign_keys=true;')
 	.replace(/^PRAGMA foreign_keys=ON;/gm, 'PRAGMA defer_foreign_keys=false;')
-	.replace(/^PRAGMA foreign_key_check;/gm, '');
+	.replace(/^PRAGMA foreign_key_check;/gm, '')
+	.replace(/ON DELETE CASCADE/gm, 'ON DELETE NO ACTION')
+	.replace(/ON UPDATE CASCADE/gm, 'ON UPDATE NO ACTION')
+	.replace(/ON DELETE SET NULL/gm, 'ON DELETE NO ACTION')
+	.replace(/ON UPDATE SET NULL/gm, 'ON UPDATE NO ACTION')
+	.replace(/ON DELETE SET DEFAULT/gm, 'ON DELETE NO ACTION')
+	.replace(/ON UPDATE SET DEFAULT/gm, 'ON UPDATE NO ACTION');
 console.log(migrationSql);
 
 writeFileSync(migrationFile, migrationSql);
