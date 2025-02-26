@@ -3,7 +3,7 @@ use crate::input::UserInput;
 use anyhow::{Context, Result};
 use std::{collections::HashSet, fs};
 
-const REPLACABLE_EXTENSIONS: [&str; 2] = ["html", "json"];
+const REPLACABLE_EXTENSIONS: [&str; 2] = ["html", "json", "jsonc"];
 const NAME_PLACEHOLDER: &[u8] = b"__o7__name__";
 
 pub fn scaffold(input: &UserInput) -> Result<()> {
