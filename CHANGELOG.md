@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.10.5] - 2025-02-26
+
+
+### features
+
+- Move to wrangler.jsonc
+
+
+
+
+### misc
+
+- update wrangler compatibility_date to 2025-02-24
+
+- update telemetry-server packages
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/c89f72a7b46eb96be40049a9eefbaf4646d3f6c7) [2,](https://github.com/ottomated/create-o7-app/commit/e945a84095563e35bb9cd632b879e6a11be9009e) [3,](https://github.com/ottomated/create-o7-app/commit/d05d615756ac311927f205e9bc2fa2595e137513) [4,](https://github.com/ottomated/create-o7-app/commit/ce16e9a2b1e5a8a624fa0e715fa0f87ee99d9f9d) [5,](https://github.com/ottomated/create-o7-app/commit/769730e3565621bcd084639f84c4f415ae3948d2) [6,](https://github.com/ottomated/create-o7-app/commit/82113482127d52192ba4cc5b7a39117f8cea9daf) [7,](https://github.com/ottomated/create-o7-app/commit/436762db1859d753bde9215e7eec3c391699092f) [8](https://github.com/ottomated/create-o7-app/commit/9882fb17069a18345c3405de7cb29f36f701ccbf)
+
+
 ## [0.10.4] - 2025-02-19
 
 
