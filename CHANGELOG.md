@@ -1,11 +1,33 @@
 # Changelog
 
+## [0.10.6] - 2025-03-05
+
+
+### fixes
+
+- add sharp to onlyBuiltDependencies
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/1f2dc410a7cacdc0aea4428594217a1a7c5205bf) [2,](https://github.com/ottomated/create-o7-app/commit/363966f152878de35a35d4825d6bcb0d6d1891a8) [3,](https://github.com/ottomated/create-o7-app/commit/fe1d4fc0d5aa9b9db909470b29465d674d3e83ce) [4,](https://github.com/ottomated/create-o7-app/commit/7dd36b166ec3158d2519905d62fc908086f2c144) [5,](https://github.com/ottomated/create-o7-app/commit/eb088e80a79439e0a8786537833ebd35b00cbc5a) [6,](https://github.com/ottomated/create-o7-app/commit/b44d9dd9854606cad68c1c12f70a578dd8fbd173) [7](https://github.com/ottomated/create-o7-app/commit/e6edc13ffbe6d2cc41ff250be2f1c62135641a29)
+
+
 ## [0.10.5] - 2025-02-26
 
 
 ### features
 
 - Move to wrangler.jsonc
+
+
+
+
+### fixes
+
+- add typegen to npm sidecar
 
 
 
