@@ -9,11 +9,11 @@
 	},
 	"dependencies": {
 		"common": "^0.0.0",
-		"hono": "^4.7.2"
+		"hono": "^4.7.4"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250303.0",
 		"typescript": "^5.8.2",
-		"wrangler": "^3.111.0"
+		"wrangler": "^3.112.0"
 	}
 }
