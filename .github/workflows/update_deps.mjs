@@ -88,6 +88,50 @@ export async function getUpdates() {
 			console.log('\n\n');
 		}
 	}
+	const cloudflareVersion = await latestVersion(
+		'@cloudflare/workers-types',
+		'latest',
+	);
+	const cloudflareDate = cloudflareVersion.split('.')[1];
+	if (!cloudflareDate || !/^[0-9]{8}$/.test(cloudflareDate)) {
+		console.error(
+			`Invalid @cloudflare/workers-types version: ${cloudflareVersion}`,
+		);
+		process.exit(1);
+	}
+	const compatibilityDate = `${cloudflareDate.substring(
+		0,
+		4,
+	)}-${cloudflareDate.substring(4, 6)}-${cloudflareDate.substring(6, 8)}`;
+
+	let changedFiles = [];
+	for await (const f of getFiles(templateRoot)) {
+		const groups = basename(f).match(/^(\{[^{}]*\})?wrangler\.jsonc$/);
+
+		if (!groups) continue;
+		const wrangler = await import(f, { assert: { type: 'jsonc' } });
+
+		const oldVersion = wrangler.compatibility_date;
+
+		if (oldVersion !== compatibilityDate) {
+			if (!dryRun) {
+				const text = (await readFile(f, 'utf8')).replace(
+					`"${oldVersion}"`,
+					`"${compatibilityDate}"`,
+				);
+				await writeFile(f, text);
+			}
+			changedFiles.push([prettifyFeatures(groups[1]), oldVersion]);
+		}
+	}
+	if (changedFiles.length) {
+		console.log(`| \`compatibility_date\` | old | new |`);
+		console.log('|-|-|-|');
+		for (const [name, oldVersion] of changedFiles) {
+			console.log(`| ${name} | \`${oldVersion}\` | \`${compatibilityDate}\` |`);
+		}
+		console.log('\n\n');
+	}
 }
 
 /**
@@ -110,7 +154,9 @@ async function latestVersion(packageName, tag) {
 	const data = await res.json();
 
 	if (packageName === 'tailwindcss' && tag === '3') {
-		const v3Versions = Object.keys(data?.versions ?? {}).filter(v => Bun.semver.satisfies(v, '3')).sort(Bun.semver.order);
+		const v3Versions = Object.keys(data?.versions ?? {})
+			.filter((v) => Bun.semver.satisfies(v, '3'))
+			.sort(Bun.semver.order);
 		const mostRecent = v3Versions[v3Versions.length - 1];
 		return mostRecent;
 	}
