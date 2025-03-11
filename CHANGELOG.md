@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.10.7] - 2025-03-11
+
+
+### misc
+
+- automatically bump compatibility_date to latest
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/fa1e2fa5be2b3891b19734eb6ca3709419095f23) [2,](https://github.com/ottomated/create-o7-app/commit/adef3e1f8dee19bdbb8c27db3d170d1692c4c0c2) [3,](https://github.com/ottomated/create-o7-app/commit/48f5d1dd63019eea10fd1b0f3bed0aee0a9f4810) [4,](https://github.com/ottomated/create-o7-app/commit/6ab8b64609a621a59431a97695d66c6d45a11928) [5,](https://github.com/ottomated/create-o7-app/commit/0d2f619d2996f359d49acc4f9c3dfb93e9ab4351) [6](https://github.com/ottomated/create-o7-app/commit/e547ea5bedde41e88a90da571e814dec80dd32a1)
+
+
 ## [0.10.6] - 2025-03-05
 
 
