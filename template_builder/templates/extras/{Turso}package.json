@@ -3,12 +3,12 @@
 		"db:push": "node ./prisma/push.mjs"
 	},
 	"dependencies": {
-		"kysely-libsql": "^0.6.0",
-		"@libsql/client": "^0.14.0"
+		"kysely-libsql": "^0.6.1",
+		"@libsql/client": "^0.15.0"
 	},
 	"devDependencies": {
 		"dotenv": "^16.4.7",
-		"better-sqlite3": "^11.9.0",
+		"better-sqlite3": "^11.9.1",
 		"@types/better-sqlite3": "^7.6.12"
 	},
 	"pnpm": {
