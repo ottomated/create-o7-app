@@ -3,6 +3,6 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
 	return {
-		trpc: await trpcServer.hydrateToClient(event),
+		trpc: trpcServer.hydrateToClient(event),
 	};
 };
