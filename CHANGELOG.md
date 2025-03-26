@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.11.0] - 2025-03-26
+
+
+### features
+
+- Update to trpc-svelte-query v3 / trpc v11
+
+
+
+
+### misc
+
+- remove legacy tailwind config when using tailwind 4
+
+- update telemetry server
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/afd330960e576b1c489bebc87cc0b5ad477458d8) [2,](https://github.com/ottomated/create-o7-app/commit/20c42ff555827ba4096b2444e9d8e0cfe50ee946) [3,](https://github.com/ottomated/create-o7-app/commit/6ec789ac2d2315d26015f6e0c750313aa715bc74) [4,](https://github.com/ottomated/create-o7-app/commit/d1d7fa86c9862297eb67874abc86929d088a018d) [5,](https://github.com/ottomated/create-o7-app/commit/318d377baaeb33f39bd4d1c8268ee1422e603d21) [6,](https://github.com/ottomated/create-o7-app/commit/14627cd2469e3d260afb4be79dcad9a75569dc7c) [7,](https://github.com/ottomated/create-o7-app/commit/ee8daadda33e52f586d779292a0b8fa8034a0940) [8](https://github.com/ottomated/create-o7-app/commit/6332e5e0786e643087f8277e1fc9a4680f4e03e8)
+
+
 ## [0.10.9] - 2025-03-19
 
 
