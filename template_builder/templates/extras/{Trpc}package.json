@@ -4,7 +4,7 @@
 		"@trpc/client": "^11.0.0",
 		"@trpc/server": "^11.0.0",
 		"devalue": "^5.1.1",
-		"trpc-svelte-query": "^2.1.0",
+		"trpc-svelte-query": "^3.0.0",
 		"zod": "^3.24.2"
 	}
 }
