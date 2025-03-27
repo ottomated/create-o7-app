@@ -11,20 +11,22 @@
 <br />
 
 <p align="center">
-	<img src="https://github.com/ottomated/create-o7-app/assets/31470743/24427098-4d2d-443c-bf70-f8f8972e8bb6">
+	<img src="assets/example.gif">
 </p>
 
 <h2>What is the o7 Stack?</h2>
 
 - [Svelte](https://svelte.dev)
-- [tRPC](https://trpc.io)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Typescript](https://www.typescriptlang.org/)
 - [Prisma](https://www.prisma.io/)
 - [Kysely](https://github.com/kysely-org/kysely)
+- [tRPC](https://trpc.io)
 - [Lucia](https://lucia-auth.com/)
 
-Why both Prisma and Kysely? `create-o7-app`'s template includes Kysely for **Edge support** and **fast cold starts**, with all the convenience of using Prisma to define your database model.
+> **Why both Prisma and Kysely?** `create-o7-app`'s template includes Kysely for **Edge support** and **fast cold starts**, with all the convenience of using Prisma for migrations.
+
+> **Isn't Lucia Auth deprecated?** No - while the Lucia _library_ is deprecated, Lucia transitioned into a tutorial for implementing authentication, which the Auth template sets up for you.
 
 <h2>Getting Started</h2>
 
