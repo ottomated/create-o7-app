@@ -11,7 +11,7 @@
 <br />
 
 <p align="center">
-	<img src="https://github.com/ottomated/create-o7-app/assets/31470743/24427098-4d2d-443c-bf70-f8f8972e8bb6">
+	<img src="assets/example.gif">
 </p>
 
 <h2>What is the o7 Stack?</h2>
