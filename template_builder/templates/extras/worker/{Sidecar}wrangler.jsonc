@@ -2,7 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "__o7__name__-worker",
 	"main": "src/worker.ts",
-	"compatibility_date": "2025-04-06",
+	"compatibility_date": "2025-04-07",
 	"durable_objects": {
 		"bindings": [
 			{
