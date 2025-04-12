@@ -4,7 +4,7 @@
 	},
 	"dependencies": {
 		"kysely-libsql": "^0.7.0",
-		"@libsql/client": "^0.15.2"
+		"@libsql/client": "^0.15.3"
 	},
 	"devDependencies": {
 		"dotenv": "^16.5.0",
