@@ -4,7 +4,7 @@
 		"db:push:local": "node ./prisma/push.mjs --local"
 	},
 	"dependencies": {
-		"kysely-d1": "^0.3.0"
+		"kysely-d1": "^0.4.0"
 	},
 	"devDependencies": {
 		"dotenv": "^16.5.0",
