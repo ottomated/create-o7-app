@@ -1,10 +1,10 @@
 {
 	"dependencies": {
-		"kysely": "^0.28.1"
+		"kysely": "^0.28.2"
 	},
 	"devDependencies": {
 		"prisma-kysely": "^1.8.0",
-		"prisma": "^6.6.0"
+		"prisma": "^6.7.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
