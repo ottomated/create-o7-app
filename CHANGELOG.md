@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.11.4] - 2025-05-14
+
+
+### features
+
+- replace deprecated inferAsyncReturnType
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/d296f0f057e84e3d1fa6ed114cabf5f11debb34f) [2,](https://github.com/ottomated/create-o7-app/commit/736a1ec04bce2b0a752ec8885c42c24fe892adb4) [3,](https://github.com/ottomated/create-o7-app/commit/4be1d0b0e32dbb24c72c860a3dc943e5dcd7b26d) [4,](https://github.com/ottomated/create-o7-app/commit/b557917a288ecca5a569c3f1e25831f5f6dca2ac) [5,](https://github.com/ottomated/create-o7-app/commit/32eb4ed0dea397b7c7522e29979873de7114fa08) [6,](https://github.com/ottomated/create-o7-app/commit/26f47315e61be793e12f38b1ede9861dbd5ee114) [7,](https://github.com/ottomated/create-o7-app/commit/34c4235680e6724df3c34f1ab85fc8646042600f) [8,](https://github.com/ottomated/create-o7-app/commit/63699e2292b0cb6fdd5697f0162c792cf4e29632) [9,](https://github.com/ottomated/create-o7-app/commit/38454e514e49918fc5f511b83bbb32fa907fc910) [10,](https://github.com/ottomated/create-o7-app/commit/705a3ae3e1f3da76fce0b1ba84eb71d9bff7eec5) [11,](https://github.com/ottomated/create-o7-app/commit/4a2eacc3ee7c857118bacfa4d2fe18a1ba6a8240) [12,](https://github.com/ottomated/create-o7-app/commit/085d13510d7661191a84b5b81a673a786712c744) [13,](https://github.com/ottomated/create-o7-app/commit/d4a605c7a2a6f7faa53d51699a67f19b80152486) [14,](https://github.com/ottomated/create-o7-app/commit/1998af4896cc8765a04944a283da68537945eb50) [15,](https://github.com/ottomated/create-o7-app/commit/7c4189d6e58b750a317d648cb84d5c431070cfdc) [16,](https://github.com/ottomated/create-o7-app/commit/f52d18ee7f664b7df90ddc7df3a11617180053d6) [17,](https://github.com/ottomated/create-o7-app/commit/d56f132f25431098e91adbed27ebef0fec22d372) [18,](https://github.com/ottomated/create-o7-app/commit/7a6538e4f4c28871bf3ad7ec2fdefbd238387f7a) [19,](https://github.com/ottomated/create-o7-app/commit/556c026de58cf3413a821c87c2f51baf1886d28a) [20,](https://github.com/ottomated/create-o7-app/commit/a29c33535ef90da253b089361213b7619d300a0c) [21,](https://github.com/ottomated/create-o7-app/commit/0d1f8bff790b66a7e0c1dfbb1e4e1cef1a5395d6) [22](https://github.com/ottomated/create-o7-app/commit/e38dd9ca12572635876676715a173feb39233d83)
+
+
 ## [0.11.3] - 2025-04-22
 
 
