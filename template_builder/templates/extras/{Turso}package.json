@@ -4,11 +4,11 @@
 	},
 	"dependencies": {
 		"kysely-libsql": "^0.7.0",
-		"@libsql/client": "^0.15.4"
+		"@libsql/client": "^0.15.5"
 	},
 	"devDependencies": {
 		"dotenv": "^16.5.0",
-		"better-sqlite3": "^11.9.1",
+		"better-sqlite3": "^11.10.0",
 		"@types/better-sqlite3": "^7.6.13"
 	},
 	"pnpm": {
