@@ -3,7 +3,7 @@
 		"db:push": "prisma db push"
 	},
 	"dependencies": {
-		"kysely-planetscale": "^1.6.0",
+		"kysely-planetscale": "^1.7.1",
 		"@planetscale/database": "^1.19.0"
 	}
 }
