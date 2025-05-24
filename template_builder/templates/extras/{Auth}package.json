@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"arctic": "^3.6.1",
+		"arctic": "^3.7.0",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0"
 	}
