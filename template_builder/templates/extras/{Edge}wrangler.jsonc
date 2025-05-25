@@ -3,6 +3,7 @@
 	"name": "__o7__name__",
 	"pages_build_output_dir": "./.svelte-kit/cloudflare",
 	"compatibility_date": "2025-05-25",
+	"compatibility_flags": ["nodejs_als"],
 	"observability": {
 		"enabled": true
 	}
