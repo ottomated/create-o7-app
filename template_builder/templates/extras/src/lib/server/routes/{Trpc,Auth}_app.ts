@@ -1,5 +1,5 @@
 import { router, publicProcedure, authedProcedure } from '../trpc';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const appRouter = router({
 	greeting: publicProcedure
