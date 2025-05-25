@@ -1,10 +1,14 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "__o7__name__",
-	"pages_build_output_dir": "./.svelte-kit/cloudflare",
+	"main": "./.svelte-kit/cloudflare/_worker.js",
 	"compatibility_date": "2025-05-25",
 	"compatibility_flags": ["nodejs_als"],
 	"observability": {
 		"enabled": true
+	},
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
 	}
 }
