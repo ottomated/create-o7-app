@@ -2,7 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "create-o7-app-telemetry-server",
 	"main": "src/worker.ts",
-	"compatibility_date": "2025-03-21",
+	"compatibility_date": "2025-05-25",
 	"routes": [
 		{
 			"pattern": "o7-telemetry.ottomated.net",
