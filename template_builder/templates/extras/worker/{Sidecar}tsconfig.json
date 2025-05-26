@@ -14,7 +14,6 @@
 		"allowSyntheticDefaultImports": true,
 		"noUncheckedIndexedAccess": true,
 		"noEmit": true,
-		"isolatedModules": true,
-		"types": ["@cloudflare/workers-types/experimental"]
+		"isolatedModules": true
 	}
 }

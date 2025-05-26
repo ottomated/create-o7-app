@@ -1,0 +1,31 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "__o7__name__",
+	"main": "./.svelte-kit/cloudflare/_worker.js",
+	"compatibility_date": "2025-05-25",
+	"compatibility_flags": ["nodejs_als"],
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	},
+	"d1_databases": [
+		/* Run `pnpm wrangler d1 create <name>` before deploying! */
+		{
+			"binding": "DB",
+			"database_name": "",
+			"database_id": ""
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"script_name": "__o7__name__-worker",
+				"class_name": "SocketObject",
+				"name": "SOCKET_OBJECT"
+			}
+		]
+	}
+}

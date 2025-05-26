@@ -1,6 +1,10 @@
 use std::{ffi::OsStr, process::Command};
 
-use crate::{create::log_step_start, input::UserInput, utils::PackageManager};
+use crate::{
+	create::log_step_start,
+	input::UserInput,
+	utils::{Feature, PackageManager},
+};
 use anyhow::{bail, Context, Result};
 
 use super::log_step_end;
@@ -53,6 +57,22 @@ pub fn install_deps(input: &UserInput) -> Result<()> {
 
 	if !sync.success() {
 		bail!("Could not run svelte-kit sync");
+	}
+
+	// Run wrangler types
+	if input.features.contains(&Feature::Edge) {
+		let mut wrangler_types = Command::new(&pm.exec_path);
+		wrangler_types
+			.args(["run", "typegen"])
+			.current_dir(&input.location.path);
+
+		let sync = wrangler_types
+			.status()
+			.context("Failed to generate wrangler types")?;
+
+		if !sync.success() {
+			bail!("Could not generate wrangler types");
+		}
 	}
 
 	log_step_end(start);

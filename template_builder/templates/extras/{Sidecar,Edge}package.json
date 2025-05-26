@@ -1,0 +1,5 @@
+{
+	"scripts": {
+		"typegen": "wrangler types src/worker-configuration.d.ts && wrangler types --cwd worker"
+	}
+}

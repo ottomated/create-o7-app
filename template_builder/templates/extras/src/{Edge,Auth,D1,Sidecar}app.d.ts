@@ -1,6 +1,13 @@
 declare global {
 	namespace App {
-		// interface Platform {}
+		interface Platform {
+			env: Cloudflare.Env & {
+				SOCKET_OBJECT: DurableObjectNamespace<
+					import('../worker/src/worker').SocketObject
+				>;
+			};
+			context: ExecutionContext;
+		}
 
 		interface Locals {
 			user: import('$lib/auth').User | null;
