@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.12.0] - 2025-05-26
+
+
+### features
+
+- update to zod v4
+
+- create RouterOutput and RouterInput helpers
+
+- switch from cloudflare pages -> cloudflare workers w/ static assets
+
+- Switch to wrangler generated runtime types
+
+
+
+
+### fixes
+
+- Add nodejs_als compatibility flag
+
+
+
+
+### misc
+
+- update telemetry-server packages
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/e987b5b156e6d8d40d83471e0badc7e96e0f297d) [2,](https://github.com/ottomated/create-o7-app/commit/44a0f6b12e4f681645cbc2b68ed7e5b8fcf04109) [3,](https://github.com/ottomated/create-o7-app/commit/60c0c05613ee7e1991d3260a8217ed1d1642a6f2) [4,](https://github.com/ottomated/create-o7-app/commit/da7feb0369e5b3d64c380f8428aa3fb3fa3c8d6d) [5](https://github.com/ottomated/create-o7-app/commit/eda28f8285b8f4d217a024a85ad644e461e7ca1e)
+
+
 ## [0.11.5] - 2025-05-21
 
 
