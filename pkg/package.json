@@ -21,7 +21,9 @@
 		"d1",
 		"cloudflare",
 		"lucia",
-		"authentication"
+		"authentication",
+		"turso",
+		"websocket"
 	],
 	"bin": {
 		"create-o7-app": "run.js"
