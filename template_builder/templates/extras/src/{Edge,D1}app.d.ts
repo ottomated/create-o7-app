@@ -1,18 +1,14 @@
-/// <reference types="@cloudflare/workers-types" />
-
 declare global {
 	namespace App {
 		interface Platform {
-			env: {
-				DB: D1Database;
-			};
+			env: Cloudflare.Env;
 			context: ExecutionContext;
 		}
 
 		// interface Locals {}
 		// interface Error {}
-		// interface Session {}
-		// interface Stuff {}
+		// interface PageData {}
+		// interface PageState {}
 	}
 }
 

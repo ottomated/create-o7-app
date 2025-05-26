@@ -17,6 +17,9 @@ export default ts.config(
 				...globals.es2017,
 			},
 		},
+		linterOptions: {
+			reportUnusedDisableDirectives: 'off',
+		},
 	},
 	{
 		files: ['**/*.cjs', '**/*.mjs'],

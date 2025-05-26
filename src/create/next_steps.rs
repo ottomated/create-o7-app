@@ -3,7 +3,7 @@ use std::path::Path;
 use crossterm::style::{style, Stylize};
 
 use super::git::GitStep;
-use crate::utils::{get_package_manager, INITIAL_COMMIT};
+use crate::utils::{get_package_manager, Feature, INITIAL_COMMIT};
 use crate::{create::log_step_start, input::UserInput};
 
 fn log_with_info(command: String, info: &str) {
@@ -40,6 +40,12 @@ pub fn print(input: &UserInput, git_error: Option<&GitStep>, install_deps: bool)
 					format!("{} install", pm.package_manager),
 					"(install dependencies)",
 				);
+				if input.features.contains(&Feature::Edge) {
+					log_with_info(
+						format!("{} run typegen", pm.package_manager),
+						"(generate Cloudflare types)",
+					);
+				}
 			}
 
 			log_with_info(
@@ -53,6 +59,12 @@ pub fn print(input: &UserInput, git_error: Option<&GitStep>, install_deps: bool)
 				format!("{} install", package_manager),
 				"(install dependencies)",
 			);
+			if input.features.contains(&Feature::Edge) {
+				log_with_info(
+					format!("{} run typegen", package_manager),
+					"(generate Cloudflare types)",
+				);
+			}
 			log_with_info(package_manager.run_script("dev"), "(start the dev server)");
 		}
 	};

@@ -1,11 +1,7 @@
-/// <reference types="@cloudflare/workers-types" />
-
 declare global {
 	namespace App {
 		interface Platform {
-			env: {
-				DB: D1Database;
-			};
+			env: Cloudflare.Env;
 			context: ExecutionContext;
 		}
 
@@ -13,9 +9,10 @@ declare global {
 			user: import('$lib/auth').User | null;
 			session: import('$lib/auth').Session | null;
 		}
+
 		// interface Error {}
-		// interface Session {}
-		// interface Stuff {}
+		// interface PageData {}
+		// interface PageState {}
 	}
 }
 

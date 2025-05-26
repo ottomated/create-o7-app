@@ -10,5 +10,14 @@
 	"assets": {
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
+	},
+	"durable_objects": {
+		"bindings": [
+			{
+				"script_name": "__o7__name__-worker",
+				"class_name": "SocketObject",
+				"name": "SOCKET_OBJECT"
+			}
+		]
 	}
 }

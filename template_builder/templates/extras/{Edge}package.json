@@ -1,14 +1,14 @@
 {
+	"scripts": {
+		"typegen": "wrangler types src/worker-configuration.d.ts"
+	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250521.0",
 		"@sveltejs/adapter-cloudflare": "^7.0.3",
-		"wrangler": "^4.16.0",
+		"@types/node": "^22.15.21",
+		"wrangler": "^4.16.1",
 		"@sveltejs/adapter-auto": null
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": [
-			"workerd",
-			"sharp"
-		]
+		"onlyBuiltDependencies": ["workerd", "sharp"]
 	}
 }
