@@ -4,11 +4,14 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-cloudflare": "^7.0.3",
-		"@types/node": "^22.15.21",
-		"wrangler": "^4.16.1",
+		"@types/node": "^22.15.23",
+		"wrangler": "^4.17.0",
 		"@sveltejs/adapter-auto": null
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": ["workerd", "sharp"]
+		"onlyBuiltDependencies": [
+			"workerd",
+			"sharp"
+		]
 	}
 }
