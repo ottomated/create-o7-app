@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.12.1] - 2025-05-29
+
+
+### fixes
+
+- Update eslint-plugin-svelte config
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/01777e95bf458aab7fea850ba0ba96b9cf51df9e) [2,](https://github.com/ottomated/create-o7-app/commit/a34682ad2017b75c7449ac60603bd75a1f041a17) [3,](https://github.com/ottomated/create-o7-app/commit/96281424ea0309a7166c1b76ee8d96da0b1c59c6) [4](https://github.com/ottomated/create-o7-app/commit/3b61ef27c699fc55f17b73bdd626cea57f11a2e9)
+
+
 ## [0.12.0] - 2025-05-26
 
 
