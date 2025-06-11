@@ -9,7 +9,7 @@
 	<div class="flex max-w-5xl justify-center gap-4 px-3">
 		<NextStep
 			title="Edit this page"
-			learnMore="https://svelte.dev/tutorial/basics"
+			learnMore="https://svelte.dev/tutorial"
 		>
 			<p>
 				Edit <code class="text-lime-300">src/routes/+page.svelte</code> to see your
