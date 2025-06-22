@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"@tanstack/svelte-query": "^5.80.10",
+		"@tanstack/svelte-query": "^5.81.2",
 		"@trpc/client": "^11.4.2",
 		"@trpc/server": "^11.4.2",
 		"devalue": "^5.1.1",

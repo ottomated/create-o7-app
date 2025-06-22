@@ -177,7 +177,7 @@ dependencies = [
 
 [[package]]
 name = "create-o7-app"
-version = "0.12.3"
+version = "0.12.4"
 dependencies = [
  "anyhow",
  "clap",
