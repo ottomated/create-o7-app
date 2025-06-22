@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.3] - 2025-06-22
+
+
+
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/3c0049fc3054d088f6e80e0b3b394858560437d2) [2,](https://github.com/ottomated/create-o7-app/commit/7e69dbf9fc92823f60de3395d3e38e7ec029cf1a) [3,](https://github.com/ottomated/create-o7-app/commit/ab6929480475575d7e1d60554c0216a397a93fdd) [4,](https://github.com/ottomated/create-o7-app/commit/cc74ecb57b332752b7d2a048406dd505eb83aa32) [5,](https://github.com/ottomated/create-o7-app/commit/652ea002f868cfe9a1001ac8e12cf327f87843ed) [6,](https://github.com/ottomated/create-o7-app/commit/8369e7a9f981cca55a8668342ad07d62c0636027) [7,](https://github.com/ottomated/create-o7-app/commit/d81106a3df8bd4410050c433a53021d0562608ec) [8,](https://github.com/ottomated/create-o7-app/commit/ff180c167a436025609299ebdc5bfdf05174d47a) [9,](https://github.com/ottomated/create-o7-app/commit/15d939641b257c1bdf63b2accad6a444e1094a7a) [10](https://github.com/ottomated/create-o7-app/commit/4fe908cdb8f13b12c3074020074ef3052db51215)
+
+
 ## [0.12.2] - 2025-06-11
 
 
