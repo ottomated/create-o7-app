@@ -7,7 +7,7 @@
 		"@libsql/client": "^0.15.9"
 	},
 	"devDependencies": {
-		"dotenv": "^17.1.0",
+		"dotenv": "^17.2.0",
 		"better-sqlite3": "^12.2.0",
 		"@types/better-sqlite3": "^7.6.13"
 	},
