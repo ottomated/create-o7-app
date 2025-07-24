@@ -49,4 +49,5 @@ Then, open your new app in your favorite IDE and get started! A good place to lo
 ## Upcoming
 
 - [ ] Move the tutorial to a README file
-- [ ] Replace the dependency on `@tanstack/svelte-query` with a more lightweight tRPC client
+- [ ] Fully remove tRPC and @tanstack/svelte-query when [Remote Functions](https://github.com/sveltejs/kit/pull/13986) land
+- [ ] Remove sidecar worker when [environment API support](https://github.com/sveltejs/kit/pull/14008) lands
