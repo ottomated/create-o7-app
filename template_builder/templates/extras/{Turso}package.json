@@ -4,10 +4,10 @@
 	},
 	"dependencies": {
 		"kysely-libsql": "^0.7.1",
-		"@libsql/client": "^0.15.9"
+		"@libsql/client": "^0.15.10"
 	},
 	"devDependencies": {
-		"dotenv": "^17.0.0",
+		"dotenv": "^17.2.0",
 		"better-sqlite3": "^12.2.0",
 		"@types/better-sqlite3": "^7.6.13"
 	},
