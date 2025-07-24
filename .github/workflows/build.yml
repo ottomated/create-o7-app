@@ -54,16 +54,15 @@ jobs:
       - name: Install MUSL
         run: |
           sudo apt-get install -y musl-tools
-      - name: Cache OSXCross
-        id: cache-osxcross
-        uses: actions/cache@v4
-        with:
-          path: osxcross
-          key: ${{ runner.os }}-osxcross-11.3
-          save-always: true
 
+      - name: Restore cached OSXCross
+        id: restore-osxcross
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ runner.os }}-osxcross-11.3
+          path: osxcross
       - name: Install OSXCross
-        if: steps.cache-osxcross.outputs.cache-hit != 'true'
+        if: steps.restore-osxcross.outputs.cache-hit != 'true'
         run: |
           git clone https://github.com/tpoechtrager/osxcross
           cd osxcross
@@ -71,6 +70,13 @@ jobs:
           wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
           mv MacOSX11.3.sdk.tar.xz tarballs/
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+      - name: Cache OSXCross
+        if: always() && steps.restore-osxcross.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          key: ${{ runner.os }}-osxcross-11.3
+          path: osxcross
+
       - name: Build Linux
         run: cargo build --release --target x86_64-unknown-linux-musl
       - name: Build MacOS
