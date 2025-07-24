@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.12.5] - 2025-07-24
+
+
+### misc
+
+- remove /v4 from zod imports
+
+- update tar
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/2bb2441a22738fda3dd64e40a18be91800205c48) [2,](https://github.com/ottomated/create-o7-app/commit/1550b8c9f937563e02fd2a5817d1d94142df5c9c) [3,](https://github.com/ottomated/create-o7-app/commit/a9857d3112be328a982b3d09ba49c7725a28309b) [4,](https://github.com/ottomated/create-o7-app/commit/7ee038b64d9051d8575958f02a77c3bf4e761e0b) [5,](https://github.com/ottomated/create-o7-app/commit/c6b40a4aee90af70f3410bd3f8981286cf7eae94) [6,](https://github.com/ottomated/create-o7-app/commit/8af7cf07fe9e7035e211ab3b33c5eb3ed592c7e1) [7,](https://github.com/ottomated/create-o7-app/commit/d916965b1592ce72c74f46457b8587a2a2fbbee5) [8,](https://github.com/ottomated/create-o7-app/commit/addca43e49399ebbf5dc08e7a4a9aa21bf208689) [9,](https://github.com/ottomated/create-o7-app/commit/ef5287c3fc7d93d0dcab04e5883c613d2cbd8c44) [10,](https://github.com/ottomated/create-o7-app/commit/433f6cfb9615cd08645ed1dfe96091aaca392079) [11,](https://github.com/ottomated/create-o7-app/commit/8887765fe28811bed5d096a8cf389e528d706f81) [12,](https://github.com/ottomated/create-o7-app/commit/91f30ff1cc2716dad6a3847e6da95614a623b0c8) [13,](https://github.com/ottomated/create-o7-app/commit/58dd27b49027498aaefd1ab750c8dbaaef1d66eb) [14,](https://github.com/ottomated/create-o7-app/commit/e78c323aae4368158f72dfcf6050618dbb6a903a) [15,](https://github.com/ottomated/create-o7-app/commit/4b4e2b7e3437e5cbe9a02f8907c6f57b420dfa79) [16,](https://github.com/ottomated/create-o7-app/commit/ef56a46a0ad765c60e4b6449d7a574995ff2b6c9) [17,](https://github.com/ottomated/create-o7-app/commit/441a80df7701822393429bb53fe58df855566992) [18,](https://github.com/ottomated/create-o7-app/commit/8fc4491fb1aa73ac2e8858160ca5e6e5e433e383) [19,](https://github.com/ottomated/create-o7-app/commit/403f6060c372eb9c6b5730d660a482ecc400dd9d) [20](https://github.com/ottomated/create-o7-app/commit/7b1885938e1521d6e7cb979ffa5ee738f8a17f6d)
+
+
 ## [0.12.4] - 2025-07-01
 
 
