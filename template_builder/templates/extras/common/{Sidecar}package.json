@@ -5,6 +5,6 @@
 	"types": "./src/common.ts",
 	"module": "./src/common.ts",
 	"dependencies": {
-		"zod": "^4.0.5"
+		"zod": "^4.0.8"
 	}
 }
