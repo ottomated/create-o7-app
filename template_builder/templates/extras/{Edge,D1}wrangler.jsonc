@@ -2,7 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "__o7__name__",
 	"main": "./.svelte-kit/cloudflare/_worker.js",
-	"compatibility_date": "2025-08-03",
+	"compatibility_date": "2025-08-05",
 	"compatibility_flags": ["nodejs_als"],
 	"observability": {
 		"enabled": true
