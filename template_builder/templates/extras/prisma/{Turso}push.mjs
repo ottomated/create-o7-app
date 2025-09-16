@@ -37,6 +37,7 @@ for (const item of current.rows) {
 		db.prepare(item.sql).run();
 	}
 }
+db.close();
 
 // 3. generate migration on dummy db
 const migration = spawnSync(
