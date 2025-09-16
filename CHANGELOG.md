@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.13.0] - 2025-09-16
+
+
+### features
+
+- remove default trpc functions
+
+- make the template a lot more barebones
+
+- reorder databases
+
+
+
+
+### fixes
+
+- more robust temp file deletion in database push scripts
+
+
+
+
+### misc
+
+- update telemetry packages
+
+- update rust crates to latest
+
+
+
+
+<br/>
+
+**Dependency Updates:** [1,](https://github.com/ottomated/create-o7-app/commit/1128f424e91bc50e0dce7f85c350ee2ea4f92917) [2,](https://github.com/ottomated/create-o7-app/commit/4643177776a08d64b2e755b68bd0a88b963ac4db) [3,](https://github.com/ottomated/create-o7-app/commit/009c5a119579d204f6e353c29752fc8676b2f6ab) [4,](https://github.com/ottomated/create-o7-app/commit/015ae6fd9c8dffbc3ac88bfd8a1e7adda12563a2) [5,](https://github.com/ottomated/create-o7-app/commit/a0dd78f0834311d257d5e2b5666b0072e2a9e710) [6,](https://github.com/ottomated/create-o7-app/commit/ab0b21933fc93f16b2581f97200ac01ae159d22a) [7,](https://github.com/ottomated/create-o7-app/commit/f1a00964ded24c78067148345389d738868ad8b3) [8,](https://github.com/ottomated/create-o7-app/commit/99b3e1c88c90bb8e840f3cdba1f2e1797f13b1f8) [9,](https://github.com/ottomated/create-o7-app/commit/4b66c323769d212834099fae1356e0d267d6714e) [10,](https://github.com/ottomated/create-o7-app/commit/d25e8edc4492c7c11681c9d0bd815eac79b30d56) [11,](https://github.com/ottomated/create-o7-app/commit/b67e959f6f08186317db58af897a41d33421b631) [12,](https://github.com/ottomated/create-o7-app/commit/cac97e5c184d5a208d3241deffd571ced19a18f5) [13,](https://github.com/ottomated/create-o7-app/commit/d1bdf1b5ad3b844186731d0825cbec6e2d3f85a3) [14,](https://github.com/ottomated/create-o7-app/commit/f566b637412971184faabab235d8a3db8fe08866) [15,](https://github.com/ottomated/create-o7-app/commit/409fb4dd1971f4f134bd4934cb126bb4cf0804fd) [16,](https://github.com/ottomated/create-o7-app/commit/d5045ce295008afe848e320a3c6f3b183ad970e1) [17,](https://github.com/ottomated/create-o7-app/commit/cf5f809e5493fd2a0bc07085b8de554326fcc4cf) [18,](https://github.com/ottomated/create-o7-app/commit/693b09db035dba37b86a945dd0a0536b45f4896e) [19,](https://github.com/ottomated/create-o7-app/commit/79f7ff53039e9f27588cef070c4172ccbc52914d) [20,](https://github.com/ottomated/create-o7-app/commit/263244514a60ad4367bfb688e9bce242b51e0de6) [21,](https://github.com/ottomated/create-o7-app/commit/8ee9cb5aaf12f9e8ed6479a8b22da77d2d57f9fe) [22,](https://github.com/ottomated/create-o7-app/commit/5060c75d6be185c46195939ff14b7e0f274871bc) [23,](https://github.com/ottomated/create-o7-app/commit/182991dcbbc62bb586ca25e756d4256e154e4dc0) [24,](https://github.com/ottomated/create-o7-app/commit/7640f82aed6a70009877c51726110ffc9e5791c0) [25,](https://github.com/ottomated/create-o7-app/commit/13886d1e60b047d0dbb14a57eebd23ba954548ee) [26](https://github.com/ottomated/create-o7-app/commit/ac7aa1ccba1162663d523fcd4db282ca1fefc24d)
+
+
 ## [0.12.6] - 2025-08-20
 
 
