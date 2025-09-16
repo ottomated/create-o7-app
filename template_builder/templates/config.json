@@ -26,9 +26,12 @@
 			"name": "Database",
 			"options": [
 				{
-					"id": "D1",
-					"name": "D1",
-					"hidden_if_not": ["Edge"]
+					"name": "None",
+					"hidden_if": ["Auth"]
+				},
+				{
+					"id": "Turso",
+					"name": "Turso"
 				},
 				{
 					"id": "Sqlite",
@@ -36,16 +39,13 @@
 					"hidden_if": ["Edge"]
 				},
 				{
-					"id": "Turso",
-					"name": "Turso"
+					"id": "D1",
+					"name": "D1",
+					"hidden_if_not": ["Edge"]
 				},
 				{
 					"id": "Planetscale",
 					"name": "Planetscale"
-				},
-				{
-					"name": "None",
-					"hidden_if": ["Auth"]
 				}
 			],
 			"description": ""

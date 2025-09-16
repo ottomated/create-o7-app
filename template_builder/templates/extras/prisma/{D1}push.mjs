@@ -23,12 +23,12 @@ const dirname = resolve(fileURLToPath(import.meta.url), '..');
 
 const tempDb = resolve(dirname, './temp.db');
 const migrationFile = resolve(dirname, './temp.sql');
+const schema = resolve(dirname, './schema.prisma');
 try {
 	unlinkSync(tempDb);
 } catch (_) {
 	/* ignore */
 }
-const schema = resolve(dirname, './schema.prisma');
 
 // 1. Pull current schema
 const currentRes = JSON.parse(
@@ -61,31 +61,35 @@ for (const item of current) {
 		db.prepare(item.sql).run();
 	}
 }
+db.close();
 
 // 3. generate migration on dummy db
-const migration = spawnSync(
-	'npx',
-	[
-		'prisma',
-		'migrate',
-		'diff',
-		'--from-url',
-		`file:${tempDb}`,
-		'--to-schema-datamodel',
-		schema,
-		'--script',
-	],
-	{ encoding: 'utf-8' },
-);
+let migration;
+try {
+	migration = spawnSync(
+		'npx',
+		[
+			'prisma',
+			'migrate',
+			'diff',
+			'--from-url',
+			`file:${tempDb}`,
+			'--to-schema-datamodel',
+			schema,
+			'--script',
+		],
+		{ encoding: 'utf-8' },
+	);
+} finally {
+	unlinkSync(tempDb);
+}
 if (migration.status !== 0) {
 	console.error('Prisma error:');
 	console.error(migration.stderr);
-	unlinkSync(tempDb);
 	process.exit(0);
 }
 if (migration.stdout.includes('-- This is an empty migration.')) {
 	console.log('No changes');
-	unlinkSync(tempDb);
 	process.exit(0);
 }
 
@@ -98,22 +102,24 @@ console.log(migrationSql);
 writeFileSync(migrationFile, migrationSql);
 
 // 4. apply migration on actual db
-const res = spawnSync(
-	`npx`,
-	[
-		'wrangler',
-		'd1',
-		'execute',
-		databaseName,
-		localFlag,
-		'--file',
-		migrationFile,
-	],
-	{ stdio: 'inherit' },
-);
-
-unlinkSync(tempDb);
-unlinkSync(migrationFile);
+let res;
+try {
+	res = spawnSync(
+		`npx`,
+		[
+			'wrangler',
+			'd1',
+			'execute',
+			databaseName,
+			localFlag,
+			'--file',
+			migrationFile,
+		],
+		{ stdio: 'inherit' },
+	);
+} finally {
+	unlinkSync(migrationFile);
+}
 
 if (res.status !== 0) {
 	console.error('Migration failed');
