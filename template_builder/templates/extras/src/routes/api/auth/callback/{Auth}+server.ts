@@ -2,6 +2,7 @@ import { OAuth2Tokens } from 'arctic';
 import { db } from '$lib/db';
 import { CLIENT_ID } from '$env/static/private';
 import { error, redirect } from '@sveltejs/kit';
+import { resolve } from '$app/paths';
 import {
 	createSession,
 	generateId,
@@ -25,7 +26,6 @@ export const GET = async (event) => {
 		tokens = await twitch.validateAuthorizationCode(code);
 	} catch (err) {
 		console.error('Invalid code or client ID', err);
-		// Invalid code or client ID
 		return error(400, 'Authentication failed');
 	}
 
@@ -68,7 +68,7 @@ export const GET = async (event) => {
 		expires: session.expiresAt,
 		secure: !dev,
 	});
-	redirect(302, '/');
+	redirect(302, resolve('/'));
 };
 
 interface TwitchUser {
