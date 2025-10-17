@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"common": "workspace:*",
-		"hono": "^4.9.12"
+		"hono": "^4.10.0"
 	},
 	"devDependencies": {
 		"typescript": "^5.9.3",

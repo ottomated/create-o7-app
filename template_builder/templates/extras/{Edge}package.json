@@ -4,7 +4,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-cloudflare": "^7.2.4",
-		"@types/node": "^24.7.2",
+		"@types/node": "^24.8.1",
 		"wrangler": "^4.43.0",
 		"@sveltejs/adapter-auto": null
 	},
