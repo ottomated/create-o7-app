@@ -12,7 +12,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
 		"@sveltejs/adapter-auto": "^7.0.0",
-		"@sveltejs/kit": "^2.49.3",
+		"@sveltejs/kit": "^2.49.4",
 		"@sveltejs/vite-plugin-svelte": "^6.2.3",
 		"autoprefixer": "^10.4.23",
 		"eslint": "^9.39.2",
