@@ -7,7 +7,7 @@
 		"kysely-d1": "^0.4.0"
 	},
 	"devDependencies": {
-		"dotenv": "^17.2.3",
+		"dotenv": "^17.2.4",
 		"better-sqlite3": "^12.6.2",
 		"@types/better-sqlite3": "^7.6.13"
 	},
