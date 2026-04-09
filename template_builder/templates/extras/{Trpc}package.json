@@ -3,7 +3,7 @@
 		"@tanstack/svelte-query": "^6.1.13",
 		"@trpc/client": "^11.16.0",
 		"@trpc/server": "^11.16.0",
-		"devalue": "^5.7.0",
+		"devalue": "^5.7.1",
 		"trpc-svelte-query": "^3.0.3",
 		"zod": "^4.3.6"
 	}
