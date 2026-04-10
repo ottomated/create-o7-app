@@ -12,7 +12,7 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@sveltejs/adapter-auto": "^7.0.1",
-		"@sveltejs/kit": "^2.57.0",
+		"@sveltejs/kit": "^2.57.1",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"autoprefixer": "^10.4.27",
 		"eslint": "^10.2.0",
@@ -22,7 +22,7 @@
 		"globals": "^17.4.0",
 		"postcss": "^8.5.9",
 		"postcss-load-config": "^6.0.1",
-		"prettier": "^3.8.1",
+		"prettier": "^3.8.2",
 		"prettier-plugin-svelte": "^3.5.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"svelte": "^5.55.2",
