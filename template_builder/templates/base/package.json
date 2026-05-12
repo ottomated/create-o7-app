@@ -23,13 +23,13 @@
 		"postcss": "^8.5.14",
 		"postcss-load-config": "^6.0.1",
 		"prettier": "^3.8.3",
-		"prettier-plugin-svelte": "^3.5.1",
+		"prettier-plugin-svelte": "^3.5.2",
 		"prettier-plugin-tailwindcss": "^0.8.0",
 		"svelte": "^5.55.5",
 		"svelte-check": "^4.4.8",
 		"tailwindcss": "^3.4.19",
 		"typescript": "~6.0.3",
-		"typescript-eslint": "^8.59.2",
+		"typescript-eslint": "^8.59.3",
 		"vite": "^8.0.12"
 	},
 	"pnpm": {
