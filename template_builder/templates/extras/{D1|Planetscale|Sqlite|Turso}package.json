@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"kysely": "^0.29.0"
+		"kysely": "^0.29.1"
 	},
 	"devDependencies": {
 		"prisma-kysely": "^3.1.0",
