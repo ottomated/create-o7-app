@@ -1,9 +1,9 @@
 {
 	"devDependencies": {
 		"autoprefixer": null,
-		"@tailwindcss/vite": "^4.3.0",
+		"@tailwindcss/vite": "^4.3.1",
 		"postcss": null,
 		"postcss-load-config": null,
-		"tailwindcss": "^4.3.0"
+		"tailwindcss": "^4.3.1"
 	}
 }
