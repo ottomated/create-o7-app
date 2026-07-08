@@ -12,8 +12,8 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@sveltejs/adapter-auto": "^7.0.1",
-		"@sveltejs/kit": "^2.69.1",
-		"@sveltejs/vite-plugin-svelte": "^7.1.4",
+		"@sveltejs/kit": "^2.69.2",
+		"@sveltejs/vite-plugin-svelte": "^7.2.0",
 		"autoprefixer": "^10.5.2",
 		"eslint": "^10.6.0",
 		"eslint-config-prettier": "^10.1.8",
