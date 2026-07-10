@@ -9,10 +9,10 @@
 	},
 	"dependencies": {
 		"common": "^0.0.0",
-		"hono": "^4.12.28"
+		"hono": "^4.12.29"
 	},
 	"devDependencies": {
 		"typescript": "^7.0.2",
-		"wrangler": "^4.107.1"
+		"wrangler": "^4.110.0"
 	}
 }
