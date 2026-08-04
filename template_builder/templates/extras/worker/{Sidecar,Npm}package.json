@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"common": "^0.0.0",
-		"hono": "^4.12.34"
+		"hono": "^4.13.0"
 	},
 	"devDependencies": {
 		"typescript": "^7.0.2",
