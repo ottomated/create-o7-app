@@ -9,10 +9,11 @@
 		"cf-typegen": "wrangler types"
 	},
 	"devDependencies": {
-		"typescript": "^5.9.2",
-		"wrangler": "^4.37.0"
+		"typescript": "^7.0.2",
+		"wrangler": "^4.118.0"
 	},
 	"dependencies": {
-		"zod": "^4.1.8"
-	}
+		"valibot": "^1.4.2"
+	},
+	"packageManager": "pnpm@11.20.0"
 }
