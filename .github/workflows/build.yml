@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Install pnpm
         uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
         with:
@@ -27,24 +28,26 @@ jobs:
       - name: Compare version to NPM
         run: |
           NPM_VERSION=$(npm view create-o7-app version)
-          MY_VERSION=${{ steps.get_version.outputs.version }}
+          MY_VERSION=${VERSION}
           if [ "$NPM_VERSION" == "$MY_VERSION" ]; then
             echo "NPM version is the same as the version in Cargo.toml, exiting"
             exit 1
           fi
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
 
       - name: Generate changelogs
         run: |
           # Full changelog
-          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} -o CHANGELOG.md
+          pnpx git-cliff --tag ${VERSION} -o CHANGELOG.md
           # Changelog for the release
-          pnpx git-cliff --tag ${{ steps.get_version.outputs.version }} --unreleased --strip header -o CHANGELOG-release.md
+          pnpx git-cliff --tag ${VERSION} --unreleased --strip header -o CHANGELOG-release.md
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
-          targets: x86_64-unknown-linux-musl,x86_64-pc-windows-gnu,i686-pc-windows-gnu,x86_64-apple-darwin,aarch64-apple-darwin
+        run: |
+          rustup toolchain install stable --component rustfmt --target x86_64-unknown-linux-musl --target x86_64-pc-windows-gnu --target i686-pc-windows-gnu --target x86_64-apple-darwin --target aarch64-apple-darwin
       # - name: Test
       #   run: cargo test
       - name: Install MinGW
@@ -107,20 +110,23 @@ jobs:
           git add CHANGELOG.md
           git config --local user.email "create-o7-app@users.noreply.github.com"
           git config --local user.name "create-o7-app[bot]"
-          git commit -m "ci: Update changelog for ${{ steps.get_version.outputs.version }}"
+          git commit -m "ci: Update changelog for ${VERSION}"
           git push
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
 
       - name: Release Binaries
-        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
-        with:
-          body_path: CHANGELOG-release.md
-          tag_name: ${{ steps.get_version.outputs.version }}
-          files: compressed/artifacts/*
+        run: gh release create ${VERSION} compressed/artifacts/* --notes-file CHANGELOG-release.md
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
+
       - name: Publish NPM Package
         run: |
           cd pkg
           cp ../README.md .
-          jq '.version = "${{ steps.get_version.outputs.version }}"' package.json > tmp && mv tmp package.json
+          jq '.version = "${VERSION}"' package.json > tmp && mv tmp package.json
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
           npm publish
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}

@@ -7,6 +7,7 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Detect open PR
         id: detect_open_pr
@@ -42,6 +43,7 @@ jobs:
         with:
           token: ${{ steps.create_token.outputs.token }}
           ref: ${{ steps.detect_open_pr.outputs.result }}
+          persist-credentials: false
 
       - name: Install pnpm
         uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
@@ -50,18 +52,20 @@ jobs:
           runtime: node@lts
           install: false
 
+
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
+        run: |
+          rustup toolchain install stable --component rustfmt
 
       - name: Do updates
         run: |
           {
             echo 'PR_BODY<<EOF'
-            node ./.github/workflows/update_deps.mjs ${{ steps.detect_open_pr.outputs.result }}
+            node ./.github/workflows/update_deps.mjs ${PR_BRANCH_NAME}
             echo EOF
           } >> $GITHUB_ENV
+        env:
+          PR_BRANCH_NAME: ${{ steps.detect_open_pr.outputs.result }}
 
       - name: Cargo update
         run: cargo update
@@ -89,7 +93,9 @@ jobs:
           git config --local user.name "create-o7-app[bot]"
           git commit -m "ci: Update dependencies"
 
-          git push origin ${{ steps.detect_open_pr.outputs.result }}
+          git push origin ${PR_BRANCH_NAME}
+        env:
+          PR_BRANCH_NAME: ${{ steps.detect_open_pr.outputs.result }}
 
       - name: Comment on PR
         if: steps.detect_open_pr.outputs.result != 'main'

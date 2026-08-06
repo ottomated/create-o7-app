@@ -5,6 +5,7 @@ on:
 jobs:
   create-shards:
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       shards: ${{ steps.shards.outputs.shards }}
       shard-count: ${{ steps.shards.outputs.count }}
@@ -20,6 +21,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: create-shards
+    permissions: {}
     strategy:
       fail-fast: false
       matrix:
@@ -28,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
@@ -40,10 +44,10 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
+        run: |
+          rustup toolchain install stable --component rustfmt
 
       - name: Install pnpm
         uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
