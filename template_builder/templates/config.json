@@ -42,10 +42,6 @@
 					"id": "D1",
 					"name": "D1",
 					"hidden_if_not": ["Edge"]
-				},
-				{
-					"id": "Planetscale",
-					"name": "Planetscale"
 				}
 			],
 			"description": ""
