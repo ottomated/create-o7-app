@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Detect open PR
         id: detect_open_pr
-        uses: actions/github-script@v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           result-encoding: string
           script: |
@@ -31,23 +31,25 @@ jobs:
             return pullRequests[0]?.head?.ref ?? 'main';
 
       - id: create_token
-        uses: tibdex/github-app-token@v2
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          client-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-pull-requests: write
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           token: ${{ steps.create_token.outputs.token }}
           ref: ${{ steps.detect_open_pr.outputs.result }}
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
         with:
-          node-version: 20
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v2
+          version: ^11.20.0
+          runtime: node@lts
+          install: false
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -57,7 +59,7 @@ jobs:
         run: |
           {
             echo 'PR_BODY<<EOF'
-            bun ./.github/workflows/update_deps.mjs ${{ steps.detect_open_pr.outputs.result }}
+            node ./.github/workflows/update_deps.mjs ${{ steps.detect_open_pr.outputs.result }}
             echo EOF
           } >> $GITHUB_ENV
 
@@ -66,7 +68,7 @@ jobs:
 
       - name: Open PR
         if: steps.detect_open_pr.outputs.result == 'main'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ steps.create_token.outputs.token }}
           commit-message: 'ci: Update dependencies'
@@ -91,7 +93,7 @@ jobs:
 
       - name: Comment on PR
         if: steps.detect_open_pr.outputs.result != 'main'
-        uses: actions/github-script@v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ steps.create_token.outputs.token }}
           script: |

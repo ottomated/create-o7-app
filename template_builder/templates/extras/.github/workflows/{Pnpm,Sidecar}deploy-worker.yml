@@ -15,15 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-
-      - name: Install node
-        uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
         with:
-          cache: 'pnpm'
+          version: ^11.20.0
+          runtime: node@lts
+          install: false
 
       - name: Install dependencies
         working-directory: worker

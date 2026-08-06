@@ -12,13 +12,15 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
         with:
-          node-version: 26
+          version: ^11.20.0
+          runtime: node@lts
+          install: false
       - name: Get version
         id: get_version
         run: echo "version=$(grep "version" Cargo.toml | head -n1 | cut -d '"' -f2)" >> $GITHUB_OUTPUT
@@ -30,8 +32,6 @@ jobs:
             echo "NPM version is the same as the version in Cargo.toml, exiting"
             exit 1
           fi
-      - name: Install pnpm
-        run: npm i -g pnpm
 
       - name: Generate changelogs
         run: |
@@ -57,7 +57,7 @@ jobs:
 
       - name: Restore cached OSXCross
         id: restore-osxcross
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           key: ${{ runner.os }}-osxcross-11.3
           path: osxcross
@@ -72,7 +72,7 @@ jobs:
           UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
       - name: Cache OSXCross
         if: always() && steps.restore-osxcross.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           key: ${{ runner.os }}-osxcross-11.3
           path: osxcross
@@ -111,7 +111,7 @@ jobs:
           git push
 
       - name: Release Binaries
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
         with:
           body_path: CHANGELOG-release.md
           tag_name: ${{ steps.get_version.outputs.version }}

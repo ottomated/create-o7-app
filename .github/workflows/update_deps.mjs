@@ -1,6 +1,7 @@
 import { resolve, basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
+import * as semver from 'semver';
 
 const isNewPr = process.argv[2] === 'main';
 const dryRun = process.argv.includes('--dry-run');
@@ -155,8 +156,8 @@ async function latestVersion(packageName, tag) {
 
 	if (packageName === 'tailwindcss' && tag === '3') {
 		const v3Versions = Object.keys(data?.versions ?? {})
-			.filter((v) => Bun.semver.satisfies(v, '3'))
-			.sort(Bun.semver.order);
+			.filter((v) => semver.satisfies(v, '3'))
+			.sort(semver.compare);
 		const mostRecent = v3Versions[v3Versions.length - 1];
 		return mostRecent;
 	}
