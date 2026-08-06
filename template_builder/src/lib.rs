@@ -195,7 +195,6 @@ impl Builder {
 			pub enum Feature {
 				Npm,
 				Pnpm,
-				Yarn,
 				Bun,
 				#(#features),*
 			}

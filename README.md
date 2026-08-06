@@ -38,8 +38,6 @@ pnpm create o7-app
 bun create o7-app
 # OR
 npm create o7-app@latest
-# OR
-yarn create o7-app
 ```
 
 Then, open your new app in your favorite IDE and get started! A good place to look first is `src/routes/+page.svelte` for your frontend or `src/lib/server/routes/_app.ts` for tRPC.
