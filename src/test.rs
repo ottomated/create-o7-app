@@ -130,11 +130,6 @@ fn test() {
 	let combinations = generate_combinations(get_feature_list());
 	let mut combinations = create_shard(combinations);
 
-	// let mut combinations = vec![HashSet::new()];
-	// combinations[0].insert(Feature::Edge);
-	// combinations[0].insert(Feature::D1);
-	// combinations[0].insert(Feature::Trpc);
-
 	let num_threads = min(
 		{
 			let possible =

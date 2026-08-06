@@ -9,13 +9,6 @@
 			"default": false
 		},
 		{
-			"id": "Trpc",
-			"name": "tRPC",
-			"description": "(Type-safe API)",
-			"default": true,
-			"required_if": ["Auth"]
-		},
-		{
 			"id": "Edge",
 			"name": "Edge",
 			"description": "(Deploy to Cloudflare)",
