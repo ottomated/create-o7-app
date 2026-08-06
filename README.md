@@ -41,10 +41,8 @@ Then, open your new app in your favorite IDE and get started!
 ## Upcoming
 
 - [ ] zod -> valibot
-- [ ] sveltekit 3
-- [ ] prettier -> oxfmt
-- [ ] svelte-check tsgo
 - [ ] remote functions auth
 - [ ] auth user + pass option?
 - [ ] durable object patch
 - [ ] prisma 7?
+- [ ] pnpm-workspace
