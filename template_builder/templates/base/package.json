@@ -6,9 +6,9 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"lint": "svelte-kit sync && eslint --max-warnings 0 --fix .",
-		"fmt": "oxfmt",
-		"check": "svelte-kit sync && svelte-check --incremental --tsgo"
+		"lint": "svelte-kit sync && eslint --max-warnings 0 --flag unstable_native_nodejs_ts_config --fix .",
+		"check": "svelte-kit sync && svelte-check --incremental --tsgo",
+		"fmt": "oxfmt ."
 	},
 	"imports": {
 		"#lib/*": "./src/lib/*"

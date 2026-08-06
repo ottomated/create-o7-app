@@ -126,27 +126,6 @@ impl<'a> PackageJsonPartial<'a> {
 		merge_hashmaps(&mut self.scripts, other.scripts);
 		merge_hashmaps(&mut self.dependencies, other.dependencies);
 		merge_hashmaps(&mut self.dev_dependencies, other.dev_dependencies);
-
-		match (&mut self.pnpm, other.pnpm) {
-			(_, None) => {}
-			(None, Some(pnpm)) => {
-				self.pnpm = Some(pnpm);
-			}
-			(Some(old), Some(new)) => {
-				match (
-					&mut old.only_built_dependencies,
-					new.only_built_dependencies,
-				) {
-					(_, None) => {}
-					(None, Some(new)) => {
-						old.only_built_dependencies = Some(new);
-					}
-					(Some(ref mut old), Some(new)) => {
-						old.extend(new);
-					}
-				}
-			}
-		}
 	}
 }
 

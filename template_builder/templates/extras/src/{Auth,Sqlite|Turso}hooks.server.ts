@@ -1,4 +1,4 @@
-import { initAuth, validateSessionToken } from '$lib/auth';
+import { initAuth, validateSessionToken } from '#lib/auth';
 import { dev } from '$app/environment';
 
 export async function handle({ event, resolve }) {

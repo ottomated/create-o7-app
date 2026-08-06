@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { generateState } from 'arctic';
-import { twitch } from '$lib/auth';
+import { twitch } from '#lib/auth';
 import { dev } from '$app/environment';
 
 export const GET = async (event) => {

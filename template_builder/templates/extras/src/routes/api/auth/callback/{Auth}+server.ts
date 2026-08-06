@@ -1,5 +1,5 @@
 import { OAuth2Tokens } from 'arctic';
-import { db } from '$lib/db';
+import { db } from '#lib/db';
 import { CLIENT_ID } from '$env/static/private';
 import { error, redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
@@ -8,7 +8,7 @@ import {
 	generateId,
 	generateSessionToken,
 	twitch,
-} from '$lib/auth';
+} from '#lib/auth';
 import { dev } from '$app/environment';
 
 export const GET = async (event) => {

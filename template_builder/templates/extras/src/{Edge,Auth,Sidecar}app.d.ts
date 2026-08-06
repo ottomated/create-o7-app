@@ -6,12 +6,12 @@ declare global {
 					import('../worker/src/worker').SocketObject
 				>;
 			};
-			context: ExecutionContext;
+			ctx: ExecutionContext;
 		}
 
 		interface Locals {
-			user: import('$lib/auth').User | null;
-			session: import('$lib/auth').Session | null;
+			user: import('#lib/auth').User | null;
+			session: import('#lib/auth').Session | null;
 		}
 
 		// interface Error {}

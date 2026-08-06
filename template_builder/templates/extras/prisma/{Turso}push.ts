@@ -1,10 +1,12 @@
 import { spawnSync } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { resolve } from 'node:path';
+import { loadEnvFile } from 'node:process';
 import { unlinkSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createClient } from '@libsql/client';
-import 'dotenv/config';
+
+loadEnvFile();
 
 if (!process.env.TURSO_URL) {
 	throw new Error('TURSO_URL not set');
@@ -17,10 +19,10 @@ const client = createClient({
 
 const dirname = resolve(fileURLToPath(import.meta.url), '..');
 
-const tempDb = resolve(dirname, './temp.db');
+const temp_db = resolve(dirname, './temp.db');
 const schema = resolve(dirname, './schema.prisma');
 try {
-	unlinkSync(tempDb);
+	unlinkSync(temp_db);
 } catch (_) {
 	/* ignore */
 }
@@ -31,7 +33,7 @@ const current = await client.execute(
 );
 
 // 2. create dummy db with that schema
-const db = new Database(tempDb);
+const db = new Database(temp_db);
 for (const item of current.rows) {
 	if (item.sql && item.sql !== 'null') {
 		db.prepare(item.sql).run();
@@ -49,7 +51,7 @@ try {
 			'migrate',
 			'diff',
 			'--from-url',
-			`file:${tempDb}`,
+			`file:${temp_db}`,
 			'--to-schema-datamodel',
 			schema,
 			'--script',
@@ -57,7 +59,7 @@ try {
 		{ encoding: 'utf-8' },
 	);
 } finally {
-	unlinkSync(tempDb);
+	unlinkSync(temp_db);
 }
 if (migration.status !== 0) {
 	console.error('Prisma error:');
@@ -69,13 +71,13 @@ if (migration.stdout.includes('-- This is an empty migration.')) {
 	process.exit(0);
 }
 
-const migrationSql = migration.stdout;
+const migration_sql = migration.stdout;
 
-console.log(migrationSql);
+console.log(migration_sql);
 
 // 4. apply migration on actual db
 try {
-	await client.executeMultiple(migrationSql);
+	await client.executeMultiple(migration_sql);
 } catch (e) {
 	console.error('Migration failed', e);
 	process.exit(1);

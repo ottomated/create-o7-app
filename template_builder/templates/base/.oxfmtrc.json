@@ -1,8 +1,0 @@
-{
-	"singleQuote": true,
-	"tabWidth": 2,
-	"useTabs": true,
-	"sortTailwindcss": true,
-	"svelte": true,
-	"ignorePatterns": ["worker-configuration.d.ts"]
-}

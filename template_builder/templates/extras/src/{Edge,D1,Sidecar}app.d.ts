@@ -6,7 +6,7 @@ declare global {
 					import('../worker/src/worker').SocketObject
 				>;
 			};
-			context: ExecutionContext;
+			ctx: ExecutionContext;
 		}
 
 		// interface Locals {}

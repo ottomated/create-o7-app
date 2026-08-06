@@ -1,4 +1,4 @@
-import { invalidateSession } from '$lib/auth';
+import { invalidateSession } from '#lib/auth';
 import { redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
 
