@@ -1,6 +1,5 @@
 import globals from 'globals';
 import js from '@eslint/js';
-import prettier from 'eslint-plugin-prettier/recommended';
 import svelte from 'eslint-plugin-svelte';
 import ts from 'typescript-eslint';
 import svelteConfig from './svelte.config.js';
@@ -9,8 +8,6 @@ export default ts.config(
 	js.configs.recommended,
 	...ts.configs.recommended,
 	...svelte.configs.recommended,
-	...svelte.configs.prettier,
-	prettier,
 	{
 		languageOptions: {
 			globals: {
@@ -51,11 +48,6 @@ export default ts.config(
 					varsIgnorePattern: '^_',
 				},
 			],
-		},
-	},
-	{
-		rules: {
-			'prettier/prettier': 'warn',
 		},
 	},
 	{ ignores: ['**/.svelte-kit', 'build/', 'dist/'] },
