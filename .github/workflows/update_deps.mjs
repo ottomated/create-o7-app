@@ -22,27 +22,33 @@ export async function get_updates() {
 	async function process_dependencies(pkg, key) {
 		if (!pkg[key]) return [];
 		let dirty = [];
-		for (const [name, currentVersion] of Object.entries(pkg[key])) {
-			if (currentVersion === null) continue;
+		for (const [name, current_version] of Object.entries(pkg[key])) {
+			if (current_version === null) continue;
 			if (IGNORE_DEPS.includes(name)) continue;
 
 			let tag = 'latest';
-			if (currentVersion.includes('-next')) {
+			if (current_version.includes('-next')) {
 				tag = 'next';
 			}
-			if (name === 'tailwindcss' && currentVersion[1] === '3') {
+			if (name === 'tailwindcss' && current_version[1] === '3') {
 				tag = '3';
 			}
-			let prefix = currentVersion[0];
+			let prefix = current_version[0];
 			if (prefix !== '^' && prefix !== '~') {
 				prefix = '';
 			}
-			let latest = await latest_version(name, tag);
+			let package_name = name;
+			// handle npm:typescript
+			if (current_version.startsWith('npm:')) {
+				package_name = current_version.substring(4, current_version.lastIndexOf('@'));
+				prefix = current_version.substring(0, current_version.lastIndexOf('@') + 2);
+			}
+			let latest = await latest_version(package_name, tag);
 			if (!latest) continue;
 			latest = prefix + latest;
 
-			if (latest !== currentVersion) {
-				dirty.push([name, currentVersion, latest]);
+			if (latest !== current_version) {
+				dirty.push([name, current_version, latest]);
 				pkg[key][name] = latest;
 			}
 		}
