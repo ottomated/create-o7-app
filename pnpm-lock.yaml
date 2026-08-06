@@ -14,6 +14,9 @@ importers:
       semver:
         specifier: ^7.8.5
         version: 7.8.5
+      tiny-jsonc:
+        specifier: ^1.0.2
+        version: 1.0.2
 
 packages:
 
@@ -25,6 +28,9 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  tiny-jsonc@1.0.2:
+    resolution: {integrity: sha512-f5QDAfLq6zIVSyCZQZhhyl0QS6MvAyTxgz4X4x3+EoCktNWEYJ6PeoEA97fyb98njpBNNi88ybpD7m+BDFXaCw==}
+
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
@@ -35,5 +41,7 @@ snapshots:
       undici-types: 8.3.0
 
   semver@7.8.5: {}
+
+  tiny-jsonc@1.0.2: {}
 
   undici-types@8.3.0: {}
