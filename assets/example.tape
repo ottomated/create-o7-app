@@ -16,7 +16,7 @@ Sleep 1s
 Show
 
 Sleep 500ms
-Type "bun create o7-app"
+Type "pnpm create o7-app"
 Sleep 500ms
 Enter
 
