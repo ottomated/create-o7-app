@@ -44,7 +44,6 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-
       - name: Install Rust
         run: |
           rustup toolchain install stable --component rustfmt

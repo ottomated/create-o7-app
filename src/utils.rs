@@ -29,7 +29,7 @@ impl PackageManager {
 		match self {
 			PackageManager::Npm => Feature::Npm,
 			PackageManager::Pnpm => Feature::Pnpm,
-			PackageManager::Yarn => Feature::Yarn,
+			PackageManager::Yarn => Feature::Npm,
 			PackageManager::Bun => Feature::Bun,
 		}
 	}
