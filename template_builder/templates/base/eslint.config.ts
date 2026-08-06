@@ -73,5 +73,14 @@ export default defineConfig(
 			// ],
 		},
 	},
-	{ ignores: ['**/.svelte-kit', '.wrangler/', 'build/', 'dist/'] },
+	{
+		ignores: [
+			'**/.svelte-kit',
+			'.wrangler/',
+			'build/',
+			'dist/',
+			'worker-configuration.d.ts',
+			'db/schema.d.ts',
+		],
+	},
 );

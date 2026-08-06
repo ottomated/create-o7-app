@@ -20,6 +20,8 @@ use crate::{
 
 fn make_input(features: HashSet<Feature>) -> UserInput {
 	let tmp = tempfile::tempdir().unwrap();
+	let mut features = features.clone();
+	features.insert(Feature::Pnpm);
 	UserInput {
 		location: ProjectLocation {
 			name: "o7-test".to_string(),
@@ -182,8 +184,9 @@ fn test() {
 						create(input).map_err(|e| format!("{e}"))?;
 						// Build first so sveltekit generates its tsconfig
 						test_pnpm(&dir, &["build"])?;
-						test_pnpm(&dir, &["eslint", "--max-warnings", "0", "."])?;
-						test_pnpm(&dir, &["svelte-check"])?;
+						test_pnpm(&dir, &["eslint", "--flag", "unstable_native_nodejs_ts_config", "--max-warnings", "0", "."])?;
+						test_pnpm(&dir, &["svelte-check", "--incremental", "--tsgo"])?;
+						test_pnpm(&dir, &["oxfmt", "--check"])?;
 
 						Ok(())
 					})();

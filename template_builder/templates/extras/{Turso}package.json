@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"db:push": "node ./prisma/push.mjs"
+		"db:push": "node ./prisma/push.ts"
 	},
 	"dependencies": {
 		"kysely-libsql": "^0.7.1",

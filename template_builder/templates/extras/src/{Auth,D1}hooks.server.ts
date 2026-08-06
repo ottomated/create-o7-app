@@ -1,6 +1,6 @@
 import { initDb } from '$lib/db';
 import { initAuth, validateSessionToken } from '$lib/auth';
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 
 export async function handle({ event, resolve }) {
 	const db = event.platform!.env.DB;

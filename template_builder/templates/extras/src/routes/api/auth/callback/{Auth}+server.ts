@@ -1,6 +1,6 @@
 import { OAuth2Tokens } from 'arctic';
 import { db } from '#lib/db';
-import { CLIENT_ID } from '$env/static/private';
+import { CLIENT_ID } from '$app/env/private';
 import { error, redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
 import {
@@ -9,7 +9,7 @@ import {
 	generateSessionToken,
 	twitch,
 } from '#lib/auth';
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 
 export const GET = async (event) => {
 	const code = event.url.searchParams.get('code');

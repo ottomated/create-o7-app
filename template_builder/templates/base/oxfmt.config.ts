@@ -6,7 +6,7 @@ export default defineConfig({
 	useTabs: true,
 	sortTailwindcss: true,
 	svelte: true,
-	ignorePatterns: ['worker-configuration.d.ts'],
+	ignorePatterns: ['worker-configuration.d.ts', 'db/schema.d.ts'],
 	overrides: [
 		{
 			files: ['wrangler.jsonc'],

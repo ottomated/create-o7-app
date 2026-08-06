@@ -1,7 +1,7 @@
 {
 	"scripts": {
-		"db:push": "node ./prisma/push.mjs",
-		"db:push:local": "node ./prisma/push.mjs --local"
+		"db:push": "node ./prisma/push.ts",
+		"db:push:local": "node ./prisma/push.ts --local"
 	},
 	"dependencies": {
 		"kysely-d1": "^0.4.0"

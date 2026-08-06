@@ -7,7 +7,7 @@ import { sha256 } from '@oslojs/crypto/sha2';
 import { generateRandomString, type RandomReader } from '@oslojs/crypto/random';
 import type { Selectable } from 'kysely';
 import { db } from '#lib/db';
-import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
+import { CLIENT_ID, CLIENT_SECRET } from '$app/env/private';
 import type { DB } from '#lib/db/schema';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
