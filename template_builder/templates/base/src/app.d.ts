@@ -1,10 +1,6 @@
 declare global {
 	namespace App {
-		interface Platform {
-			env: Cloudflare.Env;
-			context: ExecutionContext;
-		}
-
+		// interface Platform {}
 		// interface Locals {}
 		// interface Error {}
 		// interface PageData {}

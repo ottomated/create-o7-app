@@ -1,5 +1,5 @@
 use super::templates;
-use crate::{input::UserInput, utils::PackageManager};
+use crate::input::UserInput;
 use anyhow::{Context, Result};
 use serde::Serialize;
 use serde_json::{ser::PrettyFormatter, Serializer};
@@ -21,14 +21,6 @@ pub fn create_package_json(input: &UserInput) -> Result<()> {
 
 	package_json.package_manager = input.install_deps.as_ref().and_then(|p| p.version_string());
 
-	if !input
-		.install_deps
-		.as_ref()
-		.is_some_and(|pm| pm.package_manager == PackageManager::Pnpm)
-	{
-		package_json.pnpm = None;
-	}
-
 	let target_path = &input.location.path.join("package.json");
 	let formatter = PrettyFormatter::with_indent(b"\t");
 	let buf = Vec::new();
@@ -36,8 +28,11 @@ pub fn create_package_json(input: &UserInput) -> Result<()> {
 	package_json
 		.serialize(&mut ser)
 		.context("Failed to serialize package.json")?;
+	
+	let mut buf = ser.into_inner();
+	buf.push(b'\n');
 
-	fs::write(target_path, ser.into_inner())?;
+	fs::write(target_path, buf)?;
 
 	Ok(())
 }

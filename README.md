@@ -21,8 +21,6 @@
 - [Typescript](https://www.typescriptlang.org/)
 - [Prisma](https://www.prisma.io/)
 - [Kysely](https://github.com/kysely-org/kysely)
-- [tRPC](https://trpc.io)
-- [Lucia](https://lucia-auth.com/)
 
 > **Why both Prisma and Kysely?** `create-o7-app`'s template includes Kysely for **Edge support** and **fast cold starts**, with all the convenience of using Prisma for migrations.
 
@@ -34,20 +32,16 @@ First, run the CLI to scaffold your app:
 
 ```bash
 pnpm create o7-app
-# OR
-bun create o7-app
-# OR
-npm create o7-app@latest
-# OR
-yarn create o7-app
 ```
 
-Then, open your new app in your favorite IDE and get started! A good place to look first is `src/routes/+page.svelte` for your frontend or `src/lib/server/routes/_app.ts` for tRPC.
+Then, open your new app in your favorite IDE and get started!
 
 ## [Changelog](https://github.com/ottomated/create-o7-app/blob/main/CHANGELOG.md)
 
 ## Upcoming
 
-- [ ] Move the tutorial to a README file
-- [ ] Fully remove tRPC and @tanstack/svelte-query when [Remote Functions](https://github.com/sveltejs/kit/pull/13986) land
-- [ ] Remove sidecar worker when [environment API support](https://github.com/sveltejs/kit/pull/14008) lands
+- [ ] zod -> valibot
+- [ ] remote functions auth
+- [ ] auth user + pass option?
+- [ ] durable object patch
+- [ ] prisma 7?

@@ -18,8 +18,9 @@ use crate::{
 	utils::PackageManager,
 };
 
-fn make_input(features: HashSet<Feature>) -> UserInput {
+fn make_input(mut features: HashSet<Feature>) -> UserInput {
 	let tmp = tempfile::tempdir().unwrap();
+	features.insert(Feature::Pnpm);
 	UserInput {
 		location: ProjectLocation {
 			name: "o7-test".to_string(),
@@ -130,11 +131,6 @@ fn test() {
 	let combinations = generate_combinations(get_feature_list());
 	let mut combinations = create_shard(combinations);
 
-	// let mut combinations = vec![HashSet::new()];
-	// combinations[0].insert(Feature::Edge);
-	// combinations[0].insert(Feature::D1);
-	// combinations[0].insert(Feature::Trpc);
-
 	let num_threads = min(
 		{
 			let possible =
@@ -187,8 +183,9 @@ fn test() {
 						create(input).map_err(|e| format!("{e}"))?;
 						// Build first so sveltekit generates its tsconfig
 						test_pnpm(&dir, &["build"])?;
-						test_pnpm(&dir, &["eslint", "--max-warnings", "0", "."])?;
-						test_pnpm(&dir, &["svelte-check"])?;
+						test_pnpm(&dir, &["eslint", "--flag", "unstable_native_nodejs_ts_config", "--max-warnings", "0", "."])?;
+						test_pnpm(&dir, &["svelte-check", "--incremental", "--tsgo"])?;
+						test_pnpm(&dir, &["oxfmt", "--check"])?;
 
 						Ok(())
 					})();

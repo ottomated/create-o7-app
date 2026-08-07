@@ -1,9 +1,8 @@
 use std::collections::{BTreeMap, HashMap};
 use std::env;
 use std::fmt::Display;
-use std::sync::Mutex;
+use std::sync::{LazyLock, Mutex};
 
-use once_cell::sync::Lazy;
 use serde::{Serialize, Serializer};
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
@@ -29,7 +28,7 @@ impl PackageManager {
 		match self {
 			PackageManager::Npm => Feature::Npm,
 			PackageManager::Pnpm => Feature::Pnpm,
-			PackageManager::Yarn => Feature::Yarn,
+			PackageManager::Yarn => Feature::Npm,
 			PackageManager::Bun => Feature::Bun,
 		}
 	}
@@ -46,8 +45,8 @@ impl Display for PackageManager {
 	}
 }
 
-pub static PACKAGE_MANAGER_OVERRIDE: Lazy<Mutex<Option<PackageManager>>> =
-	Lazy::new(|| Mutex::new(None));
+pub static PACKAGE_MANAGER_OVERRIDE: LazyLock<Mutex<Option<PackageManager>>> =
+	LazyLock::new(|| Mutex::new(None));
 
 pub fn get_package_manager() -> PackageManager {
 	if let Some(package_manager) = PACKAGE_MANAGER_OVERRIDE.lock().unwrap().as_ref() {
@@ -78,6 +77,7 @@ pub struct PackageJsonPartial<'a> {
 	pub name: Option<&'a str>,
 	pub version: Option<&'a str>,
 	pub r#type: Option<&'a str>,
+	pub imports: Option<HashMap<&'a str, Option<&'a str>>>,
 	pub scripts: Option<HashMap<&'a str, Option<&'a str>>>,
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub workspaces: Option<Vec<&'a str>>,
@@ -86,14 +86,6 @@ pub struct PackageJsonPartial<'a> {
 	#[serde(serialize_with = "sorted_map", skip_serializing_if = "skip_if_empty")]
 	pub dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	pub package_manager: Option<String>,
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub pnpm: Option<PnpmPackageJson<'a>>,
-}
-
-#[derive(serde::Serialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct PnpmPackageJson<'a> {
-	pub only_built_dependencies: Option<HashSet<&'a str>>,
 }
 
 pub fn skip_if_empty(map: &Option<HashMap<&str, Option<&str>>>) -> bool {
@@ -132,29 +124,9 @@ impl<'a> PackageJsonPartial<'a> {
 			self.package_manager = other.package_manager;
 		}
 		merge_hashmaps(&mut self.scripts, other.scripts);
+		merge_hashmaps(&mut self.imports, other.imports);
 		merge_hashmaps(&mut self.dependencies, other.dependencies);
 		merge_hashmaps(&mut self.dev_dependencies, other.dev_dependencies);
-
-		match (&mut self.pnpm, other.pnpm) {
-			(_, None) => {}
-			(None, Some(pnpm)) => {
-				self.pnpm = Some(pnpm);
-			}
-			(Some(old), Some(new)) => {
-				match (
-					&mut old.only_built_dependencies,
-					new.only_built_dependencies,
-				) {
-					(_, None) => {}
-					(None, Some(new)) => {
-						old.only_built_dependencies = Some(new);
-					}
-					(Some(ref mut old), Some(new)) => {
-						old.extend(new);
-					}
-				}
-			}
-		}
 	}
 }
 

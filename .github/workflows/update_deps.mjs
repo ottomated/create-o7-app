@@ -1,15 +1,17 @@
 import { resolve, basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
+import * as semver from 'semver';
+import JSONC from 'tiny-jsonc';
 
-const isNewPr = process.argv[2] === 'main';
-const dryRun = process.argv.includes('--dry-run');
+const is_new_pr = process.argv[2] === 'main';
+const dry_run = process.argv.includes('--dry-run');
 
 const IGNORE_DEPS = ['common'];
 
-export async function getUpdates() {
-	const projectRoot = resolve(fileURLToPath(import.meta.url), '../../..');
-	const templateRoot = join(projectRoot, 'template_builder/templates');
+export async function get_updates() {
+	const project_root = resolve(fileURLToPath(import.meta.url), '../../..');
+	const template_root = join(project_root, 'template_builder/templates');
 
 	/**
 	 *
@@ -17,118 +19,124 @@ export async function getUpdates() {
 	 * @param {'dependencies' | 'devDependencies'} key
 	 * @returns true if any dependencies were updated
 	 */
-	async function processDependencies(pkg, key) {
+	async function process_dependencies(pkg, key) {
 		if (!pkg[key]) return [];
 		let dirty = [];
-		for (const [name, currentVersion] of Object.entries(pkg[key])) {
-			if (currentVersion === null) continue;
+		for (const [name, current_version] of Object.entries(pkg[key])) {
+			if (current_version === null) continue;
 			if (IGNORE_DEPS.includes(name)) continue;
 
 			let tag = 'latest';
-			if (currentVersion.includes('-next')) {
+			if (current_version.includes('-next')) {
 				tag = 'next';
 			}
-			if (name === 'tailwindcss' && currentVersion[1] === '3') {
+			if (name === 'tailwindcss' && current_version[1] === '3') {
 				tag = '3';
 			}
-			let prefix = currentVersion[0];
+			let prefix = current_version[0];
 			if (prefix !== '^' && prefix !== '~') {
 				prefix = '';
 			}
-			let latest = await latestVersion(name, tag);
+			let package_name = name;
+			// handle npm:typescript
+			if (current_version.startsWith('npm:')) {
+				package_name = current_version.substring(4, current_version.lastIndexOf('@'));
+				prefix = current_version.substring(0, current_version.lastIndexOf('@') + 2);
+			}
+			let latest = await latest_version(package_name, tag);
 			if (!latest) continue;
 			latest = prefix + latest;
 
-			if (latest !== currentVersion) {
-				dirty.push([name, currentVersion, latest]);
+			if (latest !== current_version) {
+				dirty.push([name, current_version, latest]);
 				pkg[key][name] = latest;
 			}
 		}
 		return dirty;
 	}
 
-	if (isNewPr) {
-		const cargoTomlPath = join(projectRoot, 'Cargo.toml');
-		const cargoToml = await readFile(cargoTomlPath, 'utf8');
-		const version = cargoToml.match(/version = "(.*)"/)?.[1];
+	if (is_new_pr) {
+		const cargo_toml_path = join(project_root, 'Cargo.toml');
+		const cargo_toml = await readFile(cargo_toml_path, 'utf8');
+		const version = cargo_toml.match(/version = "(.*)"/)?.[1];
 		if (!version) {
 			console.error('Could not find version in Cargo.toml');
 			process.exit(1);
 		}
 		const [major, minor, patch] = version.split('.');
-		const newVersion = `${major}.${minor}.${parseInt(patch) + 1}`;
-		if (!dryRun) {
+		const new_version = `${major}.${minor}.${parseInt(patch) + 1}`;
+		if (!dry_run) {
 			await writeFile(
-				cargoTomlPath,
-				cargoToml.replace(/version = "(.*)"/, `version = "${newVersion}"`),
+				cargo_toml_path,
+				cargo_toml.replace(/version = "(.*)"/, `version = "${new_version}"`),
 			);
 		}
-		console.log(`_Bumped version to ${newVersion}_\n\n`);
+		console.log(`_Bumped version to ${new_version}_\n\n`);
 	}
 
-	for await (const f of getFiles(templateRoot)) {
+	for await (const f of get_files(template_root)) {
 		const groups = basename(f).match(/^(\{[^{}]*\})?package\.json$/);
 		if (!groups) continue;
 		const pkg = JSON.parse(await readFile(f, 'utf8'));
 		const updates = await Promise.all([
-			processDependencies(pkg, 'dependencies'),
-			processDependencies(pkg, 'devDependencies'),
+			process_dependencies(pkg, 'dependencies'),
+			process_dependencies(pkg, 'devDependencies'),
 		]).then((results) => results.flat());
 
 		if (updates.length) {
-			if (!dryRun) {
+			if (!dry_run) {
 				await writeFile(f, JSON.stringify(pkg, null, '\t') + '\n');
 			}
-			const features = prettifyFeatures(groups[1]);
+			const features = prettify_features(groups[1]);
 			console.log(`| \`${features}\` | old | new |`);
 			console.log('|-|-|-|');
-			for (const [name, currentVersion, latest] of updates) {
-				console.log(`| ${name} | \`${currentVersion}\` | \`${latest}\` |`);
+			for (const [name, current_version, latest] of updates) {
+				console.log(`| ${name} | \`${current_version}\` | \`${latest}\` |`);
 			}
 			console.log('\n\n');
 		}
 	}
-	const cloudflareVersion = await latestVersion(
+	const cloudflare_version = await latest_version(
 		'@cloudflare/workers-types',
 		'latest',
 	);
-	const cloudflareDate = cloudflareVersion.split('.')[1];
-	if (!cloudflareDate || !/^[0-9]{8}$/.test(cloudflareDate)) {
+	const cloudflare_date = cloudflare_version.split('.')[1];
+	if (!cloudflare_date || !/^[0-9]{8}$/.test(cloudflare_date)) {
 		console.error(
-			`Invalid @cloudflare/workers-types version: ${cloudflareVersion}`,
+			`Invalid @cloudflare/workers-types version: ${cloudflare_version}`,
 		);
 		process.exit(1);
 	}
-	const compatibilityDate = `${cloudflareDate.substring(
+	const compatibility_date = `${cloudflare_date.substring(
 		0,
 		4,
-	)}-${cloudflareDate.substring(4, 6)}-${cloudflareDate.substring(6, 8)}`;
+	)}-${cloudflare_date.substring(4, 6)}-${cloudflare_date.substring(6, 8)}`;
 
-	let changedFiles = [];
-	for await (const f of getFiles(templateRoot)) {
+	const changed_files = [];
+	for await (const f of get_files(template_root)) {
 		const groups = basename(f).match(/^(\{[^{}]*\})?wrangler\.jsonc$/);
 
 		if (!groups) continue;
-		const wrangler = await import(f, { assert: { type: 'jsonc' } });
+		const wrangler = JSONC.parse(await readFile(f, 'utf8'));
 
-		const oldVersion = wrangler.compatibility_date;
+		const old_version = wrangler.compatibility_date;
 
-		if (oldVersion !== compatibilityDate) {
-			if (!dryRun) {
+		if (old_version !== compatibility_date) {
+			if (!dry_run) {
 				const text = (await readFile(f, 'utf8')).replace(
-					`"${oldVersion}"`,
-					`"${compatibilityDate}"`,
+					`"${old_version}"`,
+					`"${compatibility_date}"`,
 				);
 				await writeFile(f, text);
 			}
-			changedFiles.push([prettifyFeatures(groups[1]), oldVersion]);
+			changed_files.push([prettify_features(groups[1]), old_version]);
 		}
 	}
-	if (changedFiles.length) {
+	if (changed_files.length) {
 		console.log(`| \`compatibility_date\` | old | new |`);
 		console.log('|-|-|-|');
-		for (const [name, oldVersion] of changedFiles) {
-			console.log(`| ${name} | \`${oldVersion}\` | \`${compatibilityDate}\` |`);
+		for (const [name, oldVersion] of changed_files) {
+			console.log(`| ${name} | \`${oldVersion}\` | \`${compatibility_date}\` |`);
 		}
 		console.log('\n\n');
 	}
@@ -136,13 +144,13 @@ export async function getUpdates() {
 
 /**
  *
- * @param {string} packageName
+ * @param {string} package_name
  * @param {string} tag
  * @returns {Promise<string>}
  */
-async function latestVersion(packageName, tag) {
+async function latest_version(package_name, tag) {
 	const url = new URL(
-		encodeURIComponent(packageName).replace(/^%40/, '@'),
+		encodeURIComponent(package_name).replace(/^%40/, '@'),
 		'https://registry.npmjs.org/',
 	);
 	const res = await fetch(url, {
@@ -153,10 +161,10 @@ async function latestVersion(packageName, tag) {
 	});
 	const data = await res.json();
 
-	if (packageName === 'tailwindcss' && tag === '3') {
+	if (package_name === 'tailwindcss' && tag === '3') {
 		const v3Versions = Object.keys(data?.versions ?? {})
-			.filter((v) => Bun.semver.satisfies(v, '3'))
-			.sort(Bun.semver.order);
+			.filter((v) => semver.satisfies(v, '3'))
+			.sort(semver.compare);
 		const mostRecent = v3Versions[v3Versions.length - 1];
 		return mostRecent;
 	}
@@ -169,12 +177,12 @@ async function latestVersion(packageName, tag) {
  * @param {string} dir
  * @returns {AsyncGenerator<string>}
  */
-async function* getFiles(dir) {
+async function* get_files(dir) {
 	const dirents = await readdir(dir, { withFileTypes: true });
 	for (const dirent of dirents) {
 		const res = resolve(dir, dirent.name);
 		if (dirent.isDirectory()) {
-			yield* getFiles(res);
+			yield* get_files(res);
 		} else {
 			yield res;
 		}
@@ -183,7 +191,7 @@ async function* getFiles(dir) {
 /**
  * @param {string | undefined} features
  */
-function prettifyFeatures(features) {
+function prettify_features(features) {
 	if (features === undefined) return 'base';
 	return features
 		.substring(1, features.length - 1) // strip {}
@@ -191,4 +199,4 @@ function prettifyFeatures(features) {
 		.replace(/\|/g, ' \\| '); // escape and prettify pipes
 }
 
-getUpdates();
+get_updates();
