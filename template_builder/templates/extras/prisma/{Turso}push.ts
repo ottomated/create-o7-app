@@ -1,8 +1,8 @@
 import { spawnSync } from 'node:child_process';
-import Database from 'better-sqlite3';
+import { unlinkSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { loadEnvFile } from 'node:process';
-import { unlinkSync } from 'node:fs';
+import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
 import { createClient } from '@libsql/client';
 
@@ -31,10 +31,10 @@ try {
 const current = await client.execute("SELECT * FROM sqlite_schema WHERE name != 'sqlite_sequence'");
 
 // 2. create dummy db with that schema
-const db = new Database(temp_db);
+const db = new DatabaseSync(temp_db);
 for (const item of current.rows) {
 	if (typeof item.sql === 'string' && item.sql !== 'null') {
-		db.prepare(item.sql).run();
+		db.exec(item.sql);
 	}
 }
 db.close();

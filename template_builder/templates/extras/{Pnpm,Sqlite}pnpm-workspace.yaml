@@ -1,4 +1,4 @@
 allowBuilds:
   prisma: true
-  better-sqlite3: true
   '@prisma/engines': true
+  better-sqlite3: true

@@ -5,9 +5,5 @@
 	},
 	"dependencies": {
 		"kysely-d1": "^0.4.0"
-	},
-	"devDependencies": {
-		"better-sqlite3": "^13.0.3",
-		"@types/better-sqlite3": "^9.6.0"
 	}
 }

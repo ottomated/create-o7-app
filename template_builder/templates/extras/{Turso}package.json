@@ -5,9 +5,5 @@
 	"dependencies": {
 		"kysely-libsql": "^0.7.1",
 		"@libsql/client": "^0.17.4"
-	},
-	"devDependencies": {
-		"better-sqlite3": "^13.0.3",
-		"@types/better-sqlite3": "^9.6.0"
 	}
 }
