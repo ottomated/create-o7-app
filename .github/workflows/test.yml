@@ -4,7 +4,7 @@ on:
 
 jobs:
   create-shards:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions: {}
     outputs:
       shards: ${{ steps.shards.outputs.shards }}

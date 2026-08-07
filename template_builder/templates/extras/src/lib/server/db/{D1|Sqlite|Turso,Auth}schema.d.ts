@@ -6,12 +6,26 @@ export type Generated<T> =
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export type Session = {
-	id: string;
-	expires_at: number;
-	user_id: string;
+	/**
+	 * @kyselyType(`s_${string}`)
+	 */
+	id: `s_${string}`;
+	/**
+	 * @kyselyType(`u_${string}`)
+	 */
+	user_id: `u_${string}`;
+	/**
+	 * @kyselyType(Uint8Array)
+	 */
+	hash: Uint8Array;
+	last_verified_at: number;
+	created_at: number;
 };
 export type User = {
-	id: string;
+	/**
+	 * @kyselyType(`u_${string}`)
+	 */
+	id: `u_${string}`;
 	twitch_id: string;
 	username: string;
 };

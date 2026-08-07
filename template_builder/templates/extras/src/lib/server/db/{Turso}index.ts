@@ -1,17 +1,9 @@
 import { Kysely, type RawBuilder, sql } from 'kysely';
 import { LibsqlDialect } from 'kysely-libsql';
 import type { DB } from './schema';
-import { dev } from '$app/env';
 import { TURSO_TOKEN, TURSO_URL } from '$app/env/private';
 import { createClient } from '@libsql/client';
-
-if (!TURSO_URL || !TURSO_TOKEN) {
-	if (dev) {
-		throw new Error('TURSO_URL and TURSO_TOKEN must be set');
-	} else {
-		console.warn('TURSO_URL and TURSO_TOKEN must be set');
-	}
-}
+import * as v from 'valibot';
 
 export const db_client = createClient({
 	url: TURSO_URL,
@@ -25,3 +17,14 @@ export const db = new Kysely<DB>({
 export function json<T>(obj: T): RawBuilder<T> {
 	return sql`${JSON.stringify(obj)}`;
 }
+
+export function check_id<Prefix extends string>(prefix: Prefix) {
+	return v.startsWith(prefix + '_') as v.BaseValidation<
+		string,
+		`${Prefix}_${string}`,
+		v.StartsWithIssue<string, `${Prefix}_`>
+	>;
+}
+
+export type { DB };
+

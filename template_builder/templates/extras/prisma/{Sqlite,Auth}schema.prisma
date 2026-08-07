@@ -1,16 +1,17 @@
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
 generator kysely {
   provider = "prisma-kysely"
 
-  output   = "../src/lib/db"
+  output   = "../src/lib/server/db"
   fileName = "schema.d.ts"
 }
 
+
 model User {
+	/// @kyselyType(`u_${string}`)
   id        String @id
   twitch_id String
   username  String
@@ -19,8 +20,14 @@ model User {
 }
 
 model Session {
+	/// @kyselyType(`s_${string}`)
   id         String @id
-  expires_at Int
+	/// @kyselyType(`u_${string}`)
   user_id    String
+	/// @kyselyType(Uint8Array)
+	hash       Bytes
+	last_verified_at Int
+	created_at Int
+
   user       User   @relation(fields: [user_id], references: [id])
 }
