@@ -2,6 +2,9 @@
 	"name": "template",
 	"version": "0.0.0",
 	"type": "module",
+	"imports": {
+		"#lib/*": "./src/lib/*"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -10,13 +13,11 @@
 		"check": "svelte-kit sync && svelte-check --incremental --tsgo",
 		"fmt": "oxfmt ."
 	},
-	"imports": {
-		"#lib/*": "./src/lib/*"
-	},
 	"dependencies": {},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@sveltejs/adapter-auto": "^8.0.0-next.2",
+		"@sveltejs/load-config": "^0.2.1",
 		"@sveltejs/kit": "^3.0.0-next.14",
     "@typescript/native": "npm:typescript@^7.0.2",
 		"autoprefixer": "^10.5.4",

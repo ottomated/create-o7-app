@@ -18,9 +18,8 @@ use crate::{
 	utils::PackageManager,
 };
 
-fn make_input(features: HashSet<Feature>) -> UserInput {
+fn make_input(mut features: HashSet<Feature>) -> UserInput {
 	let tmp = tempfile::tempdir().unwrap();
-	let mut features = features.clone();
 	features.insert(Feature::Pnpm);
 	UserInput {
 		location: ProjectLocation {

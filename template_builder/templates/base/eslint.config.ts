@@ -1,8 +1,14 @@
 import globals from 'globals';
 import js from '@eslint/js';
+import { loadConfig } from '@sveltejs/load-config';
 import svelte from 'eslint-plugin-svelte';
 import { defineConfig } from 'eslint/config';
 import ts from 'typescript-eslint';
+
+const svelte_config = await loadConfig('.');
+if (!svelte_config || !('config' in svelte_config)) {
+	throw new Error(`Failed to load Svelte config: ${svelte_config?.error}`);
+}
 
 export default defineConfig(
 	js.configs.recommended,
@@ -31,12 +37,7 @@ export default defineConfig(
 				projectService: true,
 				extraFileExtensions: ['.svelte'],
 				parser: ts.parser,
-				svelteConfig: {
-					experimental: { async: true },
-					kit: {
-						experimental: { remoteFunctions: true },
-					},
-				},
+				svelteConfig: svelte_config.config,
 			},
 		},
 	},
@@ -79,8 +80,8 @@ export default defineConfig(
 			'.wrangler/',
 			'build/',
 			'dist/',
-			'worker-configuration.d.ts',
-			'db/schema.d.ts',
+			'**/worker-configuration.d.ts',
+			'**/db/schema.d.ts',
 		],
 	},
 );

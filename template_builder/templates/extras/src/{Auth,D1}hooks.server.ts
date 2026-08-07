@@ -1,5 +1,5 @@
-import { initDb } from '$lib/db';
-import { initAuth, validateSessionToken } from '$lib/auth';
+import { initDb } from '#lib/db';
+import { initAuth, validateSessionToken } from '#lib/auth';
 import { dev } from '$app/env';
 
 export async function handle({ event, resolve }) {

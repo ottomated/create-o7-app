@@ -1,9 +1,8 @@
 use std::collections::{BTreeMap, HashMap};
 use std::env;
 use std::fmt::Display;
-use std::sync::Mutex;
+use std::sync::{LazyLock, Mutex};
 
-use once_cell::sync::Lazy;
 use serde::{Serialize, Serializer};
 
 include!(concat!(env!("OUT_DIR"), "/config.rs"));
@@ -46,8 +45,8 @@ impl Display for PackageManager {
 	}
 }
 
-pub static PACKAGE_MANAGER_OVERRIDE: Lazy<Mutex<Option<PackageManager>>> =
-	Lazy::new(|| Mutex::new(None));
+pub static PACKAGE_MANAGER_OVERRIDE: LazyLock<Mutex<Option<PackageManager>>> =
+	LazyLock::new(|| Mutex::new(None));
 
 pub fn get_package_manager() -> PackageManager {
 	if let Some(package_manager) = PACKAGE_MANAGER_OVERRIDE.lock().unwrap().as_ref() {
@@ -78,6 +77,7 @@ pub struct PackageJsonPartial<'a> {
 	pub name: Option<&'a str>,
 	pub version: Option<&'a str>,
 	pub r#type: Option<&'a str>,
+	pub imports: Option<HashMap<&'a str, Option<&'a str>>>,
 	pub scripts: Option<HashMap<&'a str, Option<&'a str>>>,
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub workspaces: Option<Vec<&'a str>>,
@@ -124,6 +124,7 @@ impl<'a> PackageJsonPartial<'a> {
 			self.package_manager = other.package_manager;
 		}
 		merge_hashmaps(&mut self.scripts, other.scripts);
+		merge_hashmaps(&mut self.imports, other.imports);
 		merge_hashmaps(&mut self.dependencies, other.dependencies);
 		merge_hashmaps(&mut self.dev_dependencies, other.dev_dependencies);
 	}

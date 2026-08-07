@@ -77,6 +77,7 @@ pub struct PackageJsonPartial<'a> {
 	name: Option<&'a str>,
 	version: Option<&'a str>,
 	r#type: Option<&'a str>,
+	imports: Option<HashMap<&'a str, Option<&'a str>>>,
 	scripts: Option<HashMap<&'a str, Option<&'a str>>>,
 	dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
 	dev_dependencies: Option<HashMap<&'a str, Option<&'a str>>>,
@@ -98,6 +99,13 @@ impl ToTokens for PackageJsonPartial<'_> {
 		match self.r#type {
 			Some(_type) => pieces.push(quote! { r#type: Some(#_type) }),
 			None => pieces.push(quote! { r#type: None }),
+		}
+		match &self.imports {
+			Some(imports) => {
+				let imports = hashmap_to_tokens(imports);
+				pieces.push(quote! { imports: Some(#imports) })
+			}
+			None => pieces.push(quote! { imports: None }),
 		}
 		match &self.scripts {
 			Some(scripts) => {

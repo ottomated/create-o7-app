@@ -28,14 +28,12 @@ try {
 }
 
 // 1. Pull current schema
-const current = await client.execute(
-	"SELECT * FROM sqlite_schema WHERE name != 'sqlite_sequence'",
-);
+const current = await client.execute("SELECT * FROM sqlite_schema WHERE name != 'sqlite_sequence'");
 
 // 2. create dummy db with that schema
 const db = new Database(temp_db);
 for (const item of current.rows) {
-	if (item.sql && item.sql !== 'null') {
+	if (typeof item.sql === 'string' && item.sql !== 'null') {
 		db.prepare(item.sql).run();
 	}
 }

@@ -28,8 +28,11 @@ pub fn create_package_json(input: &UserInput) -> Result<()> {
 	package_json
 		.serialize(&mut ser)
 		.context("Failed to serialize package.json")?;
+	
+	let mut buf = ser.into_inner();
+	buf.push(b'\n');
 
-	fs::write(target_path, ser.into_inner())?;
+	fs::write(target_path, buf)?;
 
 	Ok(())
 }
