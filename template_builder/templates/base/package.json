@@ -29,7 +29,7 @@
 		"svelte-check": "^4.7.6",
 		"tailwindcss": "^3.4.19",
 		"typescript": "~7.0.2",
-		"typescript-eslint": "^8.70.0",
+		"typescript-eslint": "^8.70.1",
 		"vite": "^8.3.0"
 	},
 	"pnpm": {
