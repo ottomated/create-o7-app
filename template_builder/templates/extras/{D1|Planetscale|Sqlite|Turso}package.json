@@ -4,7 +4,7 @@
 	},
 	"devDependencies": {
 		"prisma-kysely": "^3.2.1",
-		"prisma": "^8.0.0-rc.15"
+		"prisma": "^8.0.0-rc.17"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
