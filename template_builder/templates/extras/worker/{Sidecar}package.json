@@ -9,10 +9,10 @@
 	},
 	"dependencies": {
 		"common": "workspace:*",
-		"hono": "^4.13.11"
+		"hono": "^4.13.12"
 	},
 	"devDependencies": {
 		"typescript": "^7.0.2",
-		"wrangler": "^4.143.0"
+		"wrangler": "^4.144.0"
 	}
 }
