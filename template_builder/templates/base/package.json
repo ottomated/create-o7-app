@@ -16,6 +16,7 @@
 	"dependencies": {},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@o7/favicon": "^0.0.7",
 		"@sveltejs/adapter-auto": "^8.0.0",
 		"@sveltejs/load-config": "^0.2.3",
 		"@sveltejs/kit": "^3.1.0",

@@ -40,8 +40,6 @@ Then, open your new app in your favorite IDE and get started!
 
 ## Upcoming
 
-- [ ] zod -> valibot
-- [ ] remote functions auth
 - [ ] auth user + pass option?
 - [ ] durable object patch
 - [ ] prisma 7?

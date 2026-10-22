@@ -1,3 +1,4 @@
+import { o7Favicon } from '@o7/favicon/vite';
 import adapter from '@sveltejs/adapter-auto';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
@@ -5,6 +6,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [
+		o7Favicon({ path: './favicon.png' }),
 		sveltekit({
 			adapter: adapter(),
 			experimental: {
