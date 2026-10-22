@@ -4,6 +4,6 @@
 	},
 	"dependencies": {
 		"kysely-libsql": "^0.7.1",
-		"@libsql/client": "^0.17.4"
+		"@libsql/client": "^0.18.0"
 	}
 }
