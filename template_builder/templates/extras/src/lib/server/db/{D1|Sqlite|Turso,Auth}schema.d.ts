@@ -28,6 +28,7 @@ export type User = {
 	id: `u_${string}`;
 	twitch_id: string;
 	username: string;
+	profile_image_url: string;
 };
 export type DB = {
 	Session: Session;

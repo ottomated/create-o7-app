@@ -1,6 +1,5 @@
 declare global {
 	namespace App {
-		// interface Platform {}
 		// interface Locals {}
 		// interface Error {}
 		// interface PageData {}

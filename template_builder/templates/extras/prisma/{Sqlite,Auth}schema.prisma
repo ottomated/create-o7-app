@@ -13,8 +13,10 @@ generator kysely {
 model User {
 	/// @kyselyType(`u_${string}`)
   id        String @id
-  twitch_id String
+
+  twitch_id String @unique
   username  String
+	profile_image_url String
 
   sessions Session[]
 }

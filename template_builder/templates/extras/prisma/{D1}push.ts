@@ -107,7 +107,7 @@ writeFileSync(migration_file, migration_sql);
 let res;
 try {
 	res = spawnSync(
-		`npx`,
+		'npx',
 		[
 			'wrangler',
 			'd1',
