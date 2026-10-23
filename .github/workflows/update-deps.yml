@@ -31,7 +31,8 @@ jobs:
 
             return pullRequests[0]?.head?.ref ?? 'main';
 
-      - id: create_token
+      - name: Create token
+        id: create_token
         uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
         with:
           client-id: ${{ secrets.APP_ID }}
