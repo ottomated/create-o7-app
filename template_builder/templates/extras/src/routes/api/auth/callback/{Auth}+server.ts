@@ -38,7 +38,7 @@ export const GET = async (event) => {
 			}),
 		});
 		if (res.status !== 200) {
-			const data = await res.json<{ error: string }>();
+			const data: { error: string } = await res.json();
 			throw new Error(`Failed to get access token: ${data.error}`);
 		}
 		tokens = await res.json();
