@@ -58,7 +58,7 @@ export const GET = async (event) => {
 
 	if (!twitch_user) error(400, 'No user found');
 
-	await db
+	const { user_id } = await db
 		.insertInto('User')
 		.values({
 			id: make_id('u'),
@@ -72,9 +72,10 @@ export const GET = async (event) => {
 				profile_image_url: eb.ref('excluded.profile_image_url'),
 			})),
 		)
-		.execute();
+		.returning('id as user_id')
+		.executeTakeFirstOrThrow();
 
-	const { session, token } = await create_session(twitch_user.id);
+	const { session, token } = await create_session(user_id);
 
 	event.cookies.set('session', token, {
 		path: '/',

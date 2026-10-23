@@ -1,5 +1,5 @@
 {
-	"devDependencies": {
+	"dependencies": {
 		"nanoid": "^6.0.2"
 	}
 }

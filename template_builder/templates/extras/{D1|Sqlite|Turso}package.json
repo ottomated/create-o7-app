@@ -4,6 +4,6 @@
 	},
 	"devDependencies": {
 		"prisma-kysely": "^3.2.1",
-		"prisma": "^8.0.0-rc.26"
+		"prisma": "^7.10.1"
 	}
 }

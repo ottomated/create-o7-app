@@ -13,10 +13,12 @@
 		"check": "svelte-kit sync && svelte-check --incremental --tsgo",
 		"fmt": "oxfmt ."
 	},
-	"dependencies": {},
+	"dependencies": {
+		"@o7/favicon": "^0.0.8",
+		"valibot": "^1.5.0"
+	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
-		"@o7/favicon": "^0.0.7",
 		"@sveltejs/adapter-auto": "^8.0.0",
 		"@sveltejs/load-config": "^0.2.3",
 		"@sveltejs/kit": "^3.1.0",
@@ -33,7 +35,6 @@
 		"tailwindcss": "^3.4.19",
 		"typescript": "npm:@typescript/typescript6@^6.0.2",
 		"typescript-eslint": "^8.72.0",
-		"valibot": "^1.5.0",
 		"vite": "^8.3.5"
 	}
 }

@@ -15,9 +15,9 @@ export type Session = {
 	 */
 	user_id: `u_${string}`;
 	/**
-	 * @kyselyType(Uint8Array)
+	 * @kyselyType(ArrayBuffer)
 	 */
-	hash: Uint8Array;
+	hash: ArrayBuffer;
 	last_verified_at: number;
 	created_at: number;
 };

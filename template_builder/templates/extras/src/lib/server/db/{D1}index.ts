@@ -6,7 +6,7 @@ import { customAlphabet } from 'nanoid';
 import * as v from 'valibot';
 import { env } from 'cloudflare:workers';
 
-export const db = building ? (undefined as never) : Kysely<DB>({
+export const db = building ? (undefined as never) : new Kysely<DB>({
 	dialect: new D1Dialect({
 		database: env.DB,
 	}),

@@ -33,6 +33,9 @@ export async function get_updates() {
 			if (name === 'tailwindcss' && current_version[1] === '3') {
 				tag = '3';
 			}
+			if (name === 'prisma' && current_version[1] === '7') {
+				tag = '7'
+			}
 			let prefix = current_version[0];
 			if (prefix !== '^' && prefix !== '~') {
 				prefix = '';
@@ -161,12 +164,12 @@ async function latest_version(package_name, tag) {
 	});
 	const data = await res.json();
 
-	if (package_name === 'tailwindcss' && tag === '3') {
-		const v3Versions = Object.keys(data?.versions ?? {})
-			.filter((v) => semver.satisfies(v, '3'))
+	if (/^\d+$/.test(tag)) {
+		const versions = Object.keys(data?.versions ?? {})
+			.filter((v) => semver.satisfies(v, tag))
 			.sort(semver.compare);
-		const mostRecent = v3Versions[v3Versions.length - 1];
-		return mostRecent;
+		const most_recent = versions[versions.length - 1];
+		return most_recent;
 	}
 
 	return data?.['dist-tags']?.[tag];

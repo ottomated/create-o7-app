@@ -15,7 +15,9 @@ export async function create_session(
 	const secret = new Uint8Array(32);
 	crypto.getRandomValues(secret);
 
-	const secret_hash = new Uint8Array(await crypto.subtle.digest('SHA-256', secret));
+	const secret_hash = new Uint8Array(
+		await crypto.subtle.digest('SHA-256', secret),
+	);
 
 	const token = `${id}.${secret.toBase64()}`;
 
@@ -70,7 +72,15 @@ export async function validate_session_token(
 	const row = await db
 		.selectFrom('Session as s')
 		.innerJoin('User as u', 'u.id', 's.user_id')
-		.select(['s.id', 's.user_id', 's.hash', 's.last_verified_at', 'u.twitch_id', 'u.username'])
+		.select([
+			's.id',
+			's.user_id',
+			's.hash',
+			's.last_verified_at',
+			'u.twitch_id',
+			'u.username',
+			'u.profile_image_url',
+		])
 		.where('s.id', '=', session_id)
 		.executeTakeFirst();
 
@@ -85,7 +95,9 @@ export async function validate_session_token(
 		return invalid_session;
 	}
 
-	const secret_hash = new Uint8Array(await crypto.subtle.digest('SHA-256', secret));
+	const secret_hash = new Uint8Array(
+		await crypto.subtle.digest('SHA-256', secret),
+	);
 	const secret_correct = constant_time_equal(secret_hash, row.hash);
 	if (!secret_correct) {
 		return invalid_session;
@@ -112,11 +124,14 @@ export async function validate_session_token(
 			id: row.user_id,
 			twitch_id: row.twitch_id,
 			username: row.username,
+			profile_image_url: row.profile_image_url,
 		},
 	};
 }
 
-export async function invalidate_session(session_id: `s_${string}`): Promise<void> {
+export async function invalidate_session(
+	session_id: `s_${string}`,
+): Promise<void> {
 	await db.deleteFrom('Session').where('id', '=', session_id).execute();
 }
 
@@ -131,7 +146,9 @@ function constant_time_equal(a: Uint8Array, b: Uint8Array): boolean {
 	return c === 0;
 }
 
-export type SessionValidationResult = { session: Session; user: User } | typeof invalid_session;
+export type SessionValidationResult =
+	| { session: Session; user: User }
+	| typeof invalid_session;
 
 export type Session = {
 	id: `s_${string}`;
