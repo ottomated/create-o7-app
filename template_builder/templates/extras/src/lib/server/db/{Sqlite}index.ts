@@ -6,12 +6,13 @@ import type { DB } from './schema';
 import { customAlphabet } from 'nanoid';
 import * as v from 'valibot';
 
-
-export const db = building ? (undefined as never) : new Kysely<DB>({
-	dialect: new SqliteDialect({
-		database: new Database(DATABASE_URL),
-	}),
-});
+export const db = building
+	? (undefined as never)
+	: new Kysely<DB>({
+			dialect: new SqliteDialect({
+				database: new Database(DATABASE_URL),
+			}),
+		});
 
 export function json<T>(obj: T): RawBuilder<T> {
 	return sql`${JSON.stringify(obj)}`;

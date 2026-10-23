@@ -6,12 +6,14 @@ import { TURSO_TOKEN, TURSO_URL } from '$app/env/private';
 import { customAlphabet } from 'nanoid';
 import * as v from 'valibot';
 
-export const db = building ? (undefined as never) : new Kysely<DB>({
-	dialect: new LibsqlDialect({ 
-		url: TURSO_URL,
-		authToken: TURSO_TOKEN,
-	 }),
-});
+export const db = building
+	? (undefined as never)
+	: new Kysely<DB>({
+			dialect: new LibsqlDialect({
+				url: TURSO_URL,
+				authToken: TURSO_TOKEN,
+			}),
+		});
 
 export function json<T>(obj: T): RawBuilder<T> {
 	return sql`${JSON.stringify(obj)}`;
@@ -34,4 +36,3 @@ export function make_id<Prefix extends string>(prefix: Prefix) {
 }
 
 export type { DB };
-

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Favicon } from '@o7/favicon';
+	import { Favicon } from '@o7/favicon';
 	import '../app.css';
 
 	const { children } = $props();

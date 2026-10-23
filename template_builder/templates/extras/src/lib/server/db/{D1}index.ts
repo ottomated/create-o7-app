@@ -6,11 +6,13 @@ import { customAlphabet } from 'nanoid';
 import * as v from 'valibot';
 import { env } from 'cloudflare:workers';
 
-export const db = building ? (undefined as never) : new Kysely<DB>({
-	dialect: new D1Dialect({
-		database: env.DB,
-	}),
-})
+export const db = building
+	? (undefined as never)
+	: new Kysely<DB>({
+			dialect: new D1Dialect({
+				database: env.DB,
+			}),
+		});
 
 export function json<T>(obj: T): RawBuilder<T> {
 	return sql`${JSON.stringify(obj)}`;

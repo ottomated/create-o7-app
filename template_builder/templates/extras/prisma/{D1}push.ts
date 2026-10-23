@@ -48,7 +48,7 @@ function npm_bin(command: string) {
 	return resolve(dirname, '../node_modules/.bin', command);
 }
 // 1. Pull current schema
-const current_res: {error: unknown} | [{results: Array<{sql: string}>}] = JSON.parse(
+const current_res: { error: unknown } | [{ results: Array<{ sql: string }> }] = JSON.parse(
 	spawnSync(
 		npm_bin('wrangler'),
 		[
@@ -139,14 +139,7 @@ let res;
 try {
 	res = spawnSync(
 		npm_bin('wrangler'),
-		[
-			'd1',
-			'execute',
-			database_name,
-			local_flag,
-			'--file',
-			migration_file,
-		],
+		['d1', 'execute', database_name, local_flag, '--file', migration_file],
 		{ stdio: 'inherit' },
 	);
 } finally {
