@@ -98,7 +98,7 @@ export async function validate_session_token(
 	const secret_hash = new Uint8Array(
 		await crypto.subtle.digest('SHA-256', secret),
 	);
-	const secret_correct = constant_time_equal(secret_hash, row.hash);
+	const secret_correct = constant_time_equal(secret_hash, new Uint8Array(row.hash));
 	if (!secret_correct) {
 		return invalid_session;
 	}
