@@ -9,13 +9,6 @@
 			"default": false
 		},
 		{
-			"id": "Trpc",
-			"name": "tRPC",
-			"description": "(Type-safe API)",
-			"default": true,
-			"required_if": ["Auth"]
-		},
-		{
 			"id": "Edge",
 			"name": "Edge",
 			"description": "(Deploy to Cloudflare)",
@@ -42,25 +35,21 @@
 					"id": "D1",
 					"name": "D1",
 					"hidden_if_not": ["Edge"]
-				},
-				{
-					"id": "Planetscale",
-					"name": "Planetscale"
 				}
 			],
 			"description": ""
 		},
 		{
-			"id": "Sidecar",
-			"name": "Sidecar",
-			"description": "(Additional worker for websockets, etc.)",
+			"id": "Worker",
+			"name": "Custom Worker",
+			"description": "(Custom worker for WebSockets, etc.)",
 			"hidden_if_not": ["Edge"],
 			"default": false
 		},
 		{
 			"id": "Tailwind4",
 			"name": "Tailwind 4",
-			"description": "(supported only by VERY modern browsers, not recommended)",
+			"description": "(supported only by very modern browsers)",
 			"default": false
 		}
 	]
