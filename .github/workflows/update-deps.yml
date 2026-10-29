@@ -53,7 +53,6 @@ jobs:
           runtime: node@lts
           install: false
 
-
       - name: Install Rust
         run: |
           rustup toolchain install stable --component rustfmt

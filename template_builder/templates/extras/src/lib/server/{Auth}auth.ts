@@ -1,7 +1,6 @@
 import type { Selectable } from 'kysely';
-import { nanoid } from 'nanoid';
 import * as v from 'valibot';
-import { v_id, db, type DB } from '#lib/server/db/index.ts';
+import { v_id, make_id, db, type DB } from '#lib/server/db/index.ts';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -10,7 +9,7 @@ const SESSION_EXPIRES_IN = ONE_DAY * 10;
 export async function create_session(
 	user_id: `u_${string}`,
 ): Promise<{ session: Session; token: string }> {
-	const id = `s_${nanoid()}` as const;
+	const id = make_id('s');
 
 	const secret = new Uint8Array(32);
 	crypto.getRandomValues(secret);
@@ -114,7 +113,7 @@ export async function validate_session_token(
 		session: {
 			id: row.id,
 			user_id: row.user_id,
-			expires_at: new Date(row.last_verified_at + SESSION_EXPIRES_IN),
+			expires_at: new Date(row.last_verified_at * 1000 + SESSION_EXPIRES_IN),
 		},
 		user: {
 			id: row.user_id,
