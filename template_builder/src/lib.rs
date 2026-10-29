@@ -195,7 +195,6 @@ impl Builder {
 			pub enum Feature {
 				Npm,
 				Pnpm,
-				Yarn,
 				Bun,
 				#(#features),*
 			}
@@ -380,7 +379,7 @@ impl Builder {
 
 		let (base, extras) = package_jsons;
 		quote! {
-			use crate::utils::{Feature, PackageJsonPartial, PnpmPackageJson};
+			use crate::utils::{Feature, PackageJsonPartial};
 			use std::collections::{HashSet, HashMap};
 			#[derive(Debug)]
 			pub struct TemplateFile<T> {

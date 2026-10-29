@@ -4,12 +4,14 @@ on:
 
 jobs:
   create-shards:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
+    permissions: {}
     outputs:
       shards: ${{ steps.shards.outputs.shards }}
       shard-count: ${{ steps.shards.outputs.count }}
     steps:
-      - id: shards
+      - name: Generate shards
+        id: shards
         run: |
           shard_count=6
 
@@ -20,6 +22,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: create-shards
+    permissions: {}
     strategy:
       fail-fast: false
       matrix:
@@ -27,11 +30,14 @@ jobs:
         shard-count: ${{ fromJson(needs.create-shards.outputs.shard-count) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: actions/cache@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          save-always: true
+          persist-credentials: false
+
+      - name: Restore Cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        id: cache-cargo
+        with:
           path: |
             ~/.cargo/bin/
             ~/.cargo/registry/index/
@@ -41,18 +47,32 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
+        run: |
+          rustup toolchain install stable --component rustfmt
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
       - name: Install pnpm
-        run: npm i -g pnpm
+        uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3
+        with:
+          version: ^12.15.0
+          runtime: node@lts
+          install: false
+
       - name: Test
         run: cargo test
         env:
           SHARD: ${{ matrix.shard }}
           SHARD_COUNT: ${{ matrix.shard-count }}
+
+      - name: Save Cache
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        if: always() && steps.cache-cargo.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ steps.cache-cargo.outputs.cache-primary-key }}
+
+

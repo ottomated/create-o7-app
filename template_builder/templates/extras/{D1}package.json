@@ -1,19 +1,9 @@
 {
 	"scripts": {
-		"db:push": "node ./prisma/push.mjs",
-		"db:push:local": "node ./prisma/push.mjs --local"
+		"db:push": "node ./prisma/push.ts",
+		"db:push:local": "node ./prisma/push.ts --local"
 	},
 	"dependencies": {
 		"kysely-d1": "^0.4.0"
-	},
-	"devDependencies": {
-		"dotenv": "^17.2.3",
-		"better-sqlite3": "^12.4.1",
-		"@types/better-sqlite3": "^7.6.13"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"better-sqlite3"
-		]
 	}
 }

@@ -1,0 +1,5 @@
+{
+	"devDependencies": {
+		"@speed-highlight/core": "^2.1.0"
+	}
+}

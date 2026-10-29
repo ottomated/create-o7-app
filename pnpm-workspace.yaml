@@ -1,0 +1,2 @@
+minimumReleaseAgeExclude:
+  - '@o7/favicon@0.0.7'

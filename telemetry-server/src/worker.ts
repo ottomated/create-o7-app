@@ -1,16 +1,17 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-const telemetrySchema = z.object({
-	version: z
-		.string()
-		// Semver regex from https://semver.org
-		.regex(
+const telemetrySchema = v.object({
+	version: v.pipe(
+		v.string(),
+		v.regex(
 			/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
+			'Invalid semver',
 		),
-	package_manager: z.enum(['Npm', 'Pnpm', 'Yarn', 'Bun']),
-	install_deps: z.boolean(),
-	git_init: z.boolean(),
-	features: z.array(z.string()),
+	),
+	package_manager: v.picklist(['Npm', 'Pnpm', 'Yarn', 'Bun']),
+	install_deps: v.boolean(),
+	git_init: v.boolean(),
+	features: v.array(v.string()),
 });
 
 export default {
@@ -27,7 +28,7 @@ export default {
 			return new Response('Bad request', { status: 400 });
 		}
 
-		const telemetry = telemetrySchema.safeParse(body);
+		const telemetry = v.safeParse(telemetrySchema, body);
 
 		if (!telemetry.success) {
 			return new Response('Bad request', { status: 400 });
@@ -38,11 +39,11 @@ export default {
 				'INSERT INTO telemetry (version, package_manager, install_deps, git_init, features, created_at) VALUES (?, ?, ?, ?, ?, ?)',
 			)
 				.bind(
-					telemetry.data.version,
-					telemetry.data.package_manager,
-					telemetry.data.install_deps,
-					telemetry.data.git_init,
-					JSON.stringify(telemetry.data.features),
+					telemetry.output.version,
+					telemetry.output.package_manager,
+					telemetry.output.install_deps,
+					telemetry.output.git_init,
+					JSON.stringify(telemetry.output.features),
 					new Date().toISOString(),
 				)
 				.run(),
