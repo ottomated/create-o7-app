@@ -22,7 +22,7 @@
 		"globals": "^17.14.0",
 		"postcss": "^8.5.32",
 		"postcss-load-config": "^6.0.1",
-		"prettier": "^3.10.0",
+		"prettier": "^3.10.1",
 		"prettier-plugin-svelte": "^4.1.1",
 		"prettier-plugin-tailwindcss": "^0.8.1",
 		"svelte": "^5.57.3",
