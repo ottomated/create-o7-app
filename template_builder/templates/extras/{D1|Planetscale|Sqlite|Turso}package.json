@@ -3,7 +3,7 @@
 		"kysely": "^0.29.9"
 	},
 	"devDependencies": {
-		"prisma-kysely": "^3.2.1",
+		"prisma-kysely": "^3.2.2",
 		"prisma": "^8.0.0-rc.35"
 	},
 	"pnpm": {
