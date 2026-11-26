@@ -3,8 +3,8 @@
 		"typegen": "wrangler types src/worker-configuration.d.ts"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-cloudflare": "^9.0.0",
-		"@types/node": "^26.6.10",
+		"@sveltejs/adapter-cloudflare": "^9.0.1",
+		"@types/node": "^26.6.11",
 		"wrangler": "^4.168.0",
 		"@sveltejs/adapter-auto": null
 	},
