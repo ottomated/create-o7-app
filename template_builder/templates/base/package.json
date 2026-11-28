@@ -14,7 +14,7 @@
 		"@sveltejs/adapter-auto": "^9.0.0",
 		"@sveltejs/kit": "^3.4.1",
 		"@sveltejs/vite-plugin-svelte": "^7.3.2",
-		"autoprefixer": "^10.7.0",
+		"autoprefixer": "^10.7.1",
 		"eslint": "^10.16.0",
 		"eslint-config-prettier": "^10.1.9",
 		"eslint-plugin-prettier": "^5.5.7",
